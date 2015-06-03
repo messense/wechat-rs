@@ -11,11 +11,14 @@ pub trait MessageParser {
 
 mod text;
 mod image;
+mod unknown;
 
 pub use self::text::TextMessage;
 pub use self::image::ImageMessage;
+pub use self::unknown::UnknownMessage;
 
 pub enum Message {
     Text(TextMessage),
     Image(ImageMessage),
+    Unknown(UnknownMessage),
 }

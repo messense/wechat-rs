@@ -32,7 +32,7 @@ impl WeChatMessage for TextMessage {
 }
 
 impl TextMessage {
-    pub fn content(&self) -> String {
-        self.content.clone()
+    pub fn content(&self) -> &str {
+        &self.content
     }
 }

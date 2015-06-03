@@ -10,8 +10,12 @@ pub trait MessageParser {
 
 
 mod text;
+mod image;
+
 pub use self::text::TextMessage;
+pub use self::image::ImageMessage;
 
 pub enum Message {
     Text(TextMessage),
+    Image(ImageMessage),
 }

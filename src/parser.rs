@@ -16,6 +16,7 @@ pub fn parse_message(xml: &str) -> Message {
         "shortvideo" => Message::ShortVideoMessage(messages::ShortVideoMessage::from_xml(xml)),
         "video" => Message::VideoMessage(messages::VideoMessage::from_xml(xml)),
         "location" => Message::LocationMessage(messages::LocationMessage::from_xml(xml)),
+        "link" => Message::LinkMessage(messages::LinkMessage::from_xml(xml)),
         _ => Message::UnknownMessage(messages::UnknownMessage::from_xml(xml)),
     };
     msg

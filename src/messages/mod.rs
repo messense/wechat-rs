@@ -17,6 +17,7 @@ mod image;
 mod voice;
 mod shortvideo;
 mod video;
+mod location;
 mod unknown;
 
 pub use self::text::TextMessage;
@@ -24,12 +25,15 @@ pub use self::image::ImageMessage;
 pub use self::voice::VoiceMessage;
 pub use self::shortvideo::ShortVideoMessage;
 pub use self::video::VideoMessage;
+pub use self::location::LocationMessage;
 pub use self::unknown::UnknownMessage;
 
 pub enum Message {
-    Text(TextMessage),
-    Image(ImageMessage),
-    Voice(VoiceMessage),
-    ShortVideo(ShortVideoMessage),
-    Unknown(UnknownMessage),
+    TextMessage(TextMessage),
+    ImageMessage(ImageMessage),
+    VoiceMessage(VoiceMessage),
+    ShortVideoMessage(ShortVideoMessage),
+    VideoMessage(VideoMessage),
+    LocationMessage(LocationMessage),
+    UnknownMessage(UnknownMessage),
 }

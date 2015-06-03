@@ -6,4 +6,5 @@ mod xmlutil;
 pub mod messages;
 mod parser;
 
+pub use self::messages::{MessageParser, MessageData};
 pub use self::parser::parse_message;

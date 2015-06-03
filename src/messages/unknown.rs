@@ -1,5 +1,5 @@
 use super::super::xmlutil;
-use super::MessageParser;
+use super::{MessageParser, MessageData};
 
 #[derive(Debug, Eq, PartialEq, Clone)]
 pub struct UnknownMessage {
@@ -9,9 +9,7 @@ pub struct UnknownMessage {
     id: usize,
 }
 
-impl MessageParser for UnknownMessage {
-    type WeChatMessage = UnknownMessage;
-
+impl MessageData for UnknownMessage {
     fn source(&self) -> &str {
         &self.source
     }
@@ -27,6 +25,10 @@ impl MessageParser for UnknownMessage {
     fn id(&self) -> usize {
         self.id
     }
+}
+
+impl MessageParser for UnknownMessage {
+    type WeChatMessage = UnknownMessage;
 
     fn from_xml(xml: &str) -> UnknownMessage {
         let package = xmlutil::parse(xml);

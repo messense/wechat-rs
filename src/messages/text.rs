@@ -1,5 +1,5 @@
 use super::super::xmlutil;
-use super::MessageParser;
+use super::{MessageParser, MessageData};
 
 #[derive(Debug, Eq, PartialEq, Clone)]
 pub struct TextMessage {
@@ -10,9 +10,7 @@ pub struct TextMessage {
     content: String,
 }
 
-impl MessageParser for TextMessage {
-    type WeChatMessage = TextMessage;
-
+impl MessageData for TextMessage {
     fn source(&self) -> &str {
         &self.source
     }
@@ -28,6 +26,10 @@ impl MessageParser for TextMessage {
     fn id(&self) -> usize {
         self.id
     }
+}
+
+impl MessageParser for TextMessage {
+    type WeChatMessage = TextMessage;
 
     fn from_xml(xml: &str) -> TextMessage {
         let package = xmlutil::parse(xml);
@@ -55,7 +57,7 @@ impl TextMessage {
 
 #[cfg(test)]
 mod tests {
-    use messages::MessageParser;
+    use messages::{MessageParser, MessageData};
     use super::TextMessage;
 
     #[test]

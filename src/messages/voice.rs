@@ -31,34 +31,6 @@ impl MessageParser for VoiceMessage {
         self.id
     }
 
-    ///
-    /// ```
-    /// extern crate wechat;
-    ///
-    /// use wechat::messages::MessageParser;
-    /// use wechat::messages::VoiceMessage;
-    ///
-    /// fn main() {
-    ///     let xml = "<xml>\
-    ///     <ToUserName><![CDATA[toUser]]></ToUserName>\
-    ///     <FromUserName><![CDATA[fromUser]]></FromUserName>\
-    ///     <CreateTime>1348831860</CreateTime>\
-    ///     <MsgType><![CDATA[text]]></MsgType>\
-    ///     <MediaId><![CDATA[media_id]]></MediaId>\
-    ///     <Format><![CDATA[Format]]></Format>\
-    ///     <MsgId>1234567890123456</MsgId>\
-    ///     </xml>";
-    ///     let msg = VoiceMessage::from_xml(xml);
-    ///
-    ///     assert_eq!("fromUser", msg.source());
-    ///     assert_eq!("toUser", msg.target());
-    ///     assert_eq!(1234567890123456, msg.id());
-    ///     assert_eq!(1348831860, msg.time());
-    ///     assert_eq!("media_id", msg.media_id());
-    ///     assert_eq!("Format", msg.format());
-    ///     assert_eq!("", msg.recognition());
-    /// }
-    /// ```
     fn from_xml(xml: &str) -> VoiceMessage {
         let package = xmlutil::parse(xml);
         let doc = package.as_document();
@@ -92,5 +64,33 @@ impl VoiceMessage {
 
     pub fn recognition(&self) -> &str {
         &self.recognition
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use messages::MessageParser;
+    use super::VoiceMessage;
+
+    #[test]
+    fn test_from_xml() {
+        let xml = "<xml>\
+        <ToUserName><![CDATA[toUser]]></ToUserName>\
+        <FromUserName><![CDATA[fromUser]]></FromUserName>\
+        <CreateTime>1348831860</CreateTime>\
+        <MsgType><![CDATA[text]]></MsgType>\
+        <MediaId><![CDATA[media_id]]></MediaId>\
+        <Format><![CDATA[Format]]></Format>\
+        <MsgId>1234567890123456</MsgId>\
+        </xml>";
+        let msg = VoiceMessage::from_xml(xml);
+
+        assert_eq!("fromUser", msg.source());
+        assert_eq!("toUser", msg.target());
+        assert_eq!(1234567890123456, msg.id());
+        assert_eq!(1348831860, msg.time());
+        assert_eq!("media_id", msg.media_id());
+        assert_eq!("Format", msg.format());
+        assert_eq!("", msg.recognition());
     }
 }

@@ -30,33 +30,6 @@ impl MessageParser for ImageMessage {
         self.id
     }
 
-    ///
-    /// ```
-    /// extern crate wechat;
-    ///
-    /// use wechat::messages::MessageParser;
-    /// use wechat::messages::ImageMessage;
-    ///
-    /// fn main() {
-    ///     let xml = "<xml>\
-    ///     <ToUserName><![CDATA[toUser]]></ToUserName>\
-    ///     <FromUserName><![CDATA[fromUser]]></FromUserName>\
-    ///     <CreateTime>1348831860</CreateTime>\
-    ///     <MsgType><![CDATA[image]]></MsgType>\
-    ///     <PicUrl><![CDATA[this is a url]]></PicUrl>\
-    ///     <MediaId><![CDATA[media_id]]></MediaId>\
-    ///     <MsgId>1234567890123456</MsgId>\
-    ///     </xml>";
-    ///     let msg = ImageMessage::from_xml(xml);
-    ///
-    ///     assert_eq!("fromUser", msg.source());
-    ///     assert_eq!("toUser", msg.target());
-    ///     assert_eq!(1234567890123456, msg.id());
-    ///     assert_eq!(1348831860, msg.time());
-    ///     assert_eq!("media_id", msg.media_id());
-    ///     assert_eq!("this is a url", msg.image());
-    /// }
-    /// ```
     fn from_xml(xml: &str) -> ImageMessage {
         let package = xmlutil::parse(xml);
         let doc = package.as_document();
@@ -84,5 +57,32 @@ impl ImageMessage {
 
     pub fn image(&self) -> &str {
         &self.image
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use messages::MessageParser;
+    use super::ImageMessage;
+
+    #[test]
+    fn test_from_xml() {
+        let xml = "<xml>\
+        <ToUserName><![CDATA[toUser]]></ToUserName>\
+        <FromUserName><![CDATA[fromUser]]></FromUserName>\
+        <CreateTime>1348831860</CreateTime>\
+        <MsgType><![CDATA[image]]></MsgType>\
+        <PicUrl><![CDATA[this is a url]]></PicUrl>\
+        <MediaId><![CDATA[media_id]]></MediaId>\
+        <MsgId>1234567890123456</MsgId>\
+        </xml>";
+        let msg = ImageMessage::from_xml(xml);
+
+        assert_eq!("fromUser", msg.source());
+        assert_eq!("toUser", msg.target());
+        assert_eq!(1234567890123456, msg.id());
+        assert_eq!(1348831860, msg.time());
+        assert_eq!("media_id", msg.media_id());
+        assert_eq!("this is a url", msg.image());
     }
 }

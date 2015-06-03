@@ -30,33 +30,6 @@ impl MessageParser for ShortVideoMessage {
         self.id
     }
 
-    ///
-    /// ```
-    /// extern crate wechat;
-    ///
-    /// use wechat::messages::MessageParser;
-    /// use wechat::messages::ShortVideoMessage;
-    ///
-    /// fn main() {
-    ///     let xml = "<xml>\
-    ///     <ToUserName><![CDATA[toUser]]></ToUserName>\
-    ///     <FromUserName><![CDATA[fromUser]]></FromUserName>\
-    ///     <CreateTime>1348831860</CreateTime>\
-    ///     <MsgType><![CDATA[text]]></MsgType>\
-    ///     <MediaId><![CDATA[media_id]]></MediaId>\
-    ///     <ThumbMediaId><![CDATA[thumb_media_id]]></ThumbMediaId>\
-    ///     <MsgId>1234567890123456</MsgId>\
-    ///     </xml>";
-    ///     let msg = ShortVideoMessage::from_xml(xml);
-    ///
-    ///     assert_eq!("fromUser", msg.source());
-    ///     assert_eq!("toUser", msg.target());
-    ///     assert_eq!(1234567890123456, msg.id());
-    ///     assert_eq!(1348831860, msg.time());
-    ///     assert_eq!("media_id", msg.media_id());
-    ///     assert_eq!("thumb_media_id", msg.thumb_media_id());
-    /// }
-    /// ```
     fn from_xml(xml: &str) -> ShortVideoMessage {
         let package = xmlutil::parse(xml);
         let doc = package.as_document();
@@ -84,5 +57,32 @@ impl ShortVideoMessage {
 
     pub fn thumb_media_id(&self) -> &str {
         &self.thumb_media_id
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use messages::MessageParser;
+    use super::ShortVideoMessage;
+
+    #[test]
+    fn test_from_xml() {
+        let xml = "<xml>\
+        <ToUserName><![CDATA[toUser]]></ToUserName>\
+        <FromUserName><![CDATA[fromUser]]></FromUserName>\
+        <CreateTime>1348831860</CreateTime>\
+        <MsgType><![CDATA[text]]></MsgType>\
+        <MediaId><![CDATA[media_id]]></MediaId>\
+        <ThumbMediaId><![CDATA[thumb_media_id]]></ThumbMediaId>\
+        <MsgId>1234567890123456</MsgId>\
+        </xml>";
+        let msg = ShortVideoMessage::from_xml(xml);
+
+        assert_eq!("fromUser", msg.source());
+        assert_eq!("toUser", msg.target());
+        assert_eq!(1234567890123456, msg.id());
+        assert_eq!(1348831860, msg.time());
+        assert_eq!("media_id", msg.media_id());
+        assert_eq!("thumb_media_id", msg.thumb_media_id());
     }
 }

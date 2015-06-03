@@ -11,8 +11,8 @@ pub fn parse(xml: &str) -> Package {
 }
 
 pub fn evaluate<'d>(package: &'d Document<'d>, xpath: &str) -> Value<'d> {
-    let setup = XPathEvaluator::new();
-    setup.evaluate(package, xpath)
+    let evaluator = XPathEvaluator::new();
+    evaluator.evaluate(package, xpath)
 }
 
 struct XPathEvaluator<'d> {

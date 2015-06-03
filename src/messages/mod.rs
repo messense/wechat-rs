@@ -16,12 +16,14 @@ mod text;
 mod image;
 mod voice;
 mod shortvideo;
+mod video;
 mod unknown;
 
 pub use self::text::TextMessage;
 pub use self::image::ImageMessage;
 pub use self::voice::VoiceMessage;
 pub use self::shortvideo::ShortVideoMessage;
+pub use self::video::VideoMessage;
 pub use self::unknown::UnknownMessage;
 
 pub enum Message {

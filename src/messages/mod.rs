@@ -12,16 +12,19 @@ pub trait MessageParser {
 mod text;
 mod image;
 mod voice;
+mod shortvideo;
 mod unknown;
 
 pub use self::text::TextMessage;
 pub use self::image::ImageMessage;
 pub use self::voice::VoiceMessage;
+pub use self::shortvideo::ShortVideoMessage;
 pub use self::unknown::UnknownMessage;
 
 pub enum Message {
     Text(TextMessage),
     Image(ImageMessage),
     Voice(VoiceMessage),
+    ShortVideo(ShortVideoMessage),
     Unknown(UnknownMessage),
 }

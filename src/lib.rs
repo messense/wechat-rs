@@ -3,6 +3,7 @@ extern crate sxd_document;
 extern crate sxd_xpath;
 
 mod xmlutil;
+mod cryptography;
 pub mod messages;
 mod parser;
 

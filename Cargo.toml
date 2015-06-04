@@ -7,3 +7,4 @@ authors = ["messense <messense@icloud.com>"]
 rust-crypto = "*"
 sxd-document = "*"
 sxd-xpath = "*"
+rand = "*"

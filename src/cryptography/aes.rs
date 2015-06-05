@@ -3,7 +3,7 @@ use crypto::buffer::{ ReadBuffer, WriteBuffer, BufferResult };
 
 // Encrypt a buffer with the given key and iv using
 // AES-256/CBC/Pkcs encryption.
-fn encrypt(data: &[u8], key: &[u8], iv: &[u8]) -> Result<Vec<u8>, symmetriccipher::SymmetricCipherError> {
+pub fn encrypt(data: &[u8], key: &[u8], iv: &[u8]) -> Result<Vec<u8>, symmetriccipher::SymmetricCipherError> {
 
     // Create an encryptor instance of the best performing
     // type available for the platform.
@@ -68,7 +68,7 @@ fn encrypt(data: &[u8], key: &[u8], iv: &[u8]) -> Result<Vec<u8>, symmetricciphe
 // comments in that function. In non-example code, if desired, it is possible to
 // share much of the implementation using closures to hide the operation
 // being performed. However, such code would make this example less clear.
-fn decrypt(encrypted_data: &[u8], key: &[u8], iv: &[u8]) -> Result<Vec<u8>, symmetriccipher::SymmetricCipherError> {
+pub fn decrypt(encrypted_data: &[u8], key: &[u8], iv: &[u8]) -> Result<Vec<u8>, symmetriccipher::SymmetricCipherError> {
     let mut decryptor = aes::cbc_decryptor(
             aes::KeySize::KeySize256,
             key,

@@ -3,6 +3,8 @@ extern crate rand;
 extern crate crypto;
 extern crate sxd_document;
 extern crate sxd_xpath;
+extern crate rustc_serialize;
+extern crate byteorder;
 
 mod xmlutil;
 mod cryptography;

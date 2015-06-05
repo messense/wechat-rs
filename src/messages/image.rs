@@ -5,8 +5,8 @@ use super::{MessageParser, MessageData};
 pub struct ImageMessage {
     source: String,
     target: String,
-    time: usize,
-    id: usize,
+    time: i64,
+    id: i64,
     media_id: String,
     image: String,
 }
@@ -21,11 +21,11 @@ impl MessageData for ImageMessage {
         &self.target
     }
 
-    fn time(&self) -> usize {
+    fn time(&self) -> i64 {
         self.time
     }
 
-    fn id(&self) -> usize {
+    fn id(&self) -> i64 {
         self.id
     }
 }
@@ -45,8 +45,8 @@ impl MessageParser for ImageMessage {
         ImageMessage {
             source: source.string(),
             target: target.string(),
-            id: id.number() as usize,
-            time: time.number() as usize,
+            id: id.number() as i64,
+            time: time.number() as i64,
             media_id: media_id.string(),
             image: image.string(),
         }

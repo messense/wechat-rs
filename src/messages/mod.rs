@@ -1,3 +1,5 @@
+use time;
+
 pub trait MessageParser {
     type WeChatMessage;
 
@@ -7,8 +9,12 @@ pub trait MessageParser {
 pub trait MessageData {
     fn source(&self) -> &str;
     fn target(&self) -> &str;
-    fn time(&self) -> usize;
-    fn id(&self) -> usize;
+    fn time(&self) -> i64;
+    fn id(&self) -> i64;
+    fn create_time(&self) -> time::Tm {
+        let clock = time::Timespec::new(self.time(), 0);
+        time::at(clock)
+    }
 }
 
 

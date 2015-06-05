@@ -5,8 +5,8 @@ use super::{MessageParser, MessageData};
 pub struct LocationMessage {
     source: String,
     target: String,
-    time: usize,
-    id: usize,
+    time: i64,
+    id: i64,
     location_x: f64,
     location_y: f64,
     scale: usize,
@@ -22,11 +22,11 @@ impl MessageData for LocationMessage {
         &self.target
     }
 
-    fn time(&self) -> usize {
+    fn time(&self) -> i64 {
         self.time
     }
 
-    fn id(&self) -> usize {
+    fn id(&self) -> i64 {
         self.id
     }
 }
@@ -48,8 +48,8 @@ impl MessageParser for LocationMessage {
         LocationMessage {
             source: source.string(),
             target: target.string(),
-            id: id.number() as usize,
-            time: time.number() as usize,
+            id: id.number() as i64,
+            time: time.number() as i64,
             location_x: location_x.number(),
             location_y: location_y.number(),
             scale: scale.number() as usize,

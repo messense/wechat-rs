@@ -1,3 +1,5 @@
+extern crate time;
+extern crate rand;
 extern crate crypto;
 extern crate sxd_document;
 extern crate sxd_xpath;

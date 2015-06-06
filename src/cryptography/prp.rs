@@ -31,7 +31,7 @@ impl PrpCrypto {
         wtr.write_u32::<NativeEndian>(text.len().to_be() as u32).unwrap();
         wtr.extend(text.bytes());
         wtr.extend(_id.bytes());
-        let encoded = PKCS7Encoder::encode(wtr);
+        let encoded = PKCS7Encoder::encode(&wtr);
         let encrypted = aes::encrypt(&encoded, self.key.as_bytes(), &self.key.as_bytes()[0..16])
             .ok()
             .expect("AES encrypt failed");

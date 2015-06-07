@@ -1,4 +1,8 @@
 # wechat-rs
+
+[![Build Status](https://travis-ci.org/messense/wechat-rs.svg)](https://travis-ci.org/messense/wechat-rs)
+[![Coverage Status](https://coveralls.io/repos/messense/wechat-rs/badge.svg)](https://coveralls.io/r/messense/wechat-rs)
+
 WeChat SDK for Rust. Working in progress...
 
 ## Goals
@@ -6,7 +10,7 @@ WeChat SDK for Rust. Working in progress...
 This project has two goals, one more achievable than the other:
 
 1. Help me learn Rust.
-2. Implementing a workable WeChat SDK in pure Rust.
+2. Implementing a workable WeChat SDK in pure Rust someday hopefully.
 
 ## License
 

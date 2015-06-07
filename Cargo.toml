@@ -2,6 +2,12 @@
 name = "wechat"
 version = "0.1.0"
 authors = ["messense <messense@icloud.com>"]
+description = "WeChat SDK for Rust"
+repository = "https://github.com/messense/wechat-rs"
+homepage = "https://github.com/messense/wechat-rs"
+readme = "README.md"
+keywords = ["wechat", "sdk"]
+license = "MIT"
 
 [dependencies]
 rust-crypto = "*"

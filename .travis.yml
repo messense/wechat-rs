@@ -15,4 +15,4 @@ after_success:
   - travis-cargo coveralls
 env:
   global:
-    secure: kiFNaGhEpGpxzsNyKELUcEOfw8wu82EtqIAqQ2hudj6pueqKaSzlDJT2iQIiXhjA84+V2tOorIJcTPGuhYfQTcl7/EWYtTgOPBh+wUv9moUBMwF5hOSzpvYlSNO0QgdAdwgAPnZ/jZSi8uCdAAijcUUhTPRZWwN+AodSWNZRo8w=
+    - secure: QsZct6sdZ2BoYABY5VgrS4/CRFrfPmMob5nY55rRenm0qCm1j793sXV7KvaxJBLDh+w8uAMqTOGbppS/HoKZDPL/puY7u0suv9bZkmrgubo+fgLP5wLqVyBsIqICi+KFhaw0Zas5lrK+H434aEcJ3AfzI8HIf13OQTQR/1wemAI=

@@ -17,3 +17,6 @@ rand = "*"
 time = "*"
 byteorder = "*"
 rustc-serialize = "*"
+
+[features]
+unstable = []

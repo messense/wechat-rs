@@ -1,33 +1,19 @@
+use time;
+
 use super::super::xmlutil;
-use super::{MessageParser, MessageData};
+use super::MessageParser;
 
 #[derive(Debug, Eq, PartialEq, Clone)]
 pub struct VoiceMessage {
-    source: String,
-    target: String,
-    time: i64,
-    id: i64,
-    media_id: String,
-    format: String,
-    recognition: String,
-}
-
-impl MessageData for VoiceMessage {
-    fn source(&self) -> &str {
-        &self.source
-    }
-
-    fn target(&self) -> &str {
-        &self.target
-    }
-
-    fn time(&self) -> i64 {
-        self.time
-    }
-
-    fn id(&self) -> i64 {
-        self.id
-    }
+    pub source: String,
+    pub target: String,
+    pub time: i64,
+    pub create_time: time::Tm,
+    pub id: i64,
+    pub media_id: String,
+    pub format: String,
+    pub recognition: String,
+    pub raw: String,
 }
 
 impl MessageParser for VoiceMessage {
@@ -36,42 +22,30 @@ impl MessageParser for VoiceMessage {
     fn from_xml(xml: &str) -> VoiceMessage {
         let package = xmlutil::parse(xml);
         let doc = package.as_document();
-        let source = xmlutil::evaluate(&doc, "//xml/FromUserName/text()");
-        let target = xmlutil::evaluate(&doc, "//xml/ToUserName/text()");
-        let id = xmlutil::evaluate(&doc, "//xml/MsgId/text()");
-        let time = xmlutil::evaluate(&doc, "//xml/CreateTime/text()");
-        let media_id = xmlutil::evaluate(&doc, "//xml/MediaId/text()");
-        let format = xmlutil::evaluate(&doc, "//xml/Format/text()");
-        let recognition = xmlutil::evaluate(&doc, "//xml/Recognition/text()");
+        let source = xmlutil::evaluate(&doc, "//xml/FromUserName/text()").string();
+        let target = xmlutil::evaluate(&doc, "//xml/ToUserName/text()").string();
+        let id = xmlutil::evaluate(&doc, "//xml/MsgId/text()").number() as i64;
+        let time = xmlutil::evaluate(&doc, "//xml/CreateTime/text()").number() as i64;
+        let media_id = xmlutil::evaluate(&doc, "//xml/MediaId/text()").string();
+        let format = xmlutil::evaluate(&doc, "//xml/Format/text()").string();
+        let recognition = xmlutil::evaluate(&doc, "//xml/Recognition/text()").string();
         VoiceMessage {
-            source: source.string(),
-            target: target.string(),
-            id: id.number() as i64,
-            time: time.number() as i64,
-            media_id: media_id.string(),
-            format: format.string(),
-            recognition: recognition.string(),
+            source: source,
+            target: target,
+            id: id,
+            time: time,
+            create_time: time::at(time::Timespec::new(time, 0)),
+            media_id: media_id,
+            format: format,
+            recognition: recognition,
+            raw: xml.to_string(),
         }
-    }
-}
-
-impl VoiceMessage {
-    pub fn format(&self) -> &str {
-        &self.format
-    }
-
-    pub fn media_id(&self) -> &str {
-        &self.media_id
-    }
-
-    pub fn recognition(&self) -> &str {
-        &self.recognition
     }
 }
 
 #[cfg(test)]
 mod tests {
-    use messages::{MessageParser, MessageData};
+    use messages::MessageParser;
     use super::VoiceMessage;
 
     #[test]
@@ -87,12 +61,12 @@ mod tests {
         </xml>";
         let msg = VoiceMessage::from_xml(xml);
 
-        assert_eq!("fromUser", msg.source());
-        assert_eq!("toUser", msg.target());
-        assert_eq!(1234567890123456, msg.id());
-        assert_eq!(1348831860, msg.time());
-        assert_eq!("media_id", msg.media_id());
-        assert_eq!("Format", msg.format());
-        assert_eq!("", msg.recognition());
+        assert_eq!("fromUser", &msg.source);
+        assert_eq!("toUser", &msg.target);
+        assert_eq!(1234567890123456, msg.id);
+        assert_eq!(1348831860, msg.time);
+        assert_eq!("media_id", &msg.media_id);
+        assert_eq!("Format", &msg.format);
+        assert_eq!("", &msg.recognition);
     }
 }

@@ -1,30 +1,16 @@
+use time;
+
 use super::super::xmlutil;
-use super::{MessageParser, MessageData};
+use super::MessageParser;
 
 #[derive(Debug, Eq, PartialEq, Clone)]
 pub struct UnknownMessage {
-    source: String,
-    target: String,
-    time: i64,
-    id: i64,
-}
-
-impl MessageData for UnknownMessage {
-    fn source(&self) -> &str {
-        &self.source
-    }
-
-    fn target(&self) -> &str {
-        &self.target
-    }
-
-    fn time(&self) -> i64 {
-        self.time
-    }
-
-    fn id(&self) -> i64 {
-        self.id
-    }
+    pub source: String,
+    pub target: String,
+    pub time: i64,
+    pub create_time: time::Tm,
+    pub id: i64,
+    pub raw: String,
 }
 
 impl MessageParser for UnknownMessage {
@@ -33,15 +19,17 @@ impl MessageParser for UnknownMessage {
     fn from_xml(xml: &str) -> UnknownMessage {
         let package = xmlutil::parse(xml);
         let doc = package.as_document();
-        let source = xmlutil::evaluate(&doc, "//xml/FromUserName/text()");
-        let target = xmlutil::evaluate(&doc, "//xml/ToUserName/text()");
-        let id = xmlutil::evaluate(&doc, "//xml/MsgId/text()");
-        let time = xmlutil::evaluate(&doc, "//xml/CreateTime/text()");
+        let source = xmlutil::evaluate(&doc, "//xml/FromUserName/text()").string();
+        let target = xmlutil::evaluate(&doc, "//xml/ToUserName/text()").string();
+        let id = xmlutil::evaluate(&doc, "//xml/MsgId/text()").number() as i64;
+        let time = xmlutil::evaluate(&doc, "//xml/CreateTime/text()").number() as i64;
         UnknownMessage {
-            source: source.string(),
-            target: target.string(),
-            id: id.number() as i64,
-            time: time.number() as i64,
+            source: source,
+            target: target,
+            id: id,
+            time: time,
+            create_time: time::at(time::Timespec::new(time, 0)),
+            raw: xml.to_string(),
         }
     }
 }

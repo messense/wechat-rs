@@ -1,33 +1,19 @@
+use time;
+
 use super::super::xmlutil;
-use super::{MessageParser, MessageData};
+use super::MessageParser;
 
 #[derive(Debug, Eq, PartialEq, Clone)]
 pub struct LinkMessage {
-    source: String,
-    target: String,
-    time: i64,
-    id: i64,
-    title: String,
-    description: String,
-    url: String,
-}
-
-impl MessageData for LinkMessage {
-    fn source(&self) -> &str {
-        &self.source
-    }
-
-    fn target(&self) -> &str {
-        &self.target
-    }
-
-    fn time(&self) -> i64 {
-        self.time
-    }
-
-    fn id(&self) -> i64 {
-        self.id
-    }
+    pub source: String,
+    pub target: String,
+    pub time: i64,
+    pub create_time: time::Tm,
+    pub id: i64,
+    pub title: String,
+    pub description: String,
+    pub url: String,
+    pub raw: String,
 }
 
 impl MessageParser for LinkMessage {
@@ -36,42 +22,30 @@ impl MessageParser for LinkMessage {
     fn from_xml(xml: &str) -> LinkMessage {
         let package = xmlutil::parse(xml);
         let doc = package.as_document();
-        let source = xmlutil::evaluate(&doc, "//xml/FromUserName/text()");
-        let target = xmlutil::evaluate(&doc, "//xml/ToUserName/text()");
-        let id = xmlutil::evaluate(&doc, "//xml/MsgId/text()");
-        let time = xmlutil::evaluate(&doc, "//xml/CreateTime/text()");
-        let title = xmlutil::evaluate(&doc, "//xml/Title/text()");
-        let description = xmlutil::evaluate(&doc, "//xml/Description/text()");
-        let url = xmlutil::evaluate(&doc, "//xml/Url/text()");
+        let source = xmlutil::evaluate(&doc, "//xml/FromUserName/text()").string();
+        let target = xmlutil::evaluate(&doc, "//xml/ToUserName/text()").string();
+        let id = xmlutil::evaluate(&doc, "//xml/MsgId/text()").number() as i64;
+        let time = xmlutil::evaluate(&doc, "//xml/CreateTime/text()").number() as i64;
+        let title = xmlutil::evaluate(&doc, "//xml/Title/text()").string();
+        let description = xmlutil::evaluate(&doc, "//xml/Description/text()").string();
+        let url = xmlutil::evaluate(&doc, "//xml/Url/text()").string();
         LinkMessage {
-            source: source.string(),
-            target: target.string(),
-            id: id.number() as i64,
-            time: time.number() as i64,
-            title: title.string(),
-            description: description.string(),
-            url: url.string(),
+            source: source,
+            target: target,
+            id: id,
+            time: time,
+            create_time: time::at(time::Timespec::new(time, 0)),
+            title: title,
+            description: description,
+            url: url,
+            raw: xml.to_string(),
         }
-    }
-}
-
-impl LinkMessage {
-    pub fn title(&self) -> &str {
-        &self.title
-    }
-
-    pub fn description(&self) -> &str {
-        &self.description
-    }
-
-    pub fn url(&self) -> &str {
-        &self.url
     }
 }
 
 #[cfg(test)]
 mod tests {
-    use messages::{MessageParser, MessageData};
+    use messages::MessageParser;
     use super::LinkMessage;
 
     #[test]
@@ -88,12 +62,12 @@ mod tests {
         </xml>";
         let msg = LinkMessage::from_xml(xml);
 
-        assert_eq!("fromUser", msg.source());
-        assert_eq!("toUser", msg.target());
-        assert_eq!(1234567890123456, msg.id());
-        assert_eq!(1348831860, msg.time());
-        assert_eq!("公众平台官网链接", msg.title());
-        assert_eq!("公众平台官网链接", msg.description());
-        assert_eq!("url", msg.url());
+        assert_eq!("fromUser", &msg.source);
+        assert_eq!("toUser", &msg.target);
+        assert_eq!(1234567890123456, msg.id);
+        assert_eq!(1348831860, msg.time);
+        assert_eq!("公众平台官网链接", &msg.title);
+        assert_eq!("公众平台官网链接", &msg.description);
+        assert_eq!("url", &msg.url);
     }
 }

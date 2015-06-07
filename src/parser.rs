@@ -24,7 +24,7 @@ pub fn parse_message(xml: &str) -> Message {
 
 #[cfg(test)]
 mod tests {
-    use super::super::messages::{Message, MessageData};
+    use super::super::messages::Message;
     use super::*;
 
     #[test]
@@ -43,11 +43,11 @@ mod tests {
             _ => panic!("Error parsing text message"),
         };
 
-        assert_eq!("fromUser", msg.source());
-        assert_eq!("toUser", msg.target());
-        assert_eq!(1234567890123456, msg.id());
-        assert_eq!(1348831860, msg.time());
-        assert_eq!("this is a test", msg.content());
+        assert_eq!("fromUser", &msg.source);
+        assert_eq!("toUser", &msg.target);
+        assert_eq!(1234567890123456, msg.id);
+        assert_eq!(1348831860, msg.time);
+        assert_eq!("this is a test", &msg.content);
     }
 
     #[test]
@@ -67,12 +67,12 @@ mod tests {
             _ => panic!("Error parsing image message"),
         };
 
-        assert_eq!("fromUser", msg.source());
-        assert_eq!("toUser", msg.target());
-        assert_eq!(1234567890123456, msg.id());
-        assert_eq!(1348831860, msg.time());
-        assert_eq!("media_id", msg.media_id());
-        assert_eq!("this is a url", msg.image());
+        assert_eq!("fromUser", &msg.source);
+        assert_eq!("toUser", &msg.target);
+        assert_eq!(1234567890123456, msg.id);
+        assert_eq!(1348831860, msg.time);
+        assert_eq!("media_id", &msg.media_id);
+        assert_eq!("this is a url", &msg.image);
     }
 
     #[test]
@@ -92,13 +92,13 @@ mod tests {
             _ => panic!("Error parsing voice message"),
         };
 
-        assert_eq!("fromUser", msg.source());
-        assert_eq!("toUser", msg.target());
-        assert_eq!(1234567890123456, msg.id());
-        assert_eq!(1348831860, msg.time());
-        assert_eq!("media_id", msg.media_id());
-        assert_eq!("Format", msg.format());
-        assert_eq!("", msg.recognition());
+        assert_eq!("fromUser", &msg.source);
+        assert_eq!("toUser", &msg.target);
+        assert_eq!(1234567890123456, msg.id);
+        assert_eq!(1348831860, msg.time);
+        assert_eq!("media_id", &msg.media_id);
+        assert_eq!("Format", &msg.format);
+        assert_eq!("", &msg.recognition);
     }
 
     #[test]
@@ -118,12 +118,12 @@ mod tests {
             _ => panic!("Error parsing video message"),
         };
 
-        assert_eq!("fromUser", msg.source());
-        assert_eq!("toUser", msg.target());
-        assert_eq!(1234567890123456, msg.id());
-        assert_eq!(1348831860, msg.time());
-        assert_eq!("media_id", msg.media_id());
-        assert_eq!("thumb_media_id", msg.thumb_media_id());
+        assert_eq!("fromUser", &msg.source);
+        assert_eq!("toUser", &msg.target);
+        assert_eq!(1234567890123456, msg.id);
+        assert_eq!(1348831860, msg.time);
+        assert_eq!("media_id", &msg.media_id);
+        assert_eq!("thumb_media_id", &msg.thumb_media_id);
     }
 
     #[test]
@@ -143,12 +143,12 @@ mod tests {
             _ => panic!("Error parsing shortvideo message"),
         };
 
-        assert_eq!("fromUser", msg.source());
-        assert_eq!("toUser", msg.target());
-        assert_eq!(1234567890123456, msg.id());
-        assert_eq!(1348831860, msg.time());
-        assert_eq!("media_id", msg.media_id());
-        assert_eq!("thumb_media_id", msg.thumb_media_id());
+        assert_eq!("fromUser", &msg.source);
+        assert_eq!("toUser", &msg.target);
+        assert_eq!(1234567890123456, msg.id);
+        assert_eq!(1348831860, msg.time);
+        assert_eq!("media_id", &msg.media_id);
+        assert_eq!("thumb_media_id", &msg.thumb_media_id);
     }
 
     #[test]
@@ -169,13 +169,13 @@ mod tests {
             _ => panic!("Error parsing link message"),
         };
 
-        assert_eq!("fromUser", msg.source());
-        assert_eq!("toUser", msg.target());
-        assert_eq!(1234567890123456, msg.id());
-        assert_eq!(1348831860, msg.time());
-        assert_eq!("公众平台官网链接", msg.title());
-        assert_eq!("公众平台官网链接", msg.description());
-        assert_eq!("url", msg.url());
+        assert_eq!("fromUser", &msg.source);
+        assert_eq!("toUser", &msg.target);
+        assert_eq!(1234567890123456, msg.id);
+        assert_eq!(1348831860, msg.time);
+        assert_eq!("公众平台官网链接", &msg.title);
+        assert_eq!("公众平台官网链接", &msg.description);
+        assert_eq!("url", &msg.url);
     }
 
     #[test]
@@ -197,14 +197,14 @@ mod tests {
             _ => panic!("Error parsing location message"),
         };
 
-        assert_eq!("fromUser", msg.source());
-        assert_eq!("toUser", msg.target());
-        assert_eq!(1234567890123456, msg.id());
-        assert_eq!(1348831860, msg.time());
-        assert_eq!(23, msg.location_x() as usize);
-        assert_eq!(113, msg.location_y() as usize);
-        assert_eq!(20, msg.scale());
-        assert_eq!("位置信息", msg.label());
+        assert_eq!("fromUser", &msg.source);
+        assert_eq!("toUser", &msg.target);
+        assert_eq!(1234567890123456, msg.id);
+        assert_eq!(1348831860, msg.time);
+        assert_eq!(23, msg.location_x as usize);
+        assert_eq!(113, msg.location_y as usize);
+        assert_eq!(20, msg.scale);
+        assert_eq!("位置信息", &msg.label);
     }
 
     #[test]

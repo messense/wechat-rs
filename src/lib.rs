@@ -12,7 +12,7 @@ pub mod messages;
 mod parser;
 mod errors;
 
-pub use self::messages::{MessageParser, MessageData};
+pub use self::messages::MessageParser;
 pub use self::parser::parse_message;
 pub use self::errors::WeChatError;
 pub use self::cryptography::WeChatCrypto;

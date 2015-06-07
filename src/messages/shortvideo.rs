@@ -1,32 +1,18 @@
+use time;
+
 use super::super::xmlutil;
-use super::{MessageParser, MessageData};
+use super::MessageParser;
 
 #[derive(Debug, Eq, PartialEq, Clone)]
 pub struct ShortVideoMessage {
-    source: String,
-    target: String,
-    time: i64,
-    id: i64,
-    media_id: String,
-    thumb_media_id: String,
-}
-
-impl MessageData for ShortVideoMessage {
-    fn source(&self) -> &str {
-        &self.source
-    }
-
-    fn target(&self) -> &str {
-        &self.target
-    }
-
-    fn time(&self) -> i64 {
-        self.time
-    }
-
-    fn id(&self) -> i64 {
-        self.id
-    }
+    pub source: String,
+    pub target: String,
+    pub time: i64,
+    pub create_time: time::Tm,
+    pub id: i64,
+    pub media_id: String,
+    pub thumb_media_id: String,
+    pub raw: String,
 }
 
 impl MessageParser for ShortVideoMessage {
@@ -35,36 +21,28 @@ impl MessageParser for ShortVideoMessage {
     fn from_xml(xml: &str) -> ShortVideoMessage {
         let package = xmlutil::parse(xml);
         let doc = package.as_document();
-        let source = xmlutil::evaluate(&doc, "//xml/FromUserName/text()");
-        let target = xmlutil::evaluate(&doc, "//xml/ToUserName/text()");
-        let id = xmlutil::evaluate(&doc, "//xml/MsgId/text()");
-        let time = xmlutil::evaluate(&doc, "//xml/CreateTime/text()");
-        let media_id = xmlutil::evaluate(&doc, "//xml/MediaId/text()");
-        let thumb_media_id = xmlutil::evaluate(&doc, "//xml/ThumbMediaId/text()");
+        let source = xmlutil::evaluate(&doc, "//xml/FromUserName/text()").string();
+        let target = xmlutil::evaluate(&doc, "//xml/ToUserName/text()").string();
+        let id = xmlutil::evaluate(&doc, "//xml/MsgId/text()").number() as i64;
+        let time = xmlutil::evaluate(&doc, "//xml/CreateTime/text()").number() as i64;
+        let media_id = xmlutil::evaluate(&doc, "//xml/MediaId/text()").string();
+        let thumb_media_id = xmlutil::evaluate(&doc, "//xml/ThumbMediaId/text()").string();
         ShortVideoMessage {
-            source: source.string(),
-            target: target.string(),
-            id: id.number() as i64,
-            time: time.number() as i64,
-            media_id: media_id.string(),
-            thumb_media_id: thumb_media_id.string(),
+            source: source,
+            target: target,
+            id: id,
+            time: time,
+            create_time: time::at(time::Timespec::new(time, 0)),
+            media_id: media_id,
+            thumb_media_id: thumb_media_id,
+            raw: xml.to_string(),
         }
-    }
-}
-
-impl ShortVideoMessage {
-    pub fn media_id(&self) -> &str {
-        &self.media_id
-    }
-
-    pub fn thumb_media_id(&self) -> &str {
-        &self.thumb_media_id
     }
 }
 
 #[cfg(test)]
 mod tests {
-    use messages::{MessageParser, MessageData};
+    use messages::MessageParser;
     use super::ShortVideoMessage;
 
     #[test]
@@ -80,11 +58,11 @@ mod tests {
         </xml>";
         let msg = ShortVideoMessage::from_xml(xml);
 
-        assert_eq!("fromUser", msg.source());
-        assert_eq!("toUser", msg.target());
-        assert_eq!(1234567890123456, msg.id());
-        assert_eq!(1348831860, msg.time());
-        assert_eq!("media_id", msg.media_id());
-        assert_eq!("thumb_media_id", msg.thumb_media_id());
+        assert_eq!("fromUser", &msg.source);
+        assert_eq!("toUser", &msg.target);
+        assert_eq!(1234567890123456, msg.id);
+        assert_eq!(1348831860, msg.time);
+        assert_eq!("media_id", &msg.media_id);
+        assert_eq!("thumb_media_id", &msg.thumb_media_id);
     }
 }

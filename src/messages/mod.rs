@@ -1,22 +1,8 @@
-use time;
-
 pub trait MessageParser {
     type WeChatMessage;
 
     fn from_xml(xml: &str) -> Self::WeChatMessage;
 }
-
-pub trait MessageData {
-    fn source(&self) -> &str;
-    fn target(&self) -> &str;
-    fn time(&self) -> i64;
-    fn id(&self) -> i64;
-    fn create_time(&self) -> time::Tm {
-        let clock = time::Timespec::new(self.time(), 0);
-        time::at(clock)
-    }
-}
-
 
 mod text;
 mod image;

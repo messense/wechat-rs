@@ -80,7 +80,7 @@ mod tests {
         <ToUserName><![CDATA[toUser]]></ToUserName>\
         <FromUserName><![CDATA[fromUser]]></FromUserName>\
         <CreateTime>1348831860</CreateTime>\
-        <MsgType><![CDATA[text]]></MsgType>\
+        <MsgType><![CDATA[voice]]></MsgType>\
         <MediaId><![CDATA[media_id]]></MediaId>\
         <Format><![CDATA[Format]]></Format>\
         <MsgId>1234567890123456</MsgId>\

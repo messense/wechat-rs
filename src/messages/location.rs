@@ -91,7 +91,7 @@ mod tests {
         <ToUserName><![CDATA[toUser]]></ToUserName>\
         <FromUserName><![CDATA[fromUser]]></FromUserName>\
         <CreateTime>1348831860</CreateTime>\
-        <MsgType><![CDATA[text]]></MsgType>\
+        <MsgType><![CDATA[location]]></MsgType>\
         <Location_X>23.134521</Location_X>\
         <Location_Y>113.358803</Location_Y>
         <Scale>20</Scale>\

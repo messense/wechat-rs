@@ -80,7 +80,7 @@ mod tests {
         <ToUserName><![CDATA[toUser]]></ToUserName>\
         <FromUserName><![CDATA[fromUser]]></FromUserName>\
         <CreateTime>1348831860</CreateTime>\
-        <MsgType><![CDATA[text]]></MsgType>\
+        <MsgType><![CDATA[link]]></MsgType>\
         <Title><![CDATA[公众平台官网链接]]></Title>\
         <Description><![CDATA[公众平台官网链接]]></Description>\
         <Url><![CDATA[url]]></Url>\

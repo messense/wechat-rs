@@ -10,6 +10,8 @@ mod xmlutil;
 mod cryptography;
 pub mod messages;
 mod parser;
+mod errors;
 
 pub use self::messages::{MessageParser, MessageData};
 pub use self::parser::parse_message;
+pub use self::errors::WeChatError;

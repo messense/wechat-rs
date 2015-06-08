@@ -10,6 +10,7 @@ pub struct SubscribeEvent {
     pub time: i64,
     pub create_time: time::Tm,
     pub id: i64,
+    pub event: String,
     pub raw: String,
 }
 
@@ -29,6 +30,7 @@ impl MessageParser for SubscribeEvent {
             id: id,
             time: time,
             create_time: time::at(time::Timespec::new(time, 0)),
+            event: "subscribe".to_string(),
             raw: xml.to_string(),
         }
     }
@@ -52,6 +54,7 @@ mod tests {
 
         assert_eq!("fromUser", &msg.source);
         assert_eq!("toUser", &msg.target);
+        assert_eq!("subscribe", &msg.event);
         assert_eq!(123456789, msg.time);
     }
 }

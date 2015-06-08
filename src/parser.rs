@@ -29,6 +29,7 @@ pub fn parse_message(xml: &str) -> Message {
 fn parse_event(event: &str, xml: &str) -> Message {
     match event {
         "subscribe" => Message::SubscribeEvent(messages::SubscribeEvent::from_xml(xml)),
+        "unsubscribe" => Message::UnsubscribeEvent(messages::UnsubscribeEvent::from_xml(xml)),
         _ => Message::UnknownMessage(messages::UnknownMessage::from_xml(xml)),
     }
 }

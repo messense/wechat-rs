@@ -23,6 +23,7 @@ pub use self::link::LinkMessage;
 pub use self::unknown::UnknownMessage;
 
 pub use events::SubscribeEvent;
+pub use events::UnsubscribeEvent;
 
 pub enum Message {
     TextMessage(TextMessage),
@@ -34,4 +35,5 @@ pub enum Message {
     LinkMessage(LinkMessage),
     UnknownMessage(UnknownMessage),
     SubscribeEvent(SubscribeEvent),
+    UnsubscribeEvent(UnsubscribeEvent),
 }

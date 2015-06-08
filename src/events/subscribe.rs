@@ -1,0 +1,57 @@
+use time;
+
+use xmlutil;
+use messages::MessageParser;
+
+#[derive(Debug, Eq, PartialEq, Clone)]
+pub struct SubscribeEvent {
+    pub source: String,
+    pub target: String,
+    pub time: i64,
+    pub create_time: time::Tm,
+    pub id: i64,
+    pub raw: String,
+}
+
+impl MessageParser for SubscribeEvent {
+    type WeChatMessage = SubscribeEvent;
+
+    fn from_xml(xml: &str) -> SubscribeEvent {
+        let package = xmlutil::parse(xml);
+        let doc = package.as_document();
+        let source = xmlutil::evaluate(&doc, "//xml/FromUserName/text()").string();
+        let target = xmlutil::evaluate(&doc, "//xml/ToUserName/text()").string();
+        let id = xmlutil::evaluate(&doc, "//xml/MsgId/text()").number() as i64;
+        let time = xmlutil::evaluate(&doc, "//xml/CreateTime/text()").number() as i64;
+        SubscribeEvent {
+            source: source,
+            target: target,
+            id: id,
+            time: time,
+            create_time: time::at(time::Timespec::new(time, 0)),
+            raw: xml.to_string(),
+        }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use messages::MessageParser;
+    use super::SubscribeEvent;
+
+    #[test]
+    fn test_from_xml() {
+        let xml = "<xml>\
+        <ToUserName><![CDATA[toUser]]></ToUserName>\
+        <FromUserName><![CDATA[fromUser]]></FromUserName>\
+        <CreateTime>123456789</CreateTime>\
+        <MsgType><![CDATA[event]]></MsgType>\
+        <Event><![CDATA[subscribe]]></Event>\
+        </xml>";
+        let msg = SubscribeEvent::from_xml(xml);
+
+        assert_eq!("fromUser", &msg.source);
+        assert_eq!("toUser", &msg.target);
+        assert_eq!(123456789, msg.time);
+    }
+}

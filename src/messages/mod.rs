@@ -22,6 +22,8 @@ pub use self::location::LocationMessage;
 pub use self::link::LinkMessage;
 pub use self::unknown::UnknownMessage;
 
+pub use events::SubscribeEvent;
+
 pub enum Message {
     TextMessage(TextMessage),
     ImageMessage(ImageMessage),
@@ -31,4 +33,5 @@ pub enum Message {
     LocationMessage(LocationMessage),
     LinkMessage(LinkMessage),
     UnknownMessage(UnknownMessage),
+    SubscribeEvent(SubscribeEvent),
 }

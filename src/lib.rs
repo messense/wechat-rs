@@ -9,6 +9,7 @@ extern crate byteorder;
 mod xmlutil;
 mod cryptography;
 pub mod messages;
+mod events;
 mod parser;
 mod errors;
 

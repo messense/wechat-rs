@@ -3,7 +3,7 @@ use rustc_serialize::base64::FromBase64;
 mod aes;
 mod prp;
 
-use super::WeChatError;
+use errors::WeChatError;
 use self::prp::PrpCrypto;
 
 

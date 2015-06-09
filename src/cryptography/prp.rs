@@ -6,8 +6,8 @@ use rustc_serialize::base64;
 use rustc_serialize::base64::{FromBase64, ToBase64};
 use byteorder::{NativeEndian, WriteBytesExt, ReadBytesExt};
 
-use super::super::WeChatError;
-use super::aes;
+use errors::WeChatError;
+use cryptography::aes;
 
 #[derive(Debug, Eq, PartialEq)]
 pub struct PrpCrypto {

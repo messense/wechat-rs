@@ -1,7 +1,7 @@
 use time;
 
-use super::super::xmlutil;
-use super::MessageParser;
+use xmlutil;
+use messages::MessageParser;
 
 #[derive(Debug, Eq, PartialEq, Clone)]
 pub struct ShortVideoMessage {

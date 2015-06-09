@@ -1,7 +1,7 @@
-use super::xmlutil;
-use super::messages;
-use super::messages::MessageParser;
-use super::messages::Message;
+use xmlutil;
+use messages;
+use messages::MessageParser;
+use messages::Message;
 
 
 pub fn parse_message(xml: &str) -> Message {
@@ -36,8 +36,8 @@ fn parse_event(event: &str, xml: &str) -> Message {
 
 #[cfg(test)]
 mod tests {
-    use super::super::messages::Message;
-    use super::*;
+    use messages::Message;
+    use super::parse_message;
 
     #[test]
     fn test_parse_text_message() {

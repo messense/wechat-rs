@@ -7,7 +7,7 @@ use messages::Message;
 pub fn parse_message(xml: &str) -> Message {
     let package = xmlutil::parse(xml);
     let doc = package.as_document();
-    let msg_type_str = xmlutil::evaluate(&doc, "//xml/MsgType/text()").string();
+    let msg_type_str = xmlutil::evaluate(&doc, "//xml/MsgType/text()").string().to_lowercase();
     let msg_type = &msg_type_str[..];
     let msg = match msg_type {
         "text" => Message::TextMessage(messages::TextMessage::from_xml(xml)),
@@ -18,7 +18,7 @@ pub fn parse_message(xml: &str) -> Message {
         "location" => Message::LocationMessage(messages::LocationMessage::from_xml(xml)),
         "link" => Message::LinkMessage(messages::LinkMessage::from_xml(xml)),
         "event" => {
-            let event_str = xmlutil::evaluate(&doc, "//xml/Event/text()").string();
+            let event_str = xmlutil::evaluate(&doc, "//xml/Event/text()").string().to_lowercase();
             parse_event(&event_str[..], xml)
         },
         _ => Message::UnknownMessage(messages::UnknownMessage::from_xml(xml)),

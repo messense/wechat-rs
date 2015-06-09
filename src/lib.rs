@@ -6,6 +6,9 @@ extern crate sxd_document;
 extern crate sxd_xpath;
 extern crate rustc_serialize;
 extern crate byteorder;
+extern crate hyper;
+#[cfg(test)] #[macro_use]
+extern crate yup_hyper_mock as hyper_mock;
 
 mod xmlutil;
 mod cryptography;

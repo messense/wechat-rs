@@ -10,6 +10,7 @@ keywords = ["wechat", "sdk"]
 license = "MIT"
 
 [dependencies]
+log = "*"
 rust-crypto = "*"
 sxd-document = "*"
 sxd-xpath = "*"
@@ -17,6 +18,8 @@ rand = "*"
 time = "*"
 byteorder = "*"
 rustc-serialize = "*"
+hyper = "*"
+yup-hyper-mock = "*"
 
 [features]
 unstable = []

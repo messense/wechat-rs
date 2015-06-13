@@ -339,3 +339,28 @@ fn test_parse_view_event() {
     assert_eq!(123456789, msg.time);
     assert_eq!("www.qq.com", &msg.url);
 }
+
+#[test]
+fn test_parse_subscribe_scan_event() {
+    let xml = "<xml>\
+    <ToUserName><![CDATA[toUser]]></ToUserName>\
+    <FromUserName><![CDATA[fromUser]]></FromUserName>\
+    <CreateTime>123456789</CreateTime>\
+    <MsgType><![CDATA[event]]></MsgType>\
+    <Event><![CDATA[subscribe]]></Event>\
+    <EventKey><![CDATA[qrscene_123123]]></EventKey>\
+    <Ticket><![CDATA[TICKET]]></Ticket>\
+    </xml>";
+    let _msg = parse_message(xml);
+    let msg = match _msg {
+        Message::SubscribeScanEvent(ref m) => m,
+        _ => panic!("Error parsing subscribe_scan event"),
+    };
+
+    assert_eq!("fromUser", &msg.source);
+    assert_eq!("toUser", &msg.target);
+    assert_eq!("subscribe_scan", &msg.event);
+    assert_eq!(123456789, msg.time);
+    assert_eq!("123123", &msg.scene_id);
+    assert_eq!("TICKET", &msg.ticket);
+}

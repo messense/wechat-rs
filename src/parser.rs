@@ -19,6 +19,13 @@ pub fn parse_message(xml: &str) -> Message {
         "link" => Message::LinkMessage(messages::LinkMessage::from_xml(xml)),
         "event" => {
             let event_str = xmlutil::evaluate(&doc, "//xml/Event/text()").string().to_lowercase();
+            if &event_str == "subscribe" {
+                let event_key = xmlutil::evaluate(&doc, "//xml/EventKey/text()").string();
+                if &event_key != "" {
+                    // special SubscribeScanEvent
+                    return Message::SubscribeScanEvent(messages::SubscribeScanEvent::from_xml(xml));
+                }
+            }
             parse_event(&event_str[..], xml)
         },
         _ => Message::UnknownMessage(messages::UnknownMessage::from_xml(xml)),

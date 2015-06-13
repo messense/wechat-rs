@@ -27,6 +27,7 @@ pub use self::unknown::UnknownMessage;
 pub use events::SubscribeEvent;
 pub use events::UnsubscribeEvent;
 pub use events::ScanEvent;
+pub use events::SubscribeScanEvent;
 pub use events::LocationEvent;
 pub use events::ClickEvent;
 pub use events::ViewEvent;
@@ -44,6 +45,7 @@ pub enum Message {
     SubscribeEvent(SubscribeEvent),
     UnsubscribeEvent(UnsubscribeEvent),
     ScanEvent(ScanEvent),
+    SubscribeScanEvent(SubscribeScanEvent),
     LocationEvent(LocationEvent),
     ClickEvent(ClickEvent),
     ViewEvent(ViewEvent),

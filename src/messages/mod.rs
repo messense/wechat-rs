@@ -26,6 +26,7 @@ pub use events::SubscribeEvent;
 pub use events::UnsubscribeEvent;
 pub use events::ScanEvent;
 pub use events::LocationEvent;
+pub use events::ClickEvent;
 
 pub enum Message {
     TextMessage(TextMessage),
@@ -40,4 +41,5 @@ pub enum Message {
     UnsubscribeEvent(UnsubscribeEvent),
     ScanEvent(ScanEvent),
     LocationEvent(LocationEvent),
+    ClickEvent(ClickEvent),
 }

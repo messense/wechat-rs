@@ -25,6 +25,7 @@ pub use self::unknown::UnknownMessage;
 pub use events::SubscribeEvent;
 pub use events::UnsubscribeEvent;
 pub use events::ScanEvent;
+pub use events::LocationEvent;
 
 pub enum Message {
     TextMessage(TextMessage),
@@ -38,4 +39,5 @@ pub enum Message {
     SubscribeEvent(SubscribeEvent),
     UnsubscribeEvent(UnsubscribeEvent),
     ScanEvent(ScanEvent),
+    LocationEvent(LocationEvent),
 }

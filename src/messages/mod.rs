@@ -13,6 +13,7 @@ mod location;
 mod link;
 mod unknown;
 
+// export Message types
 pub use self::text::TextMessage;
 pub use self::image::ImageMessage;
 pub use self::voice::VoiceMessage;
@@ -22,12 +23,15 @@ pub use self::location::LocationMessage;
 pub use self::link::LinkMessage;
 pub use self::unknown::UnknownMessage;
 
+// export Event types
 pub use events::SubscribeEvent;
 pub use events::UnsubscribeEvent;
 pub use events::ScanEvent;
 pub use events::LocationEvent;
 pub use events::ClickEvent;
+pub use events::ViewEvent;
 
+// an enum or messages and events
 pub enum Message {
     TextMessage(TextMessage),
     ImageMessage(ImageMessage),
@@ -42,4 +46,5 @@ pub enum Message {
     ScanEvent(ScanEvent),
     LocationEvent(LocationEvent),
     ClickEvent(ClickEvent),
+    ViewEvent(ViewEvent),
 }

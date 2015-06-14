@@ -15,9 +15,12 @@ pub mod messages;
 mod events;
 mod parser;
 mod errors;
+pub mod replies;
 
 pub use self::messages::MessageParser;
 pub use self::messages::Message;
 pub use self::parser::parse_message;
 pub use self::errors::WeChatError;
 pub use self::cryptography::WeChatCrypto;
+pub use self::replies::ReplyRenderer;
+pub use self::replies::Reply;

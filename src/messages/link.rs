@@ -39,7 +39,7 @@ impl MessageParser for LinkMessage {
             title: title,
             description: description,
             url: url,
-            raw: xml.to_string(),
+            raw: xml.to_owned(),
         }
     }
 }

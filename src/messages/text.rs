@@ -33,7 +33,7 @@ impl MessageParser for TextMessage {
             time: time,
             create_time: time::at(time::Timespec::new(time, 0)),
             content: content,
-            raw: xml.to_string(),
+            raw: xml.to_owned(),
         }
     }
 }

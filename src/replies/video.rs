@@ -14,12 +14,12 @@ impl VideoReply {
 	#[inline]
 	pub fn new(source: &str, target: &str, media_id: &str) -> VideoReply {
 		VideoReply {
-			source: source.to_string(),
-			target: target.to_string(),
+			source: source.to_owned(),
+			target: target.to_owned(),
 			time: time::get_time().sec,
-			media_id: media_id.to_string(),
-			title: "".to_string(),
-			description: "".to_string(),
+			media_id: media_id.to_owned(),
+			title: "".to_owned(),
+			description: "".to_owned(),
 		}
 	}
 }

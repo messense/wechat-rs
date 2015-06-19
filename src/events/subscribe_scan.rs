@@ -37,8 +37,8 @@ impl MessageParser for SubscribeScanEvent {
             create_time: time::at(time::Timespec::new(time, 0)),
             scene_id: scene_id.replace("qrscene_", ""),
             ticket: ticket,
-            event: "subscribe_scan".to_string(),
-            raw: xml.to_string(),
+            event: "subscribe_scan".to_owned(),
+            raw: xml.to_owned(),
         }
     }
 }

@@ -40,8 +40,8 @@ impl MessageParser for LocationEvent {
             latitude: latitude,
             longitude: longitude,
             precision: precision,
-            event: "location".to_string(),
-            raw: xml.to_string(),
+            event: "location".to_owned(),
+            raw: xml.to_owned(),
         }
     }
 }

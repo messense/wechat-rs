@@ -36,7 +36,7 @@ impl MessageParser for ImageMessage {
             create_time: time::at(time::Timespec::new(time, 0)),
             media_id: media_id,
             image: image,
-            raw: xml.to_string(),
+            raw: xml.to_owned(),
         }
     }
 }

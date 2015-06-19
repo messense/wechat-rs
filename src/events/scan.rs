@@ -37,8 +37,8 @@ impl MessageParser for ScanEvent {
             create_time: time::at(time::Timespec::new(time, 0)),
             scene_id: scene_id,
             ticket: ticket,
-            event: "scan".to_string(),
-            raw: xml.to_string(),
+            event: "scan".to_owned(),
+            raw: xml.to_owned(),
         }
     }
 }

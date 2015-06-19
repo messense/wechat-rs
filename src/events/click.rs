@@ -34,8 +34,8 @@ impl MessageParser for ClickEvent {
             time: time,
             create_time: time::at(time::Timespec::new(time, 0)),
             key: key,
-            event: "click".to_string(),
-            raw: xml.to_string(),
+            event: "click".to_owned(),
+            raw: xml.to_owned(),
         }
     }
 }

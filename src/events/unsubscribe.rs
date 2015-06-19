@@ -31,8 +31,8 @@ impl MessageParser for UnsubscribeEvent {
             id: id,
             time: time,
             create_time: time::at(time::Timespec::new(time, 0)),
-            event: "unsubscribe".to_string(),
-            raw: xml.to_string(),
+            event: "unsubscribe".to_owned(),
+            raw: xml.to_owned(),
         }
     }
 }

@@ -23,7 +23,7 @@ impl PrpCrypto {
 
     fn get_random_string() -> String {
         if cfg!(test) {
-            "1234567890123456".to_string()
+            "1234567890123456".to_owned()
         } else {
             thread_rng().gen_ascii_chars().take(16).collect()
         }

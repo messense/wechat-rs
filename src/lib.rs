@@ -1,3 +1,6 @@
+#![feature(plugin)]
+#![plugin(clippy)]
+
 extern crate time;
 extern crate rand;
 extern crate crypto;

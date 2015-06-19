@@ -30,7 +30,7 @@ impl MessageParser for UnknownMessage {
             id: id,
             time: time,
             create_time: time::at(time::Timespec::new(time, 0)),
-            raw: xml.to_string(),
+            raw: xml.to_owned(),
         }
     }
 }

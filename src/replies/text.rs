@@ -12,10 +12,10 @@ impl TextReply {
 	#[inline]
 	pub fn new(source: &str, target: &str, content: &str) -> TextReply {
 		TextReply {
-			source: source.to_string(),
-			target: target.to_string(),
+			source: source.to_owned(),
+			target: target.to_owned(),
 			time: time::get_time().sec,
-			content: content.to_string(),
+			content: content.to_owned(),
 		}
 	}
 }

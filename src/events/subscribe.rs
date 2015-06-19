@@ -31,8 +31,8 @@ impl MessageParser for SubscribeEvent {
             id: id,
             time: time,
             create_time: time::at(time::Timespec::new(time, 0)),
-            event: "subscribe".to_string(),
-            raw: xml.to_string(),
+            event: "subscribe".to_owned(),
+            raw: xml.to_owned(),
         }
     }
 }

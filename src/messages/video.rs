@@ -36,7 +36,7 @@ impl MessageParser for VideoMessage {
             create_time: time::at(time::Timespec::new(time, 0)),
             media_id: media_id,
             thumb_media_id: thumb_media_id,
-            raw: xml.to_string(),
+            raw: xml.to_owned(),
         }
     }
 }

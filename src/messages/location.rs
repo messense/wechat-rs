@@ -44,7 +44,7 @@ impl MessageParser for LocationMessage {
             location: (location_x, location_y),
             scale: scale,
             label: label,
-            raw: xml.to_string(),
+            raw: xml.to_owned(),
         }
     }
 }

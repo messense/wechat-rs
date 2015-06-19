@@ -39,7 +39,7 @@ impl MessageParser for VoiceMessage {
             media_id: media_id,
             format: format,
             recognition: recognition,
-            raw: xml.to_string(),
+            raw: xml.to_owned(),
         }
     }
 }

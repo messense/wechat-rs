@@ -16,13 +16,13 @@ pub struct WeChatCrypto {
 
 impl WeChatCrypto {
     pub fn new(token: &str, encoding_aes_key: &str, _id: &str) -> WeChatCrypto {
-        let mut aes_key = encoding_aes_key.to_string();
+        let mut aes_key = encoding_aes_key.to_owned();
         aes_key.push('=');
         let key = aes_key.from_base64().unwrap();
         WeChatCrypto {
-            token: token.to_string(),
+            token: token.to_owned(),
             key: key,
-            _id: _id.to_string(),
+            _id: _id.to_owned(),
         }
     }
 
@@ -33,8 +33,8 @@ impl WeChatCrypto {
         let mut data = vec![
             self.token.clone(),
             timestamp.to_string(),
-            nonce.to_string(),
-            encrypted.to_string(),
+            nonce.to_owned(),
+            encrypted.to_owned(),
         ];
         data.sort();
         let data_str = data.connect("");

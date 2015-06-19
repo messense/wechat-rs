@@ -34,8 +34,8 @@ impl MessageParser for ViewEvent {
             time: time,
             create_time: time::at(time::Timespec::new(time, 0)),
             url: url,
-            event: "view".to_string(),
-            raw: xml.to_string(),
+            event: "view".to_owned(),
+            raw: xml.to_owned(),
         }
     }
 }

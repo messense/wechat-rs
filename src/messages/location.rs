@@ -3,7 +3,7 @@ use time;
 use xmlutil;
 use messages::MessageParser;
 
-#[derive(Debug, PartialEq, Clone)]
+#[derive(Debug, Clone)]
 pub struct LocationMessage {
     pub source: String,
     pub target: String,

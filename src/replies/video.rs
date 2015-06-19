@@ -12,14 +12,14 @@ pub struct VideoReply {
 
 impl VideoReply {
 	#[inline]
-	pub fn new(source: &str, target: &str, media_id: &str, title: &str, description: &str) -> VideoReply {
+	pub fn new(source: &str, target: &str, media_id: &str) -> VideoReply {
 		VideoReply {
 			source: source.to_string(),
 			target: target.to_string(),
 			time: time::get_time().sec,
 			media_id: media_id.to_string(),
-			title: title.to_string(),
-			description: description.to_string(),
+			title: "".to_string(),
+			description: "".to_string(),
 		}
 	}
 }
@@ -55,7 +55,7 @@ mod tests {
 
 	#[test]
 	fn test_render_text_reply() {
-		let reply = VideoReply::new("test1", "test2", "test", "", "");
+		let reply = VideoReply::new("test1", "test2", "test");
 		let rendered = reply.render();
 		assert!(rendered.contains("test1"));
 		assert!(rendered.contains("test2"));

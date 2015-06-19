@@ -5,21 +5,25 @@ pub struct MusicReply {
     pub source: String,
     pub target: String,
     pub time: i64,
-    pub media_id: String,
+    pub thumb_media_id: String,
     pub title: String,
     pub description: String,
+    pub music_url: String,
+    pub hq_music_url: String,
 }
 
 impl MusicReply {
 	#[inline]
-	pub fn new(source: &str, target: &str, media_id: &str) -> MusicReply {
+	pub fn new(source: &str, target: &str, thumb_media_id: &str) -> MusicReply {
 		MusicReply {
 			source: source.to_owned(),
 			target: target.to_owned(),
 			time: time::get_time().sec,
-			media_id: media_id.to_owned(),
+			thumb_media_id: thumb_media_id.to_owned(),
 			title: "".to_owned(),
 			description: "".to_owned(),
+			music_url: "".to_owned(),
+			hq_music_url: "".to_owned(),
 		}
 	}
 }
@@ -31,19 +35,23 @@ impl ReplyRenderer for MusicReply {
 		    <ToUserName><![CDATA[{target}]]></ToUserName>\n\
 		    <FromUserName><![CDATA[{source}]]></FromUserName>\n\
 		    <CreateTime>{time}</CreateTime>\n\
-		    <MsgType><![CDATA[video]]></MsgType>\n\
-		    <Video>\n\
-		    <MediaId><![CDATA[{media_id}]]></MediaId>\n\
-		    <Title><![CDATA[{title}]]></Title>\n\
-		    <Description><![CDATA[{description}]]></Description>\n\
-		    </Video>\n\
+		    <MsgType><![CDATA[music]]></MsgType>\n\
+		    <Music>\n\
+			    <ThumbMediaId><![CDATA[{thumb_media_id}]]></ThumbMediaId>\n\
+			    <Title><![CDATA[{title}]]></Title>\n\
+			    <Description><![CDATA[{description}]]></Description>\n\
+			    <MusicUrl><![CDATA[{music_url}]]></MusicUrl>\n\
+			    <HQMusicUrl><![CDATA[{hq_music_url}]]></HQMusicUrl>\n\
+		    </Music>\n\
 		    </xml>",
 		    target=self.target,
 		    source=self.source,
 		    time=self.time,
-		    media_id=self.media_id,
+		    thumb_media_id=self.thumb_media_id,
 		    title=self.title,
 		    description=self.description,
+		    music_url=self.music_url,
+		    hq_music_url=self.hq_music_url,
 	    )
 	}
 }

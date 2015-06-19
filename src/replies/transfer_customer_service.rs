@@ -1,6 +1,7 @@
 use time;
 use replies::ReplyRenderer;
 
+#[derive(Debug, Eq, PartialEq, Clone)]
 pub struct TransferCustomerServiceReply {
     pub source: String,
     pub target: String,

@@ -25,6 +25,7 @@ impl VideoReply {
 }
 
 impl ReplyRenderer for VideoReply {
+	#[inline]
 	fn render(&self) -> String {
 		format!("<xml>\n\
 		    <ToUserName><![CDATA[{target}]]></ToUserName>\n\

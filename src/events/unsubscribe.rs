@@ -17,6 +17,7 @@ pub struct UnsubscribeEvent {
 impl MessageParser for UnsubscribeEvent {
     type WeChatMessage = UnsubscribeEvent;
 
+    #[inline]
     fn from_xml(xml: &str) -> UnsubscribeEvent {
         let package = xmlutil::parse(xml);
         let doc = package.as_document();

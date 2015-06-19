@@ -17,6 +17,7 @@ pub struct TextMessage {
 impl MessageParser for TextMessage {
     type WeChatMessage = TextMessage;
 
+    #[inline]
     fn from_xml(xml: &str) -> TextMessage {
         let package = xmlutil::parse(xml);
         let doc = package.as_document();

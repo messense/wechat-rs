@@ -18,6 +18,7 @@ pub struct VideoMessage {
 impl MessageParser for VideoMessage {
     type WeChatMessage = VideoMessage;
 
+    #[inline]
     fn from_xml(xml: &str) -> VideoMessage {
         let package = xmlutil::parse(xml);
         let doc = package.as_document();

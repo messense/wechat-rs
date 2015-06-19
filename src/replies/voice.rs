@@ -9,6 +9,7 @@ pub struct VoiceReply {
 }
 
 impl VoiceReply {
+	#[inline]
 	pub fn new(source: &str, target: &str, media_id: &str) -> VoiceReply {
 		VoiceReply {
 			source: source.to_string(),
@@ -20,6 +21,7 @@ impl VoiceReply {
 }
 
 impl ReplyRenderer for VoiceReply {
+	#[inline]
 	fn render(&self) -> String {
 		format!("<xml>\n\
 		    <ToUserName><![CDATA[{target}]]></ToUserName>\n\

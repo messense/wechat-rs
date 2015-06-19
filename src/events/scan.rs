@@ -19,6 +19,7 @@ pub struct ScanEvent {
 impl MessageParser for ScanEvent {
     type WeChatMessage = ScanEvent;
 
+    #[inline]
     fn from_xml(xml: &str) -> ScanEvent {
         let package = xmlutil::parse(xml);
         let doc = package.as_document();

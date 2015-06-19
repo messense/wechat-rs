@@ -9,6 +9,7 @@ pub struct ImageReply {
 }
 
 impl ImageReply {
+	#[inline]
 	pub fn new(source: &str, target: &str, media_id: &str) -> ImageReply {
 		ImageReply {
 			source: source.to_string(),
@@ -20,6 +21,7 @@ impl ImageReply {
 }
 
 impl ReplyRenderer for ImageReply {
+	#[inline]
 	fn render(&self) -> String {
 		format!("<xml>\n\
 		    <ToUserName><![CDATA[{target}]]></ToUserName>\n\

@@ -18,6 +18,7 @@ pub struct ViewEvent {
 impl MessageParser for ViewEvent {
     type WeChatMessage = ViewEvent;
 
+    #[inline]
     fn from_xml(xml: &str) -> ViewEvent {
         let package = xmlutil::parse(xml);
         let doc = package.as_document();

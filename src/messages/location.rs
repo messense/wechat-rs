@@ -21,6 +21,7 @@ pub struct LocationMessage {
 impl MessageParser for LocationMessage {
     type WeChatMessage = LocationMessage;
 
+    #[inline]
     fn from_xml(xml: &str) -> LocationMessage {
         let package = xmlutil::parse(xml);
         let doc = package.as_document();

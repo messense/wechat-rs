@@ -19,6 +19,7 @@ pub struct VoiceMessage {
 impl MessageParser for VoiceMessage {
     type WeChatMessage = VoiceMessage;
 
+    #[inline]
     fn from_xml(xml: &str) -> VoiceMessage {
         let package = xmlutil::parse(xml);
         let doc = package.as_document();

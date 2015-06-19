@@ -8,6 +8,7 @@ pub struct TransferCustomerServiceReply {
 }
 
 impl TransferCustomerServiceReply {
+	#[inline]
 	pub fn new(source: &str, target: &str) -> TransferCustomerServiceReply {
 		TransferCustomerServiceReply {
 			source: source.to_string(),
@@ -18,6 +19,7 @@ impl TransferCustomerServiceReply {
 }
 
 impl ReplyRenderer for TransferCustomerServiceReply {
+	#[inline]
 	fn render(&self) -> String {
 		format!("<xml>\n\
 		    <ToUserName><![CDATA[{target}]]></ToUserName>\n\

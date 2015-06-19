@@ -9,6 +9,7 @@ pub struct TextReply {
 }
 
 impl TextReply {
+	#[inline]
 	pub fn new(source: &str, target: &str, content: &str) -> TextReply {
 		TextReply {
 			source: source.to_string(),
@@ -20,6 +21,7 @@ impl TextReply {
 }
 
 impl ReplyRenderer for TextReply {
+	#[inline]
 	fn render(&self) -> String {
 		format!("<xml>\n\
 		    <ToUserName><![CDATA[{target}]]></ToUserName>\n\

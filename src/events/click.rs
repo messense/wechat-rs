@@ -18,6 +18,7 @@ pub struct ClickEvent {
 impl MessageParser for ClickEvent {
     type WeChatMessage = ClickEvent;
 
+    #[inline]
     fn from_xml(xml: &str) -> ClickEvent {
         let package = xmlutil::parse(xml);
         let doc = package.as_document();

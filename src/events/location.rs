@@ -20,6 +20,7 @@ pub struct LocationEvent {
 impl MessageParser for LocationEvent {
     type WeChatMessage = LocationEvent;
 
+    #[inline]
     fn from_xml(xml: &str) -> LocationEvent {
         let package = xmlutil::parse(xml);
         let doc = package.as_document();

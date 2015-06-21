@@ -21,6 +21,7 @@ mod parser;
 mod errors;
 pub mod replies;
 pub mod client;
+mod utils;
 
 pub use self::messages::MessageParser;
 pub use self::messages::Message;
@@ -30,3 +31,4 @@ pub use self::cryptography::WeChatCrypto;
 pub use self::replies::ReplyRenderer;
 pub use self::replies::Reply;
 pub use self::client::WeChatClient;
+pub use self::utils::check_signature;

@@ -14,60 +14,60 @@ pub struct MusicReply {
 }
 
 impl MusicReply {
-	#[inline]
-	pub fn new(source: &str, target: &str, thumb_media_id: &str) -> MusicReply {
-		MusicReply {
-			source: source.to_owned(),
-			target: target.to_owned(),
-			time: time::get_time().sec,
-			thumb_media_id: thumb_media_id.to_owned(),
-			title: "".to_owned(),
-			description: "".to_owned(),
-			music_url: "".to_owned(),
-			hq_music_url: "".to_owned(),
-		}
-	}
+    #[inline]
+    pub fn new(source: &str, target: &str, thumb_media_id: &str) -> MusicReply {
+        MusicReply {
+            source: source.to_owned(),
+            target: target.to_owned(),
+            time: time::get_time().sec,
+            thumb_media_id: thumb_media_id.to_owned(),
+            title: "".to_owned(),
+            description: "".to_owned(),
+            music_url: "".to_owned(),
+            hq_music_url: "".to_owned(),
+        }
+    }
 }
 
 impl ReplyRenderer for MusicReply {
-	#[inline]
-	fn render(&self) -> String {
-		format!("<xml>\n\
-		    <ToUserName><![CDATA[{target}]]></ToUserName>\n\
-		    <FromUserName><![CDATA[{source}]]></FromUserName>\n\
-		    <CreateTime>{time}</CreateTime>\n\
-		    <MsgType><![CDATA[music]]></MsgType>\n\
-		    <Music>\n\
-			    <ThumbMediaId><![CDATA[{thumb_media_id}]]></ThumbMediaId>\n\
-			    <Title><![CDATA[{title}]]></Title>\n\
-			    <Description><![CDATA[{description}]]></Description>\n\
-			    <MusicUrl><![CDATA[{music_url}]]></MusicUrl>\n\
-			    <HQMusicUrl><![CDATA[{hq_music_url}]]></HQMusicUrl>\n\
-		    </Music>\n\
-		    </xml>",
-		    target=self.target,
-		    source=self.source,
-		    time=self.time,
-		    thumb_media_id=self.thumb_media_id,
-		    title=self.title,
-		    description=self.description,
-		    music_url=self.music_url,
-		    hq_music_url=self.hq_music_url,
-	    )
-	}
+    #[inline]
+    fn render(&self) -> String {
+        format!("<xml>\n\
+            <ToUserName><![CDATA[{target}]]></ToUserName>\n\
+            <FromUserName><![CDATA[{source}]]></FromUserName>\n\
+            <CreateTime>{time}</CreateTime>\n\
+            <MsgType><![CDATA[music]]></MsgType>\n\
+            <Music>\n\
+                <ThumbMediaId><![CDATA[{thumb_media_id}]]></ThumbMediaId>\n\
+                <Title><![CDATA[{title}]]></Title>\n\
+                <Description><![CDATA[{description}]]></Description>\n\
+                <MusicUrl><![CDATA[{music_url}]]></MusicUrl>\n\
+                <HQMusicUrl><![CDATA[{hq_music_url}]]></HQMusicUrl>\n\
+            </Music>\n\
+            </xml>",
+            target=self.target,
+            source=self.source,
+            time=self.time,
+            thumb_media_id=self.thumb_media_id,
+            title=self.title,
+            description=self.description,
+            music_url=self.music_url,
+            hq_music_url=self.hq_music_url,
+        )
+    }
 }
 
 #[cfg(test)]
 mod tests {
-	use replies::ReplyRenderer;
-	use super::MusicReply;
+    use replies::ReplyRenderer;
+    use super::MusicReply;
 
-	#[test]
-	fn test_render_text_reply() {
-		let reply = MusicReply::new("test1", "test2", "test");
-		let rendered = reply.render();
-		assert!(rendered.contains("test1"));
-		assert!(rendered.contains("test2"));
-		assert!(rendered.contains("test"));
-	}
+    #[test]
+    fn test_render_text_reply() {
+        let reply = MusicReply::new("test1", "test2", "test");
+        let rendered = reply.render();
+        assert!(rendered.contains("test1"));
+        assert!(rendered.contains("test2"));
+        assert!(rendered.contains("test"));
+    }
 }

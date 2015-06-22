@@ -1,5 +1,5 @@
 pub trait ReplyRenderer {
-	fn render(&self) -> String;
+    fn render(&self) -> String;
 }
 
 mod text;

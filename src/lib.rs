@@ -10,6 +10,8 @@ extern crate sxd_xpath;
 extern crate rustc_serialize;
 extern crate byteorder;
 extern crate hyper;
+#[macro_use]
+extern crate log;
 
 mod xmlutil;
 mod cryptography;

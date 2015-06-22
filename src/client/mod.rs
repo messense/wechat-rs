@@ -30,14 +30,15 @@ impl WeChatClient {
 
     pub fn request(&self, method: Method, url: &str, params: Vec<(&str, &str)>, data: &Object) -> Result<Json, WeChatError> {
         let mut http_url = if !(url.starts_with("http://") || url.starts_with("https://")) {
-            let mut url_string = url.to_owned();
-            url_string = url_string + "https://api.weixin.qq.com/cgi-bin/";
+            let mut url_string = "https://api.weixin.qq.com/cgi-bin/".to_owned();
+            url_string = url_string + url;
             Url::parse(&url_string).unwrap()
         } else {
             Url::parse(url).unwrap()
         };
         let mut querys = params.clone();
         if !self.access_token.is_empty() {
+            debug!("Using access_token: {}", self.access_token);
             querys.push(("access_token", &self.access_token));
         }
         http_url.set_query_from_pairs(querys.into_iter());
@@ -57,14 +58,21 @@ impl WeChatClient {
         };
         let mut res = match req.send() {
             Ok(_res) => _res,
-            Err(_) => { return Err(WeChatError::ClientError { errcode: -1, errmsg: "".to_owned() }); }
+            Err(_) => {
+                error!("Send request error");
+                return Err(WeChatError::ClientError { errcode: -1, errmsg: "Send request error".to_owned() });
+            }
         };
         if res.status != hyper::Ok {
-            return Err(WeChatError::ClientError { errcode: -2, errmsg: "Request status error".to_owned() })
+            error!("Response status error");
+            return Err(WeChatError::ClientError { errcode: -2, errmsg: "Response status error".to_owned() })
         }
         let obj = match Json::from_reader(&mut res) {
             Ok(decoded) => { decoded },
-            Err(_) => { return Err(WeChatError::ClientError { errcode: -3, errmsg: "Json decode error".to_owned() }); }
+            Err(_) => {
+                error!("Json decode error");
+                return Err(WeChatError::ClientError { errcode: -3, errmsg: "Json decode error".to_owned() });
+            }
         };
         Ok(obj)
     }

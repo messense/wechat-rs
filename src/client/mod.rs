@@ -29,8 +29,14 @@ impl WeChatClient {
     }
 
     pub fn request(&self, method: Method, url: &str, params: Vec<(&str, &str)>, data: &Object) -> Result<Json, WeChatError> {
+        let mut http_url = if !(url.starts_with("http://") || url.starts_with("https://")) {
+            let mut url_string = url.to_owned();
+            url_string = url_string + "https://api.weixin.qq.com/cgi-bin/";
+            Url::parse(&url_string).unwrap()
+        } else {
+            Url::parse(url).unwrap()
+        };
         let mut querys = params.clone();
-        let mut http_url = Url::parse(url).unwrap();
         if !self.access_token.is_empty() {
             querys.push(("access_token", &self.access_token));
         }
@@ -69,5 +75,9 @@ impl WeChatClient {
 
     pub fn get(&self, url: &str, params: Vec<(&str, &str)>) -> Result<Json, WeChatError> {
         self.request(Method::Get, url, params, &Object::new())
+    }
+
+    pub fn fetch_access_token(&mut self) {
+
     }
 }

@@ -86,7 +86,7 @@ impl ArticlesReply {
 
     pub fn add_article(&mut self, article: Article) -> bool {
         if self.articles.len() >= 10 {
-            return false
+            return false;
         }
         self.articles.push(article);
         true

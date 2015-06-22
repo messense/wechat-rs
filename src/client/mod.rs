@@ -28,8 +28,12 @@ impl WeChatClient {
     }
 
     pub fn post(&self, url: &str, params: Vec<(&str, &str)>, data: &Object) -> Result<Json, WeChatError> {
+        let mut querys = params.clone();
         let mut http_url = Url::parse(url).unwrap();
-        http_url.set_query_from_pairs(params.into_iter());
+        if !self.access_token.is_empty() {
+            querys.push(("access_token", &self.access_token));
+        }
+        http_url.set_query_from_pairs(querys.into_iter());
         let body = match json::encode(data) {
             Ok(text) => text,
             Err(_) => "".to_owned(),
@@ -50,8 +54,12 @@ impl WeChatClient {
     }
 
     pub fn get(&self, url: &str, params: Vec<(&str, &str)>) -> Result<Json, WeChatError> {
+        let mut querys = params.clone();
         let mut http_url = Url::parse(url).unwrap();
-        http_url.set_query_from_pairs(params.into_iter());
+        if !self.access_token.is_empty() {
+            querys.push(("access_token", &self.access_token));
+        }
+        http_url.set_query_from_pairs(querys.into_iter());
         let mut client = Client::new();
         let mut res = match client.post(http_url).send() {
             Ok(_res) => _res,

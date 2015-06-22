@@ -77,7 +77,31 @@ impl WeChatClient {
         self.request(Method::Get, url, params, &Object::new())
     }
 
-    pub fn fetch_access_token(&mut self) {
-
+    pub fn fetch_access_token(&mut self) -> Option<String> {
+        let res = self.get(
+            "token",
+            vec![
+                ("grant_type", "client_credential"),
+                ("appid", &self.appid),
+                ("secret", &self.secret),
+            ]
+        );
+        let data = match res {
+            Ok(data) => data,
+            Err(_) => { return None; },
+        };
+        let obj = data.as_object().unwrap();
+        let token = match obj.get("access_token") {
+            Some(token) => token,
+            None => { return None; }
+        };
+        let token_str = match *token {
+            Json::String(ref v) => {
+                self.access_token = v.to_owned();
+                Some(format!("{}", v))
+            },
+            _ => None,
+        };
+        token_str
     }
 }

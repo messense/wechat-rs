@@ -2,8 +2,8 @@ extern crate wechat;
 
 use wechat::WeChatClient;
 
-static APPID: &'static str = "wxd7aa56e2c7b1f4f1";
-static SECRET: &'static str = "2817b66a1d5829847196cf2f96ab2816";
+const APPID: &'static str = "wxd7aa56e2c7b1f4f1";
+const SECRET: &'static str = "2817b66a1d5829847196cf2f96ab2816";
 
 #[test]
 fn test_fetch_access_token() {

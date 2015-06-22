@@ -1,5 +1,3 @@
-use std::io::Read;
-
 use url::Url;
 use hyper::{self, Client};
 use rustc_serialize::json::{self, Json, Object};
@@ -44,14 +42,9 @@ impl WeChatClient {
         if res.status != hyper::Ok {
             return Err(WeChatError::ClientError { errcode: -2, errmsg: "Request status error".to_owned() })
         }
-        let mut buf = String::new();
-        match res.read_to_string(&mut buf) {
-            Ok(_) => {},
-            Err(_) => { return Err(WeChatError::ClientError { errcode: -3, errmsg: "Read response error".to_owned() }); }
-        };
-        let obj = match Json::from_str(&buf) {
+        let obj = match Json::from_reader(&mut res) {
             Ok(decoded) => { decoded },
-            Err(_) => { return Err(WeChatError::ClientError { errcode: -4, errmsg: "Json decode error".to_owned() }); }
+            Err(_) => { return Err(WeChatError::ClientError { errcode: -3, errmsg: "Json decode error".to_owned() }); }
         };
         Ok(obj)
     }
@@ -67,14 +60,9 @@ impl WeChatClient {
         if res.status != hyper::Ok {
             return Err(WeChatError::ClientError { errcode: -2, errmsg: "Request status error".to_owned() })
         }
-        let mut buf = String::new();
-        match res.read_to_string(&mut buf) {
-            Ok(_) => {},
-            Err(_) => { return Err(WeChatError::ClientError { errcode: -3, errmsg: "Read response error".to_owned() }); }
-        };
-        let obj = match Json::from_str(&buf) {
+        let obj = match Json::from_reader(&mut res) {
             Ok(decoded) => { decoded },
-            Err(_) => { return Err(WeChatError::ClientError { errcode: -4, errmsg: "Json decode error".to_owned() }); }
+            Err(_) => { return Err(WeChatError::ClientError { errcode: -3, errmsg: "Json decode error".to_owned() }); }
         };
         Ok(obj)
     }

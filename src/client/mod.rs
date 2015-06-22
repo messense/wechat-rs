@@ -81,23 +81,31 @@ impl WeChatClient {
     }
 
     #[inline]
-    pub fn post(&self, url: &str, params: Vec<(&str, &str)>, data: &Object) -> Result<Json, WeChatError> {
+    pub fn post(&mut self, url: &str, params: Vec<(&str, &str)>, data: &Object) -> Result<Json, WeChatError> {
+        if self.access_token.is_empty() {
+            self.fetch_access_token();
+        }
         self.request(Method::Post, url, params, data)
     }
 
     #[inline]
-    pub fn get(&self, url: &str, params: Vec<(&str, &str)>) -> Result<Json, WeChatError> {
+    pub fn get(&mut self, url: &str, params: Vec<(&str, &str)>) -> Result<Json, WeChatError> {
+        if self.access_token.is_empty() {
+            self.fetch_access_token();
+        }
         self.request(Method::Get, url, params, &Object::new())
     }
 
     pub fn fetch_access_token(&mut self) -> Option<String> {
-        let res = self.get(
+        let res = self.request(
+            Method::Get,
             "token",
             vec![
                 ("grant_type", "client_credential"),
                 ("appid", &self.appid),
                 ("secret", &self.secret),
-            ]
+            ],
+            &Object::new()
         );
         let data = match res {
             Ok(data) => data,

@@ -12,6 +12,8 @@ pub struct WeChatClient {
 }
 
 impl WeChatClient {
+
+    #[inline]
     pub fn new(appid: &str, secret: &str) -> WeChatClient {
         WeChatClient {
             appid: appid.to_owned(),
@@ -20,6 +22,7 @@ impl WeChatClient {
         }
     }
 
+    #[inline]
     pub fn with_access_token(appid: &str, secret: &str, access_token: &str) -> WeChatClient {
         WeChatClient {
             appid: appid.to_owned(),
@@ -77,10 +80,12 @@ impl WeChatClient {
         Ok(obj)
     }
 
+    #[inline]
     pub fn post(&self, url: &str, params: Vec<(&str, &str)>, data: &Object) -> Result<Json, WeChatError> {
         self.request(Method::Post, url, params, data)
     }
 
+    #[inline]
     pub fn get(&self, url: &str, params: Vec<(&str, &str)>) -> Result<Json, WeChatError> {
         self.request(Method::Get, url, params, &Object::new())
     }
@@ -98,8 +103,7 @@ impl WeChatClient {
             Ok(data) => data,
             Err(_) => { return None; },
         };
-        let obj = data.as_object().unwrap();
-        let token = match obj.get("access_token") {
+        let token = match data.find("access_token") {
             Some(token) => token,
             None => { return None; }
         };

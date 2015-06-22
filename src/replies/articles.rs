@@ -18,6 +18,7 @@ pub struct ArticlesReply {
 }
 
 impl Article {
+    
     #[inline]
     pub fn new(title: &str, url: &str) -> Article {
         Article {
@@ -128,8 +129,10 @@ mod tests {
         let mut reply = ArticlesReply::new("test1", "test2");
         let article1 = Article::new("test3", "test4");
         let article2 = Article::with_image("test5", "test6", "test7");
+        let article3 = Article::with_description("test8", "test9", "test10");
         reply.add_article(article1);
         reply.add_article(article2);
+        reply.add_article(article3);
         let rendered = reply.render();
 
         assert!(rendered.contains("test1"));

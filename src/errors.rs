@@ -4,12 +4,13 @@ use std::error;
 use crypto::symmetriccipher::SymmetricCipherError;
 use rustc_serialize::base64::FromBase64Error;
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 pub enum WeChatError {
     InvalidSignature,
     InvalidAppId,
     SymmetricCipher(SymmetricCipherError),
     InvalidBase64(FromBase64Error),
+    ClientError { errcode: i32, errmsg: String },
 }
 
 impl fmt::Display for WeChatError {
@@ -22,6 +23,7 @@ impl fmt::Display for WeChatError {
                 SymmetricCipherError::InvalidPadding => write!(f, "Invalid padding"),
             },
             WeChatError::InvalidBase64(ref err) => err.fmt(f),
+            WeChatError::ClientError { errcode, ref errmsg } => write!(f, "Client error code: {}, message: {}", errcode, errmsg),
         }
     }
 }
@@ -36,6 +38,7 @@ impl error::Error for WeChatError {
                 SymmetricCipherError::InvalidPadding => "Invalid padding",
             },
             WeChatError::InvalidBase64(ref err) => err.description(),
+            WeChatError::ClientError { errcode, ref errmsg } => errmsg,
         }
     }
 }

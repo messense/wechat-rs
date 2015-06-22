@@ -19,7 +19,6 @@ time = "*"
 byteorder = "*"
 rustc-serialize = "*"
 hyper = "*"
-yup-hyper-mock = "*"
 
 [dependencies.sxd-xpath]
 git = "https://github.com/shepmaster/sxd-xpath.git"

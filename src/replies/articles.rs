@@ -17,6 +17,7 @@ pub struct ArticlesReply {
     pub articles: Vec<Article>,
 }
 
+#[allow(dead_code)]
 impl Article {
     
     #[inline]

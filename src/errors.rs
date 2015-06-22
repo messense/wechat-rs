@@ -29,6 +29,8 @@ impl fmt::Display for WeChatError {
 }
 
 impl error::Error for WeChatError {
+
+    #[allow(unused_variables)]
     fn description(&self) -> &str {
         match *self {
             WeChatError::InvalidSignature => "Invalid signature",

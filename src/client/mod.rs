@@ -5,6 +5,9 @@ use rustc_serialize::json::{self, Json, Object};
 
 use errors::WeChatError;
 
+//mod misc;
+
+#[derive(Debug, Eq, PartialEq, Clone)]
 pub struct WeChatClient {
     pub appid: String,
     pub secret: String,

@@ -1,5 +1,5 @@
 use std::cell::RefCell;
-use std::rc::Rc;
+use std::sync::{Mutex, Arc};
 
 use url::Url;
 use hyper::{self, Client};
@@ -10,11 +10,11 @@ use errors::WeChatError;
 
 //mod misc;
 
-#[derive(Debug, Eq, PartialEq, Clone)]
+#[derive(Debug, Clone)]
 pub struct WeChatClient {
     pub appid: String,
     pub secret: String,
-    _access_token: Rc<RefCell<String>>,
+    _access_token: Arc<Mutex<RefCell<String>>>,
 }
 
 impl WeChatClient {
@@ -24,7 +24,7 @@ impl WeChatClient {
         WeChatClient {
             appid: appid.to_owned(),
             secret: secret.to_owned(),
-            _access_token: Rc::new(RefCell::new("".to_owned())),
+            _access_token: Arc::new(Mutex::new(RefCell::new("".to_owned()))),
         }
     }
 
@@ -33,13 +33,16 @@ impl WeChatClient {
         WeChatClient {
             appid: appid.to_owned(),
             secret: secret.to_owned(),
-            _access_token: Rc::new(RefCell::new(access_token.to_owned())),
+            _access_token: Arc::new(Mutex::new(RefCell::new(access_token.to_owned()))),
         }
     }
 
     #[inline]
     pub fn access_token(&self) -> String {
-        self._access_token.borrow().clone()
+        let data = self._access_token.clone();
+        let data = data.lock().unwrap();
+        let token = data.borrow().clone();
+        token
     }
 
     pub fn request(&self, method: Method, url: &str, params: Vec<(&str, &str)>, data: &Object) -> Result<Json, WeChatError> {
@@ -129,7 +132,9 @@ impl WeChatClient {
         };
         let token_str = match *token {
             Json::String(ref v) => {
-                let mut access_token = self._access_token.borrow_mut();
+                let data = self._access_token.clone();
+                let data = data.lock().unwrap();
+                let mut access_token = data.borrow_mut();
                 *access_token = v.to_owned();
                 Some(format!("{}", v))
             },

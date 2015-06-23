@@ -25,3 +25,19 @@ fn test_call_api_with_no_access_token_provided() {
     let ips = ip_list.as_array().unwrap();
     assert!(ips.len() > 0);
 }
+
+#[test]
+fn test_call_api_with_access_token_provided() {
+    let client0 = WeChatClient::new(APPID, SECRET);
+    let access_token = client0.fetch_access_token();
+
+    let client = WeChatClient::with_access_token(APPID, SECRET, &access_token.unwrap());
+    let res = client.get("getcallbackip", vec![]);
+    let data = match res {
+        Ok(data) => data,
+        Err(_) => { panic!("Error calling API"); },
+    };
+    let ip_list = data.find("ip_list").unwrap();
+    let ips = ip_list.as_array().unwrap();
+    assert!(ips.len() > 0);
+}

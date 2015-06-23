@@ -7,15 +7,15 @@ const SECRET: &'static str = "2817b66a1d5829847196cf2f96ab2816";
 
 #[test]
 fn test_fetch_access_token() {
-    let mut client = WeChatClient::new(APPID, SECRET);
+    let client = WeChatClient::new(APPID, SECRET);
     let access_token = client.fetch_access_token();
     assert!(access_token.is_some());
-    assert!(!client.access_token.is_empty());
+    assert!(!client.access_token().is_empty());
 }
 
 #[test]
 fn test_call_api_with_no_access_token_provided() {
-    let mut client = WeChatClient::new(APPID, SECRET);
+    let client = WeChatClient::new(APPID, SECRET);
     let res = client.get("getcallbackip", vec![]);
     let data = match res {
         Ok(data) => data,

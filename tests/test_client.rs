@@ -44,10 +44,10 @@ fn test_call_api_with_access_token_provided() {
 
 #[test]
 fn test_misc_get_wechat_ips() {
-    use wechat::client::Misc;
+    use wechat::client::WeChatMisc;
 
     let client = WeChatClient::new(APPID, SECRET);
-    let misc = Misc::new(&client);
+    let misc = WeChatMisc::new(&client);
     let ips = misc.get_wechat_ips();
     assert!(ips.len() > 0);
 }

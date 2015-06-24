@@ -9,7 +9,7 @@ use rustc_serialize::json::{self, Json, Object};
 use errors::WeChatError;
 
 mod misc;
-pub use self::misc::Misc;
+pub use self::misc::WeChatMisc;
 
 #[derive(Debug, Clone)]
 pub struct WeChatClient {

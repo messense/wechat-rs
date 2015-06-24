@@ -3,15 +3,15 @@ use rustc_serialize::json::Json;
 use client::WeChatClient;
 
 #[derive(Debug, Clone)]
-pub struct Misc<'a> {
+pub struct WeChatMisc<'a> {
     client: &'a WeChatClient,
 }
 
-impl<'a> Misc<'a> {
+impl<'a> WeChatMisc<'a> {
 
     #[inline]
-    pub fn new(client: &'a WeChatClient) -> Misc<'a> {
-        Misc {
+    pub fn new(client: &'a WeChatClient) -> WeChatMisc<'a> {
+        WeChatMisc {
             client: client,
         }
     }

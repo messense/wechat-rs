@@ -1,6 +1,7 @@
 use rustc_serialize::json::{Json, Object};
 
 use client::WeChatClient;
+use errors::WeChatError;
 
 #[derive(Debug, Clone)]
 pub struct WeChatMisc<'a> {
@@ -16,12 +17,8 @@ impl<'a> WeChatMisc<'a> {
         }
     }
 
-    pub fn get_wechat_ips(&self) -> Vec<String> {
-        let res = self.client.get("getcallbackip", vec![]);
-        let data = match res {
-            Ok(data) => data,
-            Err(_) => { return vec![]; },
-        };
+    pub fn get_wechat_ips(&self) -> Result<Vec<String>, WeChatError> {
+        let data = try!(self.client.get("getcallbackip", vec![]));
         let ip_list = data.find("ip_list").unwrap();
         let ip_array = ip_list.as_array().unwrap();
         let mut ips: Vec<String> = Vec::new();
@@ -30,20 +27,16 @@ impl<'a> WeChatMisc<'a> {
                 ips.push(ip.to_owned());
             }
         }
-        ips
+        Ok(ips)
     }
 
-    pub fn short_url(&self, long_url: &str) -> String {
+    pub fn short_url(&self, long_url: &str) -> Result<String, WeChatError> {
         let mut body = Object::new();
         body.insert("action".to_owned(), Json::String("long2short".to_owned()));
         body.insert("long_url".to_owned(), Json::String(long_url.to_owned()));
-        let res = self.client.post("shorturl", vec![], &body);
-        let data = match res {
-            Ok(data) => data,
-            Err(_) => { return "".to_owned() },
-        };
+        let data = try!(self.client.post("shorturl", vec![], &body));
         let short = data.find("short_url").unwrap();
         let short = short.as_string().unwrap();
-        short.to_owned()
+        Ok(short.to_owned())
     }
 }

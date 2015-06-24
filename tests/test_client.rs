@@ -48,7 +48,7 @@ fn test_misc_get_wechat_ips() {
 
     let client = WeChatClient::new(APPID, SECRET);
     let misc = WeChatMisc::new(&client);
-    let ips = misc.get_wechat_ips();
+    let ips = misc.get_wechat_ips().unwrap();
     assert!(ips.len() > 0);
 }
 
@@ -58,6 +58,6 @@ fn test_misc_short_url() {
 
     let client = WeChatClient::new(APPID, SECRET);
     let misc = WeChatMisc::new(&client);
-    let url = misc.short_url("http://www.qq.com");
+    let url = misc.short_url("http://www.qq.com").unwrap();
     assert!(url.len() > 0);
 }

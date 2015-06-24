@@ -61,3 +61,13 @@ fn test_misc_short_url() {
     let url = misc.short_url("http://www.qq.com").unwrap();
     assert!(url.len() > 0);
 }
+
+#[test]
+fn test_semantic_search_simple() {
+    use wechat::client::WeChatSemantic;
+
+    let client = WeChatClient::new(APPID, SECRET);
+    let semantic = WeChatSemantic::new(&client);
+    let res = semantic.search_simple("查一下明天从北京到上海的南航机票", "flight,hotel");
+    assert!(res.is_ok());
+}

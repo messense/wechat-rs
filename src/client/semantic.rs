@@ -21,7 +21,6 @@ impl<'a> WeChatSemantic<'a> {
         let mut body = Object::new();
         body.insert("query".to_owned(), Json::String(query.to_owned()));
         body.insert("category".to_owned(), Json::String(category.to_owned()));
-        body.insert("appid".to_owned(), Json::String(self.client.appid.clone()));
         self.search(&mut body)
     }
 

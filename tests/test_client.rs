@@ -51,3 +51,13 @@ fn test_misc_get_wechat_ips() {
     let ips = misc.get_wechat_ips();
     assert!(ips.len() > 0);
 }
+
+#[test]
+fn test_misc_short_url() {
+    use wechat::client::WeChatMisc;
+
+    let client = WeChatClient::new(APPID, SECRET);
+    let misc = WeChatMisc::new(&client);
+    let url = misc.short_url("http://www.qq.com");
+    assert!(url.len() > 0);
+}

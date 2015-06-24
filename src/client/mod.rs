@@ -3,6 +3,7 @@ use std::sync::{Mutex, Arc};
 
 use url::Url;
 use hyper::{self, Client};
+use hyper::client::Response;
 use hyper::method::Method;
 use rustc_serialize::json::{self, Json, Object};
 
@@ -49,7 +50,7 @@ impl WeChatClient {
         token
     }
 
-    pub fn request(&self, method: Method, url: &str, params: Vec<(&str, &str)>, data: &Object) -> Result<Json, WeChatError> {
+    pub fn request(&self, method: Method, url: &str, params: Vec<(&str, &str)>, data: &Object) -> Result<Response, WeChatError> {
         let mut http_url = if !(url.starts_with("http://") || url.starts_with("https://")) {
             let mut url_string = "https://api.weixin.qq.com/cgi-bin/".to_owned();
             url_string = url_string + url;
@@ -78,7 +79,7 @@ impl WeChatClient {
         } else {
             client.get(http_url)
         };
-        let mut res = match req.send() {
+        let res = match req.send() {
             Ok(_res) => _res,
             Err(_) => {
                 error!("Send request error");
@@ -89,13 +90,29 @@ impl WeChatClient {
             error!("Response status error");
             return Err(WeChatError::ClientError { errcode: -2, errmsg: "Response status error".to_owned() })
         }
-        let obj = match Json::from_reader(&mut res) {
+        Ok(res)
+        
+    }
+
+    #[inline]
+    fn json_decode(&self, res: &mut Response) -> Result<Json, WeChatError> {
+        let obj = match Json::from_reader(res) {
             Ok(decoded) => { decoded },
             Err(_) => {
                 error!("Json decode error");
                 return Err(WeChatError::ClientError { errcode: -3, errmsg: "Json decode error".to_owned() });
             }
         };
+        match obj.find("errcode") {
+            Some(code) => {
+                let errcode = code.as_i64().unwrap();
+                if errcode != 0 {
+                    let errmsg = obj.find("errmsg").unwrap().as_string().unwrap();
+                    return Err(WeChatError::ClientError { errcode: errcode as i32, errmsg: errmsg.to_owned() });
+                }
+            },
+            None => {},
+        }
         Ok(obj)
     }
 
@@ -104,7 +121,8 @@ impl WeChatClient {
         if self.access_token().is_empty() {
             self.fetch_access_token();
         }
-        self.request(Method::Post, url, params, data)
+        let mut res = try!(self.request(Method::Post, url, params, data));
+        self.json_decode(&mut res)
     }
 
     #[inline]
@@ -112,7 +130,8 @@ impl WeChatClient {
         if self.access_token().is_empty() {
             self.fetch_access_token();
         }
-        self.request(Method::Get, url, params, &Object::new())
+        let mut res = try!(self.request(Method::Get, url, params, &Object::new()));
+        self.json_decode(&mut res)
     }
 
     pub fn fetch_access_token(&self) -> Option<String> {
@@ -126,7 +145,11 @@ impl WeChatClient {
             ],
             &Object::new()
         );
-        let data = match res {
+        let mut raw_data = match res {
+            Ok(raw) => raw,
+            Err(_) => { return None; },
+        };
+        let data = match self.json_decode(&mut raw_data) {
             Ok(data) => data,
             Err(_) => { return None; },
         };

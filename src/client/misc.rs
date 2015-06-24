@@ -2,19 +2,21 @@ use rustc_serialize::json::Json;
 
 use client::WeChatClient;
 
-#[derive(Debug, Eq, PartialEq, Clone)]
-struct Misc<'a> {
-    client: &'a mut WeChatClient,
+#[derive(Debug, Clone)]
+pub struct Misc<'a> {
+    client: &'a WeChatClient,
 }
 
 impl<'a> Misc<'a> {
-    pub fn new(client: &'a mut WeChatClient) -> Misc<'a> {
+
+    #[inline]
+    pub fn new(client: &'a WeChatClient) -> Misc<'a> {
         Misc {
             client: client,
         }
     }
 
-    pub fn get_wechat_ips(&mut self) -> Vec<String> {
+    pub fn get_wechat_ips(&self) -> Vec<String> {
         let res = self.client.get("getcallbackip", vec![]);
         let data = match res {
             Ok(data) => data,
@@ -24,11 +26,8 @@ impl<'a> Misc<'a> {
         let ip_array = ip_list.as_array().unwrap();
         let mut ips: Vec<String> = Vec::new();
         for v in ip_array.iter() {
-            match v {
-                &Json::String(ref ip) => {
-                    ips.push(ip.to_owned());
-                },
-                _ => {},
+            if let &Json::String(ref ip) = v {
+                ips.push(ip.to_owned());
             }
         }
         ips

@@ -41,3 +41,13 @@ fn test_call_api_with_access_token_provided() {
     let ips = ip_list.as_array().unwrap();
     assert!(ips.len() > 0);
 }
+
+#[test]
+fn test_misc_get_wechat_ips() {
+    use wechat::client::Misc;
+
+    let client = WeChatClient::new(APPID, SECRET);
+    let misc = Misc::new(&client);
+    let ips = misc.get_wechat_ips();
+    assert!(ips.len() > 0);
+}

@@ -1,3 +1,6 @@
+#![feature(plugin)]
+#![plugin(json_macros)]
+extern crate rustc_serialize;
 extern crate wechat;
 
 use wechat::WeChatClient;
@@ -69,5 +72,24 @@ fn test_semantic_search_simple() {
     let client = WeChatClient::new(APPID, SECRET);
     let semantic = WeChatSemantic::new(&client);
     let res = semantic.search_simple("查一下明天从北京到上海的南航机票", "flight,hotel");
+    assert!(res.is_ok());
+}
+
+#[test]
+fn test_qrcode_create() {
+    use wechat::client::WeChatQRCode;
+
+    let client = WeChatClient::new(APPID, SECRET);
+    let qrcode = WeChatQRCode::new(&client);
+    let data = json!({
+        "action_name": "QR_SCENE",
+        "expire_seconds": 600,
+        "action_info": {
+            "scene": {
+                "scene_id": 123
+            }
+        }
+    });
+    let res = qrcode.create(data.as_object().unwrap());
     assert!(res.is_ok());
 }

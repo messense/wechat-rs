@@ -19,6 +19,7 @@ time = "*"
 byteorder = "*"
 rustc-serialize = "*"
 hyper = "*"
+json_macros = "*"
 
 [dependencies.sxd-xpath]
 git = "https://github.com/shepmaster/sxd-xpath.git"

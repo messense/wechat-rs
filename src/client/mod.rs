@@ -11,9 +11,11 @@ use errors::WeChatError;
 
 mod misc;
 mod semantic;
+mod qrcode;
 
 pub use self::misc::WeChatMisc;
 pub use self::semantic::WeChatSemantic;
+pub use self::qrcode::WeChatQRCode;
 
 #[derive(Debug, Clone)]
 pub struct WeChatClient {

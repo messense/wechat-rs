@@ -1,5 +1,6 @@
 #![feature(plugin)]
 #![plugin(clippy)]
+#![plugin(json_macros)]
 
 extern crate time;
 extern crate rand;

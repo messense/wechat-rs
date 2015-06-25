@@ -1,4 +1,4 @@
-use rustc_serialize::json::{Json, Object};
+use rustc_serialize::json::Json;
 
 use client::WeChatClient;
 use errors::WeChatError;
@@ -31,10 +31,11 @@ impl<'a> WeChatMisc<'a> {
     }
 
     pub fn short_url(&self, long_url: &str) -> Result<String, WeChatError> {
-        let mut body = Object::new();
-        body.insert("action".to_owned(), Json::String("long2short".to_owned()));
-        body.insert("long_url".to_owned(), Json::String(long_url.to_owned()));
-        let data = try!(self.client.post("shorturl", vec![], &body));
+        let body = json!({
+            "action": "long2short",
+            "long_url": (long_url)
+        });
+        let data = try!(self.client.post("shorturl", vec![], body.as_object().unwrap()));
         let short = data.find("short_url").unwrap();
         let short = short.as_string().unwrap();
         Ok(short.to_owned())

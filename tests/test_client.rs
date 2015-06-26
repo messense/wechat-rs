@@ -121,6 +121,10 @@ fn test_menu_apis() {
     let res = menu.get();
     assert!(res.is_ok());
 
+    // try get current menu info
+    let res = menu.get_menu_info();
+    assert!(res.is_ok());
+
     // try update
     let res = menu.update(json!({
         "button": [

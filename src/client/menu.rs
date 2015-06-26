@@ -33,4 +33,8 @@ impl<'a> WeChatMenu<'a> {
         try!(self.delete());
         self.client.post("menu/create", vec![], data)
     }
+
+    pub fn get_menu_info(&self) -> Result<Json, WeChatError> {
+        self.client.get("get_current_selfmenu_info", vec![])
+    }
 }

@@ -92,4 +92,7 @@ fn test_qrcode_create() {
     });
     let res = qrcode.create(data.as_object().unwrap());
     assert!(res.is_ok());
+
+    let qrcode_url = WeChatQRCode::get_url(&res.unwrap());
+    assert!(qrcode_url.len() > 0);
 }

@@ -96,3 +96,41 @@ fn test_qrcode_create() {
     let qrcode_url = WeChatQRCode::get_url(&res.unwrap());
     assert!(qrcode_url.len() > 0);
 }
+
+#[test]
+fn test_menu_apis() {
+    use wechat::client::WeChatMenu;
+
+    let client = WeChatClient::new(APPID, SECRET);
+    let menu = WeChatMenu::new(&client);
+
+    // delete first
+    let res = menu.delete();
+    assert!(res.is_ok());
+
+    // create new
+    let res = menu.create(json!({
+        "button": [
+            {"type": "click", "key": "test", "name": "test"},
+            {"type": "view", "url": "http://www.qq.com", "name": "QQ"}
+        ]
+    }).as_object().unwrap());
+    assert!(res.is_ok());
+
+    // try get
+    let res = menu.get();
+    assert!(res.is_ok());
+
+    // try update
+    let res = menu.update(json!({
+        "button": [
+            {"type": "click", "key": "test", "name": "test"},
+            {"type": "view", "url": "http://www.qq.com", "name": "QQ"}
+        ]
+    }).as_object().unwrap());
+    assert!(res.is_ok());
+
+    // cleanup
+    let res = menu.delete();
+    assert!(res.is_ok());
+}

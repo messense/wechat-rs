@@ -1,4 +1,4 @@
-use rustc_serialize::json::{Json, Object};
+use rustc_serialize::json::Json;
 
 use client::WeChatClient;
 use errors::WeChatError;
@@ -17,8 +17,8 @@ impl<'a> WeChatQRCode<'a> {
         }
     }
     
-    pub fn create(&self, data: &Object) -> Result<Json, WeChatError> {
-        self.client.post("qrcode/create", vec![], data)
+    pub fn create(&self, data: &Json) -> Result<Json, WeChatError> {
+        self.client.post("qrcode/create", vec![], data.as_object().unwrap())
     }
 
     pub fn get_url_with_ticket(ticket: &str) -> String {

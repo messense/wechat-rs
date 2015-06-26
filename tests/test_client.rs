@@ -90,7 +90,7 @@ fn test_qrcode_create() {
             }
         }
     });
-    let res = qrcode.create(data.as_object().unwrap());
+    let res = qrcode.create(&data);
     assert!(res.is_ok());
 
     let qrcode_url = WeChatQRCode::get_url(&res.unwrap());
@@ -109,12 +109,12 @@ fn test_menu_apis() {
     assert!(res.is_ok());
 
     // create new
-    let res = menu.create(json!({
+    let res = menu.create(&json!({
         "button": [
             {"type": "click", "key": "test", "name": "test"},
             {"type": "view", "url": "http://www.qq.com", "name": "QQ"}
         ]
-    }).as_object().unwrap());
+    }));
     assert!(res.is_ok());
 
     // try get
@@ -126,12 +126,12 @@ fn test_menu_apis() {
     assert!(res.is_ok());
 
     // try update
-    let res = menu.update(json!({
+    let res = menu.update(&json!({
         "button": [
             {"type": "click", "key": "test", "name": "test"},
             {"type": "view", "url": "http://www.qq.com", "name": "QQ"}
         ]
-    }).as_object().unwrap());
+    }));
     assert!(res.is_ok());
 
     // cleanup

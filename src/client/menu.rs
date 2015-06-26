@@ -1,4 +1,4 @@
-use rustc_serialize::json::{Json, Object};
+use rustc_serialize::json::Json;
 
 use client::WeChatClient;
 use errors::WeChatError;
@@ -17,8 +17,8 @@ impl<'a> WeChatMenu<'a> {
         }
     }
 
-    pub fn create(&self, data: &Object) -> Result<Json, WeChatError> {
-        self.client.post("menu/create", vec![], data)
+    pub fn create(&self, data: &Json) -> Result<Json, WeChatError> {
+        self.client.post("menu/create", vec![], data.as_object().unwrap())
     }
 
     pub fn get(&self) -> Result<Json, WeChatError> {
@@ -29,9 +29,9 @@ impl<'a> WeChatMenu<'a> {
         self.client.get("menu/delete", vec![])
     }
 
-    pub fn update(&self, data: &Object) -> Result<Json, WeChatError> {
+    pub fn update(&self, data: &Json) -> Result<Json, WeChatError> {
         try!(self.delete());
-        self.client.post("menu/create", vec![], data)
+        self.create(data)
     }
 
     pub fn get_menu_info(&self) -> Result<Json, WeChatError> {

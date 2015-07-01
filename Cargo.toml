@@ -24,8 +24,5 @@ json_macros = "*"
 [dependencies.sxd-xpath]
 git = "https://github.com/shepmaster/sxd-xpath.git"
 
-[dependencies.clippy]
-git = "https://github.com/Manishearth/rust-clippy"
-
 [features]
 unstable = []

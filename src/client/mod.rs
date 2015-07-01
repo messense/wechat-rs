@@ -6,6 +6,7 @@ use hyper::{self, Client};
 use hyper::client::Response;
 use hyper::method::Method;
 use rustc_serialize::json::{self, Json, Object};
+use rustc_serialize::Encodable;
 
 use errors::WeChatError;
 
@@ -54,7 +55,7 @@ impl WeChatClient {
         token
     }
 
-    pub fn request(&self, method: Method, url: &str, params: Vec<(&str, &str)>, data: &Object) -> Result<Response, WeChatError> {
+    pub fn request<D: Encodable>(&self, method: Method, url: &str, params: Vec<(&str, &str)>, data: &D) -> Result<Response, WeChatError> {
         let mut http_url = if !(url.starts_with("http://") || url.starts_with("https://")) {
             let mut url_string = "https://api.weixin.qq.com/cgi-bin/".to_owned();
             url_string = url_string + url;
@@ -69,15 +70,11 @@ impl WeChatClient {
             querys.push(("access_token", &access_token));
         }
         http_url.set_query_from_pairs(querys.into_iter());
-        let body = if !data.is_empty() {
-            match json::encode(data) {
-                Ok(text) => text,
-                Err(_) => "".to_owned(),
-            }
-        } else {
-            "".to_owned()
+        let body = match json::encode(data) {
+            Ok(text) => text,
+            Err(_) => "".to_owned(),
         };
-        let mut client = Client::new();
+        let client = Client::new();
         let req = if method == Method::Post {
             client.post(http_url).body(&body)
         } else {
@@ -121,7 +118,7 @@ impl WeChatClient {
     }
 
     #[inline]
-    pub fn post(&self, url: &str, params: Vec<(&str, &str)>, data: &Object) -> Result<Json, WeChatError> {
+    pub fn post<D: Encodable>(&self, url: &str, params: Vec<(&str, &str)>, data: &D) -> Result<Json, WeChatError> {
         if self.access_token().is_empty() {
             self.fetch_access_token();
         }

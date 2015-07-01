@@ -14,15 +14,13 @@ log = "*"
 url = "*"
 rust-crypto = "*"
 sxd-document = "*"
+sxd-xpath = "*"
 rand = "*"
 time = "*"
 byteorder = "*"
 rustc-serialize = "*"
 hyper = "*"
 json_macros = "*"
-
-[dependencies.sxd-xpath]
-git = "https://github.com/shepmaster/sxd-xpath.git"
 
 [features]
 unstable = []

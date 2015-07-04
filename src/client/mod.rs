@@ -74,7 +74,7 @@ impl WeChatClient {
             Ok(text) => text,
             Err(_) => "".to_owned(),
         };
-        let client = Client::new();
+        let mut client = Client::new();
         let req = if method == Method::Post {
             client.post(http_url).body(&body)
         } else {

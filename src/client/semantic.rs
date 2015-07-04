@@ -1,5 +1,4 @@
-use rustc_serialize::json::{Json, Object};
-use rustc_serialize::Encodable;
+use rustc_serialize::json::Json;
 
 use client::WeChatClient;
 use errors::WeChatError;
@@ -19,16 +18,16 @@ impl<'a> WeChatSemantic<'a> {
     }
 
     pub fn search_simple(&self, query: &str, category: &str) -> Result<Json, WeChatError> {
-        let mut body = Object::new();
-        body.insert("query".to_owned(), Json::String(query.to_owned()));
-        body.insert("category".to_owned(), Json::String(category.to_owned()));
-        body.insert("appid".to_owned(), Json::String(self.client.appid.clone()));
-        self.search(&mut body)
+        let body = json!({
+            "query": (query),
+            "category": (category),
+            "appid": (self.client.appid)
+        });
+        self.search(&body)
     }
 
-    pub fn search<D: Encodable>(&self, data: &D) -> Result<Json, WeChatError> {
-        // data.insert("appid".to_owned(), Json::String(self.client.appid.clone()));
-        let res = try!(self.client.post("https://api.weixin.qq.com/semantic/semproxy/search", vec![], &data));
+    pub fn search(&self, data: &Json) -> Result<Json, WeChatError> {
+        let res = try!(self.client.post("https://api.weixin.qq.com/semantic/semproxy/search", vec![], data));
         Ok(res)
     }
 }

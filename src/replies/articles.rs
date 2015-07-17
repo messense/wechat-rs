@@ -102,7 +102,7 @@ impl ReplyRenderer for ArticlesReply {
         for article in self.articles.iter() {
             articles.push(article.render());
         }
-        let articles_str = articles.connect("\n");
+        let articles_str = articles.join("\n");
         format!("<xml>\n\
             <ToUserName><![CDATA[{target}]]></ToUserName>\n\
             <FromUserName><![CDATA[{source}]]></FromUserName>\n\

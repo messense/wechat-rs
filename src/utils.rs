@@ -8,7 +8,7 @@ pub fn check_signature(token: &str, signature: &str, timestamp: i64, nonce: &str
         nonce.to_owned(),
     ];
     data.sort();
-    let data_str = data.connect("");
+    let data_str = data.join("");
     let mut hasher = Sha1::new();
     hasher.input_str(&data_str);
     signature == &hasher.result_str()

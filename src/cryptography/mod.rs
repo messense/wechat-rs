@@ -37,7 +37,7 @@ impl WeChatCrypto {
             encrypted.to_owned(),
         ];
         data.sort();
-        let data_str = data.connect("");
+        let data_str = data.join("");
         let mut hasher = Sha1::new();
         hasher.input_str(&data_str);
         hasher.result_str()

@@ -74,7 +74,7 @@ impl WeChatClient {
             Ok(text) => text,
             Err(_) => "".to_owned(),
         };
-        let mut client = Client::new();
+        let client = Client::new();
         let req = if method == Method::Post {
             client.post(http_url).body(&body)
         } else {
@@ -108,7 +108,13 @@ impl WeChatClient {
             Some(code) => {
                 let errcode = code.as_i64().unwrap();
                 if errcode != 0 {
-                    let errmsg = obj.find("errmsg").unwrap().as_string().unwrap();
+                    // let errmsg = obj.find("errmsg").unwrap_or("").as_string().unwrap();
+                    let errmsg = match obj.find("errmsg") {
+                        Some(msg) => {
+                            msg.as_string().unwrap()
+                        },
+                        None => { "" }
+                    };
                     return Err(WeChatError::ClientError { errcode: errcode as i32, errmsg: errmsg.to_owned() });
                 }
             },

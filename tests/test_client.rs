@@ -66,12 +66,18 @@ fn test_misc_short_url() {
 }
 
 #[test]
-fn test_semantic_search_simple() {
+fn test_semantic_search() {
     use wechat::client::WeChatSemantic;
 
     let client = WeChatClient::new(APPID, SECRET);
     let semantic = WeChatSemantic::new(&client);
-    let res = semantic.search_simple("查一下明天从北京到上海的南航机票", "flight,hotel");
+    let query = json!({
+        "query": "故宫门票多少钱",
+        "category": "travel",
+        "city": "北京",
+        "appid": (client.appid)
+    });
+    let res = semantic.search(&query);
     assert!(res.is_ok());
 }
 

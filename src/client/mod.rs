@@ -108,7 +108,6 @@ impl WeChatClient {
             Some(code) => {
                 let errcode = code.as_i64().unwrap();
                 if errcode != 0 {
-                    // let errmsg = obj.find("errmsg").unwrap_or("").as_string().unwrap();
                     let errmsg = match obj.find("errmsg") {
                         Some(msg) => {
                             msg.as_string().unwrap()

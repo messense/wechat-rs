@@ -28,7 +28,6 @@ impl<'a> WeChatSemantic<'a> {
     }
 
     pub fn search<D: Encodable>(&self, data: &D) -> Result<Json, WeChatError> {
-        let res = try!(self.client.post("https://api.weixin.qq.com/semantic/semproxy/search", vec![], data));
-        Ok(res)
+        self.client.post("https://api.weixin.qq.com/semantic/semproxy/search", vec![], data)
     }
 }

@@ -7,6 +7,7 @@ use wechat::WeChatClient;
 
 const APPID: &'static str = "wxd7aa56e2c7b1f4f1";
 const SECRET: &'static str = "2817b66a1d5829847196cf2f96ab2816";
+const OPENID: &'static str = "ozJS1syaqn5ztglMsr8ceH8o2zCQ";
 
 #[test]
 fn test_fetch_access_token() {
@@ -142,5 +143,60 @@ fn test_menu_apis() {
 
     // cleanup
     let res = menu.delete();
+    assert!(res.is_ok());
+}
+
+#[test]
+fn test_user_get() {
+    use wechat::client::WeChatUser;
+
+    let client = WeChatClient::new(APPID, SECRET);
+    let user = WeChatUser::new(&client);
+
+    let res = user.get(OPENID);
+    assert!(res.is_ok());
+}
+
+#[test]
+fn test_user_get_with_lang() {
+    use wechat::client::WeChatUser;
+
+    let client = WeChatClient::new(APPID, SECRET);
+    let user = WeChatUser::new(&client);
+
+    let res = user.get_with_lang(OPENID, "zh_CN");
+    assert!(res.is_ok());
+}
+
+#[test]
+fn test_user_update_remark() {
+    use wechat::client::WeChatUser;
+
+    let client = WeChatClient::new(APPID, SECRET);
+    let user = WeChatUser::new(&client);
+
+    let res = user.update_remark(OPENID, "test user");
+    assert!(res.is_ok());
+}
+
+#[test]
+fn test_user_get_followers_with_no_next_openid() {
+    use wechat::client::WeChatUser;
+
+    let client = WeChatClient::new(APPID, SECRET);
+    let user = WeChatUser::new(&client);
+
+    let res = user.get_followers("");
+    assert!(res.is_ok());
+}
+
+#[test]
+fn test_user_get_followers_with_next_openid() {
+    use wechat::client::WeChatUser;
+
+    let client = WeChatClient::new(APPID, SECRET);
+    let user = WeChatUser::new(&client);
+
+    let res = user.get_followers(OPENID);
     assert!(res.is_ok());
 }

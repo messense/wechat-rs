@@ -15,12 +15,14 @@ mod semantic;
 mod qrcode;
 mod menu;
 mod user;
+mod group;
 
 pub use self::misc::WeChatMisc;
 pub use self::semantic::WeChatSemantic;
 pub use self::qrcode::WeChatQRCode;
 pub use self::menu::WeChatMenu;
 pub use self::user::WeChatUser;
+pub use self::group::WeChatGroup;
 
 #[derive(Debug, Clone)]
 pub struct WeChatClient {

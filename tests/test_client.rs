@@ -34,6 +34,7 @@ fn test_call_api_with_no_access_token_provided() {
 fn test_call_api_with_access_token_provided() {
     let client0 = WeChatClient::new(APPID, SECRET);
     let access_token = client0.fetch_access_token();
+    assert!(access_token.is_some());
 
     let client = WeChatClient::with_access_token(APPID, SECRET, &access_token.unwrap());
     let res = client.get("getcallbackip", vec![]);
@@ -199,4 +200,38 @@ fn test_user_get_followers_with_next_openid() {
 
     let res = user.get_followers(OPENID);
     assert!(res.is_ok());
+}
+
+#[test]
+fn test_user_get_group_id() {
+    use wechat::client::WeChatUser;
+
+    let client = WeChatClient::new(APPID, SECRET);
+    let user = WeChatUser::new(&client);
+
+    let res = user.get_group_id(OPENID);
+    assert!(res.is_ok());
+}
+
+#[test]
+fn test_group_create_update_and_delete() {
+    use wechat::client::WeChatGroup;
+
+    let client = WeChatClient::new(APPID, SECRET);
+    let group = WeChatGroup::new(&client);
+
+    // create group
+    let res = group.create("测试分组");
+    assert!(res.is_ok());
+
+    let res = res.unwrap();
+    let group_id = res.find_path(&["group", "id"]).unwrap();
+    let group_id = group_id.as_u64().unwrap();
+
+    // update group name
+    let res = group.update(group_id, "Test Group");
+    assert!(res.is_ok());
+
+    // delete group
+    let _ = group.delete(group_id);
 }

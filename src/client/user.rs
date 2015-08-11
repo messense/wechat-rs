@@ -36,4 +36,11 @@ impl<'a> WeChatUser<'a> {
     pub fn get_followers(&self, next_openid: &str) -> Result<Json, WeChatError> {
         self.client.get("user/get", vec![("next_openid", next_openid)])
     }
+
+    pub fn get_group_id(&self, openid: &str) -> Result<u64, WeChatError> {
+        let res = try!(self.client.post("groups/getid", vec![], &json!({"openid": (openid)})));
+        let group_id = res.find("groupid").unwrap();
+        let group_id = group_id.as_u64().unwrap();
+        Ok(group_id)
+    }
 }

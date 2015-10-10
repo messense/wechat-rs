@@ -1,6 +1,5 @@
 use rustc_serialize::base64::FromBase64;
 
-mod aes;
 mod prp;
 
 use errors::WeChatError;
@@ -27,8 +26,7 @@ impl WeChatCrypto {
     }
 
     fn get_signature(&self, timestamp: i64, nonce: &str, encrypted: &str) -> String {
-        use crypto::digest::Digest;
-        use crypto::sha1::Sha1;
+        use sha1::Sha1;
 
         let mut data = vec![
             self.token.clone(),
@@ -38,9 +36,9 @@ impl WeChatCrypto {
         ];
         data.sort();
         let data_str = data.join("");
-        let mut hasher = Sha1::new();
-        hasher.input_str(&data_str);
-        hasher.result_str()
+        let mut sha1 = Sha1::new();
+        sha1.update(data_str.as_bytes());
+        sha1.hexdigest()
     }
 
     pub fn check_signature(&self, signature: &str, timestamp: i64, nonce: &str, echo_str: &str) -> Result<String, WeChatError> {

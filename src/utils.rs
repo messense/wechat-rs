@@ -1,5 +1,4 @@
-use crypto::digest::Digest;
-use crypto::sha1::Sha1;
+use sha1::Sha1;
 
 pub fn check_signature(token: &str, signature: &str, timestamp: i64, nonce: &str) -> bool {
     let mut data = vec![
@@ -9,9 +8,9 @@ pub fn check_signature(token: &str, signature: &str, timestamp: i64, nonce: &str
     ];
     data.sort();
     let data_str = data.join("");
-    let mut hasher = Sha1::new();
-    hasher.input_str(&data_str);
-    signature == &hasher.result_str()
+    let mut sha1 = Sha1::new();
+    sha1.update(data_str.as_bytes());
+    signature == &sha1.hexdigest()
 }
 
 #[cfg(test)]

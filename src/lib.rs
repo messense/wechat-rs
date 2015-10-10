@@ -4,12 +4,13 @@
 extern crate time;
 extern crate rand;
 extern crate url;
-extern crate crypto;
 extern crate sxd_document;
 extern crate sxd_xpath;
 extern crate rustc_serialize;
 extern crate byteorder;
 extern crate hyper;
+extern crate openssl;
+extern crate sha1;
 #[macro_use]
 extern crate log;
 

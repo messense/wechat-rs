@@ -5,9 +5,9 @@ use rand::Rng;
 use rustc_serialize::base64;
 use rustc_serialize::base64::{FromBase64, ToBase64};
 use byteorder::{NativeEndian, WriteBytesExt, ReadBytesExt};
+use openssl::crypto::symm;
 
 use errors::WeChatError;
-use cryptography::aes;
 
 #[derive(Debug, Eq, PartialEq)]
 pub struct PrpCrypto {
@@ -34,10 +34,7 @@ impl PrpCrypto {
         wtr.write_u32::<NativeEndian>((plaintext.len() as u32).to_be()).unwrap();
         wtr.extend(plaintext.bytes());
         wtr.extend(_id.bytes());
-        let encrypted = match aes::encrypt(&wtr, &self.key, &self.key[..16]) {
-            Ok(val) => val,
-            Err(err) => return Err(WeChatError::SymmetricCipher(err)),
-        };
+        let encrypted = symm::encrypt(symm::Type::AES_256_CBC, &self.key, &self.key[..16], &wtr);
         let b64encoded = encrypted.to_base64(base64::STANDARD);
         Ok(b64encoded)
     }
@@ -47,10 +44,7 @@ impl PrpCrypto {
             Ok(val) => val,
             Err(err) => return Err(WeChatError::InvalidBase64(err)),
         };
-        let text = match aes::decrypt(&b64decoded, &self.key, &self.key[..16]) {
-            Ok(val) => val,
-            Err(err) => return Err(WeChatError::SymmetricCipher(err)),
-        };
+        let text = symm::decrypt(symm::Type::AES_256_CBC, &self.key, &self.key[..16], &b64decoded);
         let mut rdr = Cursor::new(text[16..20].to_vec());
         let content_length = u32::from_be(rdr.read_u32::<NativeEndian>().unwrap()) as usize;
         let content = &text[20 .. content_length + 20];

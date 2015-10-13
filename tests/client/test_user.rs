@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 use wechat::WeChatClient;
 use wechat::client::WeChatUser;
 
@@ -57,5 +59,19 @@ fn test_user_get_group_id() {
     let user = WeChatUser::new(&client);
 
     let res = user.get_group_id(OPENID);
+    assert!(res.is_ok());
+}
+
+#[test]
+fn test_user_get_batch() {
+    let client = WeChatClient::new(APPID, SECRET);
+    let user = WeChatUser::new(&client);
+
+    let mut user_list = vec![];
+    let mut openid1 = HashMap::new();
+    openid1.insert("openid".to_owned(), OPENID.to_owned());
+    openid1.insert("lang".to_owned(), "zh-CN".to_owned());
+    user_list.push(openid1);
+    let res = user.get_batch(&user_list);
     assert!(res.is_ok());
 }

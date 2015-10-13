@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 use rustc_serialize::json::Json;
 
 use client::WeChatClient;
@@ -42,5 +44,9 @@ impl<'a> WeChatUser<'a> {
         let group_id = res.find("groupid").unwrap();
         let group_id = group_id.as_u64().unwrap();
         Ok(group_id)
+    }
+
+    pub fn get_batch(&self, user_list: &[HashMap<String, String>]) -> Result<Json, WeChatError> {
+        self.client.post("user/info/batchget", vec![], &json!({"user_list": (user_list)}))
     }
 }

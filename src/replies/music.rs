@@ -63,7 +63,7 @@ mod tests {
     use super::MusicReply;
 
     #[test]
-    fn test_render_text_reply() {
+    fn test_render_music_reply() {
         let reply = MusicReply::new("test1", "test2", "test");
         let rendered = reply.render();
         assert!(rendered.contains("test1"));

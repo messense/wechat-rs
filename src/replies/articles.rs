@@ -126,7 +126,7 @@ mod tests {
     use super::{Article, ArticlesReply};
 
     #[test]
-    fn test_render_text_reply() {
+    fn test_render_articles_reply() {
         let mut reply = ArticlesReply::new("test1", "test2");
         let article1 = Article::new("test3", "test4");
         let article2 = Article::with_image("test5", "test6", "test7");

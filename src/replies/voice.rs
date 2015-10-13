@@ -47,7 +47,7 @@ mod tests {
     use super::VoiceReply;
 
     #[test]
-    fn test_render_text_reply() {
+    fn test_render_voice_reply() {
         let reply = VoiceReply::new("test1", "test2", "test");
         let rendered = reply.render();
         assert!(rendered.contains("test1"));

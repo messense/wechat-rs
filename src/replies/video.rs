@@ -55,7 +55,7 @@ mod tests {
     use super::VideoReply;
 
     #[test]
-    fn test_render_text_reply() {
+    fn test_render_video_reply() {
         let reply = VideoReply::new("test1", "test2", "test");
         let rendered = reply.render();
         assert!(rendered.contains("test1"));

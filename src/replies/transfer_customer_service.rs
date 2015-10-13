@@ -41,7 +41,7 @@ mod tests {
     use super::TransferCustomerServiceReply;
 
     #[test]
-    fn test_render_text_reply() {
+    fn test_render_transfer_customer_service_reply() {
         let reply = TransferCustomerServiceReply::new("test1", "test2");
         let rendered = reply.render();
         assert!(rendered.contains("test1"));

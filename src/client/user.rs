@@ -49,4 +49,15 @@ impl<'a> WeChatUser<'a> {
     pub fn get_batch(&self, user_list: &[HashMap<String, String>]) -> Result<Json, WeChatError> {
         self.client.post("user/info/batchget", vec![], &json!({"user_list": (user_list)}))
     }
+
+    pub fn get_batch_with_lang(&self, user_list: &[String], lang: &str) -> Result<Json, WeChatError> {
+        let mut users = vec![];
+        for openid in user_list {
+            let mut user = HashMap::new();
+            user.insert("openid".to_owned(), openid.to_owned());
+            user.insert("lang".to_owned(), lang.to_owned());
+            users.push(user);
+        }
+        self.get_batch(&users)
+    }
 }

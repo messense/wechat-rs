@@ -75,3 +75,13 @@ fn test_user_get_batch() {
     let res = user.get_batch(&user_list);
     assert!(res.is_ok());
 }
+
+#[test]
+fn test_user_get_batch_with_lang() {
+    let client = WeChatClient::new(APPID, SECRET);
+    let user = WeChatUser::new(&client);
+
+    let user_list = vec![OPENID.to_owned()];
+    let res = user.get_batch_with_lang(&user_list, "zh-CN");
+    assert!(res.is_ok());
+}

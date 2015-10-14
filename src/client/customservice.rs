@@ -1,4 +1,5 @@
 use rustc_serialize::json::{Json, Array};
+use rustc_serialize::hex::ToHex;
 use openssl::crypto::hash;
 
 use client::WeChatClient;
@@ -20,7 +21,7 @@ impl<'a> WeChatCustomService<'a> {
 
     pub fn add_account(&self, account: &str, nickname: &str, password: &str) -> Result<Json, WeChatError> {
         let encrypted_password = hash::hash(hash::Type::MD5, password.as_bytes());
-        let encrypted_password = String::from_utf8(encrypted_password).unwrap();
+        let encrypted_password = encrypted_password.to_hex();
         let data  = json!({
             "kf_account": (account),
             "nickname": (nickname),
@@ -35,7 +36,7 @@ impl<'a> WeChatCustomService<'a> {
 
     pub fn update_account(&self, account: &str, nickname: &str, password: &str) -> Result<Json, WeChatError> {
         let encrypted_password = hash::hash(hash::Type::MD5, password.as_bytes());
-        let encrypted_password = String::from_utf8(encrypted_password).unwrap();
+        let encrypted_password = encrypted_password.to_hex();
         let data  = json!({
             "kf_account": (account),
             "nickname": (nickname),

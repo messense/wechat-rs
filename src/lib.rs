@@ -10,7 +10,6 @@ extern crate rustc_serialize;
 extern crate byteorder;
 extern crate hyper;
 extern crate openssl;
-extern crate sha1;
 #[macro_use]
 extern crate log;
 

@@ -1,4 +1,6 @@
-use sha1::Sha1;
+use rustc_serialize::hex::ToHex;
+use openssl::crypto::hash;
+
 
 pub fn check_signature(token: &str, signature: &str, timestamp: i64, nonce: &str) -> bool {
     let mut data = vec![
@@ -8,9 +10,8 @@ pub fn check_signature(token: &str, signature: &str, timestamp: i64, nonce: &str
     ];
     data.sort();
     let data_str = data.join("");
-    let mut sha1 = Sha1::new();
-    sha1.update(data_str.as_bytes());
-    signature == &sha1.hexdigest()
+    let real_sign = hash::hash(hash::Type::SHA1, data_str.as_bytes());
+    signature == &real_sign.to_hex()
 }
 
 #[cfg(test)]

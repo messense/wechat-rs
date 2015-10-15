@@ -15,6 +15,9 @@ fn test_qrcode_create_temp(){
     let res = qrcode.create(&req);
 
     assert!(res.is_ok());
+
+    let qrcode_url = WeChatQRCode::get_url(&res.unwrap());
+    assert!(qrcode_url.len() > 0);
 }
 
 #[test]
@@ -28,4 +31,7 @@ fn test_qrcode_create_perm(){
     let res = qrcode.create(&req);
 
     assert!(res.is_ok());
+
+    let qrcode_url = WeChatQRCode::get_url(&res.unwrap());
+    assert!(qrcode_url.len() > 0);
 }

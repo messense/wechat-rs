@@ -1,7 +1,8 @@
-use rustc_serialize::json::{Json, ToJson};
+use rustc_serialize::json::ToJson;
 
 use client::WeChatClient;
 use errors::WeChatError;
+use client::response::QRCodeTicket;
 
 #[derive(Debug, Clone)]
 pub struct WeChatQRCode<'a> {
@@ -17,16 +18,29 @@ impl<'a> WeChatQRCode<'a> {
         }
     }
     
-    pub fn create<D: ToJson>(&self, data: &D) -> Result<Json, WeChatError> {
-        self.client.post("qrcode/create", vec![], &data.to_json())
+    pub fn create<D: ToJson>(&self, data: &D) -> Result<QRCodeTicket, WeChatError> {
+        let res = try!(self.client.post("qrcode/create", vec![], &data.to_json()));
+        let ticket = res.find("ticket").unwrap();
+        let ticket = ticket.as_string().unwrap();
+        let expire_seconds = match res.find("expire_seconds") {
+            Some(seconds) => seconds.as_u64().unwrap(),
+            None => 0u64,
+        };
+        let url = res.find("url").unwrap();
+        let url = url.as_string().unwrap();
+        Ok(QRCodeTicket {
+            ticket: ticket.to_owned(),
+            expire_seconds: expire_seconds as u32,
+            url: url.to_owned(),
+        })
     }
 
     pub fn get_url_with_ticket(ticket: &str) -> String {
         format!("https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket={}", ticket)
     }
 
-    pub fn get_url(qrcode_res: &Json) -> String {
-        let ticket = qrcode_res.find("ticket").unwrap().as_string().unwrap();
-        Self::get_url_with_ticket(&ticket)
+    pub fn get_url(qrcode_ticket: &QRCodeTicket) -> String {
+        let ticket = &qrcode_ticket.ticket;
+        Self::get_url_with_ticket(ticket)
     }
 }

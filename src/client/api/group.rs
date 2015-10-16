@@ -1,7 +1,8 @@
-use rustc_serialize::json::Json;
-
 use client::WeChatClient;
 use errors::WeChatError;
+
+use client::response::Group;
+
 
 #[derive(Debug, Clone)]
 pub struct WeChatGroup<'a> {
@@ -17,54 +18,82 @@ impl<'a> WeChatGroup<'a> {
         }
     }
 
-    pub fn create(&self, name: &str) -> Result<Json, WeChatError> {
+    pub fn create(&self, name: &str) -> Result<Group, WeChatError> {
         let data = json!({
             "group": {
                 "name": (name)
             }
         });
-        self.client.post("groups/create", vec![], &data)
+        let res = try!(self.client.post("groups/create", vec![], &data));
+        let group_id = res.find_path(&["group", "id"]).unwrap();
+        let group_id = group_id.as_u64().unwrap();
+        let group_name = res.find_path(&["group", "name"]).unwrap();
+        let group_name = group_name.as_string().unwrap();
+        Ok(Group {
+            id: group_id,
+            name: group_name.to_owned(),
+            count: 0u64,
+        })
     }
 
-    pub fn list(&self) -> Result<Vec<Json>, WeChatError> {
+    pub fn list(&self) -> Result<Vec<Group>, WeChatError> {
         let res = try!(self.client.get("groups/get", vec![]));
         let groups = res.find("groups").unwrap();
         let groups_array = groups.as_array().unwrap();
-        Ok(groups_array.to_vec())
+        let mut groups = vec![];
+        for group_json in groups_array {
+            let group_id = group_json.find("id").unwrap();
+            let group_id = group_id.as_u64().unwrap();
+            let group_name = group_json.find("name").unwrap();
+            let group_name = group_name.as_string().unwrap();
+            let group_count = group_json.find("count").unwrap();
+            let group_count = group_count.as_u64().unwrap();
+            let group = Group {
+                id: group_id,
+                name: group_name.to_owned(),
+                count: group_count,
+            };
+            groups.push(group);
+        }
+        Ok(groups)
     }
 
-    pub fn update(&self, group_id: u64, name: &str) -> Result<Json, WeChatError> {
+    pub fn update(&self, group_id: u64, name: &str) -> Result<(), WeChatError> {
         let data = json!({
             "group": {
                 "id": (group_id),
                 "name": (name)
             }
         });
-        self.client.post("groups/update", vec![], &data)
+        try!(self.client.post("groups/update", vec![], &data));
+        Ok(())
     }
 
-    pub fn delete(&self, group_id: u64) -> Result<Json, WeChatError> {
+    pub fn delete(&self, group_id: u64) -> Result<(), WeChatError> {
         let data = json!({
             "group": {
                 "id": (group_id)
             }
         });
-        self.client.post("groups/delete", vec![], &data)
+        try!(self.client.post("groups/delete", vec![], &data));
+        Ok(())
     }
 
-    pub fn move_user(&self, openid: &str, group_id: u64) -> Result<Json, WeChatError> {
+    pub fn move_user(&self, openid: &str, group_id: u64) -> Result<(), WeChatError> {
         let data = json!({
             "openid": (openid),
             "to_groupid": (group_id)
         });
-        self.client.post("groups/members/update", vec![], &data)
+        try!(self.client.post("groups/members/update", vec![], &data));
+        Ok(())
     }
 
-    pub fn move_users(&self, openids: Vec<String>, group_id: u64) -> Result<Json, WeChatError> {
+    pub fn move_users(&self, openids: Vec<String>, group_id: u64) -> Result<(), WeChatError> {
         let data = json!({
             "openid_list": (openids),
             "to_groupid": (group_id)
         });
-        self.client.post("groups/members/batchupdate", vec![], &data)
+        try!(self.client.post("groups/members/batchupdate", vec![], &data));
+        Ok(())
     }
 }

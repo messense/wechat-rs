@@ -5,7 +5,7 @@ use rustc_serialize::json::Json;
 use client::WeChatClient;
 use errors::WeChatError;
 
-use client::response::User;
+use client::response::{User, Followers};
 
 
 #[derive(Debug, Clone)]
@@ -80,21 +80,43 @@ impl<'a> WeChatUser<'a> {
         })
     }
 
-    pub fn update_remark(&self, openid: &str, remark: &str) -> Result<Json, WeChatError> {
+    pub fn update_remark(&self, openid: &str, remark: &str) -> Result<(), WeChatError> {
         let data = json!({
             "openid": (openid),
             "remark": (remark),
         });
-        self.client.post("user/info/updateremark", vec![], &data)
+        try!(self.client.post("user/info/updateremark", vec![], &data));
+        Ok(())
     }
 
-    pub fn get_followers(&self, next_openid: &str) -> Result<Json, WeChatError> {
-        self.client.get("user/get", vec![("next_openid", next_openid)])
+    pub fn get_followers(&self, next_openid: Option<&str>) -> Result<Followers, WeChatError> {
+        let params = match next_openid {
+            Some(openid) => vec![("next_openid", openid)],
+            None => vec![],
+        };
+        let res = try!(self.client.get("user/get", params));
+        let total = &res["total"];
+        let total = total.as_u64().unwrap();
+        let count = &res["count"];
+        let count = count.as_u64().unwrap();
+        let next_id = &res["next_openid"];
+        let next_id = next_id.as_string().unwrap();
+        let openids_array = res.find_path(&["data", "openid"]).unwrap();
+        let openids_array = openids_array.as_array().unwrap();
+        let openids = openids_array.iter()
+                                   .map(|x| x.as_string().unwrap().to_owned())
+                                   .collect::<Vec<_>>();
+        Ok(Followers {
+            total: total,
+            count: count,
+            openids: openids,
+            next_openid: next_id.to_owned(),
+        })
     }
 
     pub fn get_group_id(&self, openid: &str) -> Result<u64, WeChatError> {
         let res = try!(self.client.post("groups/getid", vec![], &json!({"openid": (openid)})));
-        let group_id = res.find("groupid").unwrap();
+        let group_id = &res["groupid"];
         let group_id = group_id.as_u64().unwrap();
         Ok(group_id)
     }

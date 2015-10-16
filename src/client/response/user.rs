@@ -14,3 +14,12 @@ pub struct User {
     pub remark: String,
     pub group_id: u64,
 }
+
+
+#[derive(Debug, Clone)]
+pub struct Followers {
+    pub total: u64,
+    pub count: u64,
+    pub openids: Vec<String>,
+    pub next_openid: String,
+}

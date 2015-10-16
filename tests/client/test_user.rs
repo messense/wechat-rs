@@ -40,7 +40,7 @@ fn test_user_get_followers_with_no_next_openid() {
     let client = WeChatClient::new(APPID, SECRET);
     let user = WeChatUser::new(&client);
 
-    let res = user.get_followers("");
+    let res = user.get_followers(None);
     assert!(res.is_ok());
 }
 
@@ -49,7 +49,7 @@ fn test_user_get_followers_with_next_openid() {
     let client = WeChatClient::new(APPID, SECRET);
     let user = WeChatUser::new(&client);
 
-    let res = user.get_followers(OPENID);
+    let res = user.get_followers(Some(OPENID));
     assert!(res.is_ok());
 }
 

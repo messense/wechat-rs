@@ -33,6 +33,8 @@ impl ToJson for TempQRCodeRequest {
     }
 }
 
+make_encodable!(TempQRCodeRequest);
+
 impl PermQRCodeRequest {
     pub fn new(scene_str: &str) -> PermQRCodeRequest {
         PermQRCodeRequest  {
@@ -51,3 +53,5 @@ impl ToJson for PermQRCodeRequest {
         })
     }
 }
+
+make_encodable!(PermQRCodeRequest);

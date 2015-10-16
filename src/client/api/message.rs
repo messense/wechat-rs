@@ -1,4 +1,4 @@
-use rustc_serialize::json::Json;
+use rustc_serialize::Encodable;
 
 use client::WeChatClient;
 use errors::WeChatError;
@@ -18,38 +18,29 @@ impl<'a> WeChatMessage<'a> {
         }
     }
 
-    fn send_custom_message(&self, data: &mut Json, account: Option<&str>) -> Result<Json, WeChatError> {
-        let mut data = data.as_object_mut().unwrap();
-        if let Some(kf_account) = account {
-            data.insert("kf_account".to_owned(), Json::String(kf_account.to_owned()));
-        }
-        self.client.post("message/custom/send", vec![], data)
+    pub fn send<D: Encodable>(&self, data: &D) -> Result<(), WeChatError> {
+        try!(self.client.post("message/custom/send", vec![], data));
+        Ok(())
     }
 
-    pub fn send_text(&self, openid: &str, content: &str, account: Option<&str>) -> Result<Json, WeChatError> {
-        let mut data = json!({
-            "msgtype": "text",
-            "touser": (openid),
-            "text": {"content": (content)}
-        });
-        self.send_custom_message(&mut data, account)
+    pub fn send_text(&self, openid: &str, content: &str) -> Result<(), WeChatError> {
+        use client::request::SendTextRequest;
+
+        let req = SendTextRequest::new(openid, content);
+        self.send(&req)
     }
 
-    pub fn send_image(&self, openid: &str, media_id: &str, account: Option<&str>) -> Result<Json, WeChatError> {
-        let mut data = json!({
-            "msgtype": "image",
-            "touser": (openid),
-            "image": {"media_id": (media_id)}
-        });
-        self.send_custom_message(&mut data, account)
+    pub fn send_image(&self, openid: &str, media_id: &str) -> Result<(), WeChatError> {
+        use client::request::SendImageRequest;
+
+        let req = SendImageRequest::new(openid, media_id);
+        self.send(&req)
     }
 
-    pub fn send_voice(&self, openid: &str, media_id: &str, account: Option<&str>) -> Result<Json, WeChatError> {
-        let mut data = json!({
-            "msgtype": "voice",
-            "touser": (openid),
-            "voice": {"media_id": (media_id)}
-        });
-        self.send_custom_message(&mut data, account)
+    pub fn send_voice(&self, openid: &str, media_id: &str) -> Result<(), WeChatError> {
+        use client::request::SendVoiceRequest;
+
+        let req = SendVoiceRequest::new(openid, media_id);
+        self.send(&req)
     }
 }

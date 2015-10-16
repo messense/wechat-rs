@@ -42,11 +42,11 @@ impl<'a> WeChatGroup<'a> {
         let groups_array = groups.as_array().unwrap();
         let mut groups = vec![];
         for group_json in groups_array {
-            let group_id = group_json.find("id").unwrap();
+            let group_id = &group_json["id"];
             let group_id = group_id.as_u64().unwrap();
-            let group_name = group_json.find("name").unwrap();
+            let group_name = &group_json["name"];
             let group_name = group_name.as_string().unwrap();
-            let group_count = group_json.find("count").unwrap();
+            let group_count = &group_json["count"];
             let group_count = group_count.as_u64().unwrap();
             let group = Group {
                 id: group_id,

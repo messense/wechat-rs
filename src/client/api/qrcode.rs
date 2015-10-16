@@ -20,13 +20,13 @@ impl<'a> WeChatQRCode<'a> {
     
     pub fn create<D: Encodable>(&self, data: &D) -> Result<QRCodeTicket, WeChatError> {
         let res = try!(self.client.post("qrcode/create", vec![], data));
-        let ticket = res.find("ticket").unwrap();
+        let ticket = &res["ticket"];
         let ticket = ticket.as_string().unwrap();
         let expire_seconds = match res.find("expire_seconds") {
             Some(seconds) => seconds.as_u64().unwrap(),
             None => 0u64,
         };
-        let url = res.find("url").unwrap();
+        let url = &res["url"];
         let url = url.as_string().unwrap();
         Ok(QRCodeTicket {
             ticket: ticket.to_owned(),

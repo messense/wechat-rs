@@ -58,14 +58,14 @@ impl<'a> WeChatCustomService<'a> {
 
     pub fn get_accounts(&self) -> Result<Array, WeChatError> {
         let res = try!(self.client.get("customservice/getkflist", vec![]));
-        let kf_list = res.find("kf_list").unwrap();
+        let kf_list = &res["kf_list"];
         let kf_list = kf_list.as_array().unwrap();
         Ok(kf_list.clone())
     }
 
     pub fn get_online_accounts(&self) -> Result<Array, WeChatError> {
         let res = try!(self.client.get("customservice/getonlinekflist", vec![]));
-        let kf_list = res.find("kf_online_list").unwrap();
+        let kf_list = &res["kf_online_list"];
         let kf_list = kf_list.as_array().unwrap();
         Ok(kf_list.clone())
     }

@@ -19,7 +19,7 @@ impl<'a> WeChatMisc<'a> {
 
     pub fn get_wechat_ips(&self) -> Result<Vec<String>, WeChatError> {
         let data = try!(self.client.get("getcallbackip", vec![]));
-        let ip_list = data.find("ip_list").unwrap();
+        let ip_list = &data["ip_list"];
         let ip_array = ip_list.as_array().unwrap();
         let mut ips: Vec<String> = Vec::new();
         for v in ip_array.iter() {
@@ -36,7 +36,7 @@ impl<'a> WeChatMisc<'a> {
             "long_url": (long_url)
         });
         let data = try!(self.client.post("shorturl", vec![], body.as_object().unwrap()));
-        let short = data.find("short_url").unwrap();
+        let short = &data["short_url"];
         let short = short.as_string().unwrap();
         Ok(short.to_owned())
     }

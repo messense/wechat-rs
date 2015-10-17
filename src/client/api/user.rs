@@ -101,11 +101,15 @@ impl<'a> WeChatUser<'a> {
         let count = count.as_u64().unwrap();
         let next_id = &res["next_openid"];
         let next_id = next_id.as_string().unwrap();
-        let openids_array = res.find_path(&["data", "openid"]).unwrap();
-        let openids_array = openids_array.as_array().unwrap();
-        let openids = openids_array.iter()
-                                   .map(|x| x.as_string().unwrap().to_owned())
-                                   .collect::<Vec<_>>();
+        let openids = match res.find_path(&["data", "openid"]) {
+            Some(data) => {
+                let openids_array = data.as_array().unwrap();
+                openids_array.iter()
+                             .map(|x| x.as_string().unwrap().to_owned())
+                             .collect::<Vec<_>>()
+            },
+            None => vec![],
+        };
         Ok(Followers {
             total: total,
             count: count,

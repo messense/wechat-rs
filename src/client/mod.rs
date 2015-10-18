@@ -1,3 +1,7 @@
+use errors::WeChatError;
+
+pub type WeChatResult<T> = Result<T, WeChatError>;
+
 mod client;
 pub mod api;
 pub mod request;

@@ -1,7 +1,6 @@
 use rustc_serialize::Encodable;
 
-use client::WeChatClient;
-use errors::WeChatError;
+use client::{WeChatClient, WeChatResult};
 use client::response::QRCodeTicket;
 
 #[derive(Debug, Clone)]
@@ -18,7 +17,7 @@ impl<'a> WeChatQRCode<'a> {
         }
     }
     
-    pub fn create<D: Encodable>(&self, data: &D) -> Result<QRCodeTicket, WeChatError> {
+    pub fn create<D: Encodable>(&self, data: &D) -> WeChatResult<QRCodeTicket> {
         let res = try!(self.client.post("qrcode/create", vec![], data));
         let ticket = &res["ticket"];
         let ticket = ticket.as_string().unwrap();

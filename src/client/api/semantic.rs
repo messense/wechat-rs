@@ -1,8 +1,7 @@
 use rustc_serialize::json::Json;
 use rustc_serialize::Encodable;
 
-use client::WeChatClient;
-use errors::WeChatError;
+use client::{WeChatClient, WeChatResult};
 
 #[derive(Debug, Clone)]
 pub struct WeChatSemantic<'a> {
@@ -18,7 +17,7 @@ impl<'a> WeChatSemantic<'a> {
         }
     }
 
-    pub fn search_simple(&self, query: &str, category: &str) -> Result<Json, WeChatError> {
+    pub fn search_simple(&self, query: &str, category: &str) -> WeChatResult<Json> {
         let body = json!({
             "query": (query),
             "category": (category),
@@ -27,7 +26,7 @@ impl<'a> WeChatSemantic<'a> {
         self.search(&body)
     }
 
-    pub fn search<D: Encodable>(&self, data: &D) -> Result<Json, WeChatError> {
+    pub fn search<D: Encodable>(&self, data: &D) -> WeChatResult<Json> {
         self.client.post("https://api.weixin.qq.com/semantic/semproxy/search", vec![], data)
     }
 }

@@ -1,7 +1,6 @@
 use rustc_serialize::json::Json;
 
-use client::WeChatClient;
-use errors::WeChatError;
+use client::{WeChatClient, WeChatResult};
 
 #[derive(Debug, Clone)]
 pub struct WeChatMisc<'a> {
@@ -17,7 +16,7 @@ impl<'a> WeChatMisc<'a> {
         }
     }
 
-    pub fn get_wechat_ips(&self) -> Result<Vec<String>, WeChatError> {
+    pub fn get_wechat_ips(&self) -> WeChatResult<Vec<String>> {
         let data = try!(self.client.get("getcallbackip", vec![]));
         let ip_list = &data["ip_list"];
         let ip_array = ip_list.as_array().unwrap();
@@ -30,7 +29,7 @@ impl<'a> WeChatMisc<'a> {
         Ok(ips)
     }
 
-    pub fn short_url(&self, long_url: &str) -> Result<String, WeChatError> {
+    pub fn short_url(&self, long_url: &str) -> WeChatResult<String> {
         let body = json!({
             "action": "long2short",
             "long_url": (long_url)

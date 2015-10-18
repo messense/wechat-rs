@@ -2,9 +2,7 @@ use std::collections::HashMap;
 
 use rustc_serialize::json::Json;
 
-use client::WeChatClient;
-use errors::WeChatError;
-
+use client::{WeChatClient, WeChatResult};
 use client::response::{User, Followers};
 
 
@@ -22,11 +20,11 @@ impl<'a> WeChatUser<'a> {
         }
     }
 
-    pub fn get(&self, openid: &str) -> Result<User, WeChatError> {
+    pub fn get(&self, openid: &str) -> WeChatResult<User> {
         self.get_with_lang(openid, "zh_CN")
     }
 
-    pub fn get_with_lang(&self, openid: &str, lang: &str) -> Result<User, WeChatError> {
+    pub fn get_with_lang(&self, openid: &str, lang: &str) -> WeChatResult<User> {
         let res = try!(self.client.get("user/info", vec![("openid", openid), ("lang", lang)]));
         let _subscribe = &res["subscribe"];
         let subscribe = match _subscribe.as_u64().unwrap() {
@@ -80,7 +78,7 @@ impl<'a> WeChatUser<'a> {
         })
     }
 
-    pub fn update_remark(&self, openid: &str, remark: &str) -> Result<(), WeChatError> {
+    pub fn update_remark(&self, openid: &str, remark: &str) -> WeChatResult<()> {
         let data = json!({
             "openid": (openid),
             "remark": (remark),
@@ -89,7 +87,7 @@ impl<'a> WeChatUser<'a> {
         Ok(())
     }
 
-    pub fn get_followers(&self, next_openid: Option<&str>) -> Result<Followers, WeChatError> {
+    pub fn get_followers(&self, next_openid: Option<&str>) -> WeChatResult<Followers> {
         let params = match next_openid {
             Some(openid) => vec![("next_openid", openid)],
             None => vec![],
@@ -118,18 +116,18 @@ impl<'a> WeChatUser<'a> {
         })
     }
 
-    pub fn get_group_id(&self, openid: &str) -> Result<u64, WeChatError> {
+    pub fn get_group_id(&self, openid: &str) -> WeChatResult<u64> {
         let res = try!(self.client.post("groups/getid", vec![], &json!({"openid": (openid)})));
         let group_id = &res["groupid"];
         let group_id = group_id.as_u64().unwrap();
         Ok(group_id)
     }
 
-    pub fn get_batch(&self, user_list: &[HashMap<String, String>]) -> Result<Json, WeChatError> {
+    pub fn get_batch(&self, user_list: &[HashMap<String, String>]) -> WeChatResult<Json> {
         self.client.post("user/info/batchget", vec![], &json!({"user_list": (user_list)}))
     }
 
-    pub fn get_batch_with_lang(&self, user_list: &[String], lang: &str) -> Result<Json, WeChatError> {
+    pub fn get_batch_with_lang(&self, user_list: &[String], lang: &str) -> WeChatResult<Json> {
         let mut users = vec![];
         for openid in user_list {
             let mut user = HashMap::new();

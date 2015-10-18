@@ -1,8 +1,7 @@
 use rustc_serialize::hex::ToHex;
 use openssl::crypto::hash;
 
-use client::WeChatClient;
-use errors::WeChatError;
+use client::{WeChatClient, WeChatResult};
 
 use client::response::{KFAccount, OnlineKFAccount};
 
@@ -21,7 +20,7 @@ impl<'a> WeChatCustomService<'a> {
         }
     }
 
-    pub fn add_account(&self, account: &str, nickname: &str, password: &str) -> Result<(), WeChatError> {
+    pub fn add_account(&self, account: &str, nickname: &str, password: &str) -> WeChatResult<()> {
         let encrypted_password = hash::hash(hash::Type::MD5, password.as_bytes());
         let encrypted_password = encrypted_password.to_hex();
         let data  = json!({
@@ -37,7 +36,7 @@ impl<'a> WeChatCustomService<'a> {
         Ok(())
     }
 
-    pub fn update_account(&self, account: &str, nickname: &str, password: &str) -> Result<(), WeChatError> {
+    pub fn update_account(&self, account: &str, nickname: &str, password: &str) -> WeChatResult<()> {
         let encrypted_password = hash::hash(hash::Type::MD5, password.as_bytes());
         let encrypted_password = encrypted_password.to_hex();
         let data  = json!({
@@ -53,7 +52,7 @@ impl<'a> WeChatCustomService<'a> {
         Ok(())
     }
 
-    pub fn delete_account(&self, account: &str) -> Result<(), WeChatError> {
+    pub fn delete_account(&self, account: &str) -> WeChatResult<()> {
         try!(self.client.get(
             "https://api.weixin.qq.com/customservice/kfaccount/del",
             vec![("kf_account", account)]
@@ -61,7 +60,7 @@ impl<'a> WeChatCustomService<'a> {
         Ok(())
     }
 
-    pub fn get_accounts(&self) -> Result<Vec<KFAccount>, WeChatError> {
+    pub fn get_accounts(&self) -> WeChatResult<Vec<KFAccount>> {
         let res = try!(self.client.get("customservice/getkflist", vec![]));
         let kf_list = &res["kf_list"];
         let kf_list = kf_list.as_array().unwrap();
@@ -86,7 +85,7 @@ impl<'a> WeChatCustomService<'a> {
         Ok(accounts)
     }
 
-    pub fn get_online_accounts(&self) -> Result<Vec<OnlineKFAccount>, WeChatError> {
+    pub fn get_online_accounts(&self) -> WeChatResult<Vec<OnlineKFAccount>> {
         let res = try!(self.client.get("customservice/getonlinekflist", vec![]));
         let kf_list = &res["kf_online_list"];
         let kf_list = kf_list.as_array().unwrap();

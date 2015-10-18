@@ -9,6 +9,7 @@ use rustc_serialize::json::{self, Json, Object};
 use rustc_serialize::Encodable;
 
 use errors::WeChatError;
+use client::WeChatResult;
 
 
 #[derive(Debug, Clone)]
@@ -46,7 +47,7 @@ impl WeChatClient {
         token
     }
 
-    pub fn request<D: Encodable>(&self, method: Method, url: &str, params: Vec<(&str, &str)>, data: &D) -> Result<Response, WeChatError> {
+    pub fn request<D: Encodable>(&self, method: Method, url: &str, params: Vec<(&str, &str)>, data: &D) -> WeChatResult<Response> {
         let mut http_url = if !(url.starts_with("http://") || url.starts_with("https://")) {
             let mut url_string = "https://api.weixin.qq.com/cgi-bin/".to_owned();
             url_string = url_string + url;
@@ -87,7 +88,7 @@ impl WeChatClient {
     }
 
     #[inline]
-    fn json_decode(&self, res: &mut Response) -> Result<Json, WeChatError> {
+    fn json_decode(&self, res: &mut Response) -> WeChatResult<Json> {
         let obj = match Json::from_reader(res) {
             Ok(decoded) => { decoded },
             Err(_) => {
@@ -114,7 +115,7 @@ impl WeChatClient {
     }
 
     #[inline]
-    pub fn post<D: Encodable>(&self, url: &str, params: Vec<(&str, &str)>, data: &D) -> Result<Json, WeChatError> {
+    pub fn post<D: Encodable>(&self, url: &str, params: Vec<(&str, &str)>, data: &D) -> WeChatResult<Json> {
         if self.access_token().is_empty() {
             self.fetch_access_token();
         }
@@ -123,7 +124,7 @@ impl WeChatClient {
     }
 
     #[inline]
-    pub fn get(&self, url: &str, params: Vec<(&str, &str)>) -> Result<Json, WeChatError> {
+    pub fn get(&self, url: &str, params: Vec<(&str, &str)>) -> WeChatResult<Json> {
         if self.access_token().is_empty() {
             self.fetch_access_token();
         }

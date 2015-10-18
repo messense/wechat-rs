@@ -1,5 +1,4 @@
-use client::WeChatClient;
-use errors::WeChatError;
+use client::{WeChatClient, WeChatResult};
 
 use client::response::Group;
 
@@ -18,7 +17,7 @@ impl<'a> WeChatGroup<'a> {
         }
     }
 
-    pub fn create(&self, name: &str) -> Result<Group, WeChatError> {
+    pub fn create(&self, name: &str) -> WeChatResult<Group> {
         let data = json!({
             "group": {
                 "name": (name)
@@ -36,7 +35,7 @@ impl<'a> WeChatGroup<'a> {
         })
     }
 
-    pub fn list(&self) -> Result<Vec<Group>, WeChatError> {
+    pub fn list(&self) -> WeChatResult<Vec<Group>> {
         let res = try!(self.client.get("groups/get", vec![]));
         let groups = res.find("groups").unwrap();
         let groups_array = groups.as_array().unwrap();
@@ -58,7 +57,7 @@ impl<'a> WeChatGroup<'a> {
         Ok(groups)
     }
 
-    pub fn update(&self, group_id: u64, name: &str) -> Result<(), WeChatError> {
+    pub fn update(&self, group_id: u64, name: &str) -> WeChatResult<()> {
         let data = json!({
             "group": {
                 "id": (group_id),
@@ -69,7 +68,7 @@ impl<'a> WeChatGroup<'a> {
         Ok(())
     }
 
-    pub fn delete(&self, group_id: u64) -> Result<(), WeChatError> {
+    pub fn delete(&self, group_id: u64) -> WeChatResult<()> {
         let data = json!({
             "group": {
                 "id": (group_id)
@@ -79,7 +78,7 @@ impl<'a> WeChatGroup<'a> {
         Ok(())
     }
 
-    pub fn move_user(&self, openid: &str, group_id: u64) -> Result<(), WeChatError> {
+    pub fn move_user(&self, openid: &str, group_id: u64) -> WeChatResult<()> {
         let data = json!({
             "openid": (openid),
             "to_groupid": (group_id)
@@ -88,7 +87,7 @@ impl<'a> WeChatGroup<'a> {
         Ok(())
     }
 
-    pub fn move_users(&self, openids: Vec<String>, group_id: u64) -> Result<(), WeChatError> {
+    pub fn move_users(&self, openids: Vec<String>, group_id: u64) -> WeChatResult<()> {
         let data = json!({
             "openid_list": (openids),
             "to_groupid": (group_id)

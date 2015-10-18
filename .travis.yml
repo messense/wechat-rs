@@ -1,18 +1,27 @@
 sudo: required
+
 language: rust
+
 rust:
   # - stable
   # - beta
   - nightly
+
+services:
+  - redis-server
+
 before_script:
   - pip install 'travis-cargo<0.2' --user && export PATH=$HOME/.local/bin:$PATH
+
 script:
   - travis-cargo build
   - travis-cargo test
   # - travis-cargo --only stable doc
+  #
 after_success:
   # - travis-cargo --only stable doc-upload
   - travis-cargo coveralls
+
 env:
   global:
     - secure: QsZct6sdZ2BoYABY5VgrS4/CRFrfPmMob5nY55rRenm0qCm1j793sXV7KvaxJBLDh+w8uAMqTOGbppS/HoKZDPL/puY7u0suv9bZkmrgubo+fgLP5wLqVyBsIqICi+KFhaw0Zas5lrK+H434aEcJ3AfzI8HIf13OQTQR/1wemAI=

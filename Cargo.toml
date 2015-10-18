@@ -21,7 +21,9 @@ rustc-serialize = "*"
 hyper = "*"
 json_macros = "*"
 openssl = "*"
-redis = "*"
+
+[dependencies.redis]
+git = "https://github.com/mitsuhiko/redis-rs.git"
 
 [features]
 unstable = []

@@ -7,7 +7,7 @@ pub trait SessionStore {
     fn del(&self, key: &str);
 }
 
-//#[derive(Debug, Clone)]
+#[derive(Debug, Clone)]
 pub struct RedisStorage {
     client: redis::Client,
 }

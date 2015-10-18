@@ -40,10 +40,7 @@ impl PrpCrypto {
     }
 
     pub fn decrypt(&self, ciphertext: &str, _id: &str) -> Result<String, WeChatError> {
-        let b64decoded = match ciphertext.from_base64() {
-            Ok(val) => val,
-            Err(err) => return Err(WeChatError::InvalidBase64(err)),
-        };
+        let b64decoded = try!(ciphertext.from_base64());
         let text = symm::decrypt(symm::Type::AES_256_CBC, &self.key, &self.key[..16], &b64decoded);
         let mut rdr = Cursor::new(text[16..20].to_vec());
         let content_length = u32::from_be(rdr.read_u32::<NativeEndian>().unwrap()) as usize;

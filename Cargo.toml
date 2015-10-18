@@ -21,6 +21,7 @@ rustc-serialize = "*"
 hyper = "*"
 json_macros = "*"
 openssl = "*"
+redis = "*"
 
 [features]
 unstable = []

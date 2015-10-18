@@ -10,6 +10,7 @@ extern crate rustc_serialize;
 extern crate byteorder;
 extern crate hyper;
 extern crate openssl;
+extern crate redis;
 #[macro_use]
 extern crate log;
 
@@ -18,13 +19,15 @@ mod macros;
 
 mod xmlutil;
 mod cryptography;
-pub mod messages;
 mod events;
 mod parser;
 mod errors;
+mod utils;
+
+pub mod messages;
 pub mod replies;
 pub mod client;
-mod utils;
+pub mod session;
 
 pub use self::messages::MessageParser;
 pub use self::messages::Message;

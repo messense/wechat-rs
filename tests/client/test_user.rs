@@ -2,15 +2,18 @@ use std::collections::HashMap;
 
 use wechat::WeChatClient;
 use wechat::client::WeChatUser;
+use wechat::session::RedisStorage;
 
 const APPID: &'static str = "wxd7aa56e2c7b1f4f1";
 const SECRET: &'static str = "2817b66a1d5829847196cf2f96ab2816";
 const OPENID: &'static str = "ozJS1syaqn5ztglMsr8ceH8o2zCQ";
+const REDIS_URI: &'static str = "redis://127.0.0.1/";
 
 
 #[test]
 fn test_user_get() {
-    let client = WeChatClient::new(APPID, SECRET);
+    let session = RedisStorage::from_url(REDIS_URI);
+    let client = WeChatClient::new(APPID, SECRET, session);
     let user = WeChatUser::new(&client);
 
     let res = user.get(OPENID);
@@ -19,7 +22,8 @@ fn test_user_get() {
 
 #[test]
 fn test_user_get_with_lang() {
-    let client = WeChatClient::new(APPID, SECRET);
+    let session = RedisStorage::from_url(REDIS_URI);
+    let client = WeChatClient::new(APPID, SECRET, session);
     let user = WeChatUser::new(&client);
 
     let res = user.get_with_lang(OPENID, "zh_CN");
@@ -28,7 +32,8 @@ fn test_user_get_with_lang() {
 
 #[test]
 fn test_user_update_remark() {
-    let client = WeChatClient::new(APPID, SECRET);
+    let session = RedisStorage::from_url(REDIS_URI);
+    let client = WeChatClient::new(APPID, SECRET, session);
     let user = WeChatUser::new(&client);
 
     let res = user.update_remark(OPENID, "test user");
@@ -37,7 +42,8 @@ fn test_user_update_remark() {
 
 #[test]
 fn test_user_get_followers_with_no_next_openid() {
-    let client = WeChatClient::new(APPID, SECRET);
+    let session = RedisStorage::from_url(REDIS_URI);
+    let client = WeChatClient::new(APPID, SECRET, session);
     let user = WeChatUser::new(&client);
 
     let res = user.get_followers(None);
@@ -46,7 +52,8 @@ fn test_user_get_followers_with_no_next_openid() {
 
 #[test]
 fn test_user_get_followers_with_next_openid() {
-    let client = WeChatClient::new(APPID, SECRET);
+    let session = RedisStorage::from_url(REDIS_URI);
+    let client = WeChatClient::new(APPID, SECRET, session);
     let user = WeChatUser::new(&client);
 
     let res = user.get_followers(Some(OPENID));
@@ -55,7 +62,8 @@ fn test_user_get_followers_with_next_openid() {
 
 #[test]
 fn test_user_get_group_id() {
-    let client = WeChatClient::new(APPID, SECRET);
+    let session = RedisStorage::from_url(REDIS_URI);
+    let client = WeChatClient::new(APPID, SECRET, session);
     let user = WeChatUser::new(&client);
 
     let res = user.get_group_id(OPENID);
@@ -64,7 +72,8 @@ fn test_user_get_group_id() {
 
 #[test]
 fn test_user_get_batch() {
-    let client = WeChatClient::new(APPID, SECRET);
+    let session = RedisStorage::from_url(REDIS_URI);
+    let client = WeChatClient::new(APPID, SECRET, session);
     let user = WeChatUser::new(&client);
 
     let mut user_list = vec![];
@@ -78,7 +87,8 @@ fn test_user_get_batch() {
 
 #[test]
 fn test_user_get_batch_with_lang() {
-    let client = WeChatClient::new(APPID, SECRET);
+    let session = RedisStorage::from_url(REDIS_URI);
+    let client = WeChatClient::new(APPID, SECRET, session);
     let user = WeChatUser::new(&client);
 
     let user_list = vec![OPENID.to_owned()];

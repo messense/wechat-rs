@@ -1,6 +1,3 @@
-use std::cell::RefCell;
-use std::sync::{Mutex, Arc};
-
 use url::Url;
 use hyper::{self, Client};
 use hyper::client::Response;
@@ -10,40 +7,39 @@ use rustc_serialize::Encodable;
 
 use errors::WeChatError;
 use client::WeChatResult;
+use session::{SessionStore, RedisStorage};
 
 
 #[derive(Debug, Clone)]
 pub struct WeChatClient {
     pub appid: String,
     pub secret: String,
-    _access_token: Arc<Mutex<RefCell<String>>>,
+    pub session: RedisStorage,
 }
 
 impl WeChatClient {
 
     #[inline]
-    pub fn new(appid: &str, secret: &str) -> WeChatClient {
+    pub fn new(appid: &str, secret: &str, session: RedisStorage) -> WeChatClient {
         WeChatClient {
             appid: appid.to_owned(),
             secret: secret.to_owned(),
-            _access_token: Arc::new(Mutex::new(RefCell::new("".to_owned()))),
+            session: session,
         }
     }
 
     #[inline]
-    pub fn with_access_token(appid: &str, secret: &str, access_token: &str) -> WeChatClient {
-        WeChatClient {
-            appid: appid.to_owned(),
-            secret: secret.to_owned(),
-            _access_token: Arc::new(Mutex::new(RefCell::new(access_token.to_owned()))),
-        }
+    pub fn with_access_token(appid: &str, secret: &str, access_token: &str, session: RedisStorage) -> WeChatClient {
+        let client = Self::new(appid, secret, session);
+        let token_key = format!("{}_access_token", appid);
+        client.session.set(&token_key, access_token.to_owned(), None);
+        client
     }
 
     #[inline]
     pub fn access_token(&self) -> String {
-        let data = self._access_token.clone();
-        let data = data.lock().unwrap();
-        let token = data.borrow().clone();
+        let token_key = format!("{}_access_token", self.appid);
+        let token: String = self.session.get(&token_key, Some("".to_owned())).unwrap();
         token
     }
 
@@ -157,10 +153,8 @@ impl WeChatClient {
         };
         let token_str = match *token {
             Json::String(ref v) => {
-                let data = self._access_token.clone();
-                let data = data.lock().unwrap();
-                let mut access_token = data.borrow_mut();
-                *access_token = v.to_owned();
+                let token_key = format!("{}_access_token", self.appid);
+                self.session.set(&token_key, v.to_owned(), Some(7200usize));
                 Some(format!("{}", v))
             },
             _ => None,

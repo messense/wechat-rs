@@ -18,6 +18,13 @@ impl RedisStorage {
             client: client,
         }
     }
+
+    pub fn from_url(url: &str) -> RedisStorage {
+        let client = redis::Client::open(url).unwrap();
+        RedisStorage {
+            client: client,
+        }
+    }
 }
 
 impl SessionStore for RedisStorage {

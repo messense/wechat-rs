@@ -1,11 +1,14 @@
 use wechat::WeChatClient;
+use wechat::session::RedisStorage;
 
 const APPID: &'static str = "wxd7aa56e2c7b1f4f1";
 const SECRET: &'static str = "2817b66a1d5829847196cf2f96ab2816";
+const REDIS_URI: &'static str = "redis://127.0.0.1/";
 
 #[test]
 fn test_fetch_access_token() {
-    let client = WeChatClient::new(APPID, SECRET);
+    let session = RedisStorage::from_url(REDIS_URI);
+    let client = WeChatClient::new(APPID, SECRET, session);
     let access_token = client.fetch_access_token();
     assert!(access_token.is_some());
     assert!(!client.access_token().is_empty());
@@ -13,7 +16,8 @@ fn test_fetch_access_token() {
 
 #[test]
 fn test_call_api_with_no_access_token_provided() {
-    let client = WeChatClient::new(APPID, SECRET);
+    let session = RedisStorage::from_url(REDIS_URI);
+    let client = WeChatClient::new(APPID, SECRET, session);
     let res = client.get("getcallbackip", vec![]);
     let data = match res {
         Ok(data) => data,
@@ -26,11 +30,13 @@ fn test_call_api_with_no_access_token_provided() {
 
 #[test]
 fn test_call_api_with_access_token_provided() {
-    let client0 = WeChatClient::new(APPID, SECRET);
+    let session0 = RedisStorage::from_url(REDIS_URI);
+    let client0 = WeChatClient::new(APPID, SECRET, session0);
     let access_token = client0.fetch_access_token();
     assert!(access_token.is_some());
 
-    let client = WeChatClient::with_access_token(APPID, SECRET, &access_token.unwrap());
+    let session1 = RedisStorage::from_url(REDIS_URI);
+    let client = WeChatClient::with_access_token(APPID, SECRET, &access_token.unwrap(), session1);
     let res = client.get("getcallbackip", vec![]);
     let data = match res {
         Ok(data) => data,

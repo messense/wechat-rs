@@ -34,3 +34,9 @@ impl error::Error for WeChatError {
         }
     }
 }
+
+impl From<FromBase64Error> for WeChatError {
+    fn from(err: FromBase64Error) -> WeChatError {
+        WeChatError::InvalidBase64(err)
+    }
+}

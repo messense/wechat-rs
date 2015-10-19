@@ -1,13 +1,13 @@
 use rustc_serialize::json::{Json, ToJson};
 
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct TempQRCodeRequest {
     scene_id: u32,
     expire_seconds: u32,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct PermQRCodeRequest {
     scene_str: String,
 }

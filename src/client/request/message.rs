@@ -1,27 +1,27 @@
 use rustc_serialize::json::{Json, ToJson};
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct SendTextRequest {
     openid: String,
     account: Option<String>,
     content: String,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct SendImageRequest {
     openid: String,
     account: Option<String>,
     media_id: String,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct SendVoiceRequest {
     openid: String,
     account: Option<String>,
     media_id: String,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct SendVideoRequest {
     openid: String,
     account: Option<String>,
@@ -31,7 +31,7 @@ pub struct SendVideoRequest {
     description: Option<String>,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct SendMusicRequest {
     openid: String,
     account: Option<String>,
@@ -42,7 +42,7 @@ pub struct SendMusicRequest {
     description: Option<String>,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Article {
     title: String,
     url: String,
@@ -50,7 +50,7 @@ pub struct Article {
     image: Option<String>,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct SendArticlesRequest {
     openid: String,
     account: Option<String>,

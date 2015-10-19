@@ -1,4 +1,4 @@
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct KFAccount {
     pub id: String,
     pub nick: String,
@@ -6,7 +6,7 @@ pub struct KFAccount {
     pub avatar: String,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct OnlineKFAccount {
     pub id: String,
     pub account: String,

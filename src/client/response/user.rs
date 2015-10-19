@@ -1,4 +1,4 @@
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct User {
     pub subscribe: bool,
     pub openid: String,
@@ -16,7 +16,7 @@ pub struct User {
 }
 
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Followers {
     pub total: u64,
     pub count: u64,

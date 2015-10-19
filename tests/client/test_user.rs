@@ -18,6 +18,9 @@ fn test_user_get() {
 
     let res = user.get(OPENID);
     assert!(res.is_ok());
+
+    let user = res.unwrap();
+    assert!(OPENID == &user.openid);
 }
 
 #[test]
@@ -28,6 +31,9 @@ fn test_user_get_with_lang() {
 
     let res = user.get_with_lang(OPENID, "zh_CN");
     assert!(res.is_ok());
+
+    let user = res.unwrap();
+    assert!(OPENID == &user.openid);
 }
 
 #[test]
@@ -83,6 +89,9 @@ fn test_user_get_batch() {
     user_list.push(openid1);
     let res = user.get_batch(&user_list);
     assert!(res.is_ok());
+
+    let users = res.unwrap();
+    assert!(users.len() > 0);
 }
 
 #[test]
@@ -94,4 +103,7 @@ fn test_user_get_batch_with_lang() {
     let user_list = vec![OPENID.to_owned()];
     let res = user.get_batch_with_lang(&user_list, "zh-CN");
     assert!(res.is_ok());
+
+    let users = res.unwrap();
+    assert!(users.len() > 0);
 }

@@ -286,9 +286,80 @@ pub struct Article {
     image: Option<String>,
 }
 
+impl Article {
+    pub fn new(title: &str, url: &str, description: Option<String>, image: Option<String>) -> Article {
+        Article {
+            title: title.to_owned(),
+            url: url.to_owned(),
+            description: description,
+            image: image,
+        }
+    }
+}
+
+impl ToJson for Article {
+    fn to_json(&self) -> Json {
+        json!({
+            "title": (self.title),
+            "url": (self.url),
+            "description": (self.description),
+            "picurl": (self.image),
+        })
+    }
+}
+
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct SendArticlesRequest {
     openid: String,
     account: Option<String>,
     articles: Vec<Article>,
 }
+
+impl SendArticlesRequest {
+    pub fn new(openid: &str, articles: &[Article]) -> SendArticlesRequest {
+        SendArticlesRequest {
+            openid: openid.to_owned(),
+            account: None,
+            articles: articles.to_vec(),
+        }
+    }
+
+    pub fn with_account(openid: &str, account: &str, articles: &[Article]) -> SendArticlesRequest {
+        SendArticlesRequest {
+            openid: openid.to_owned(),
+            account: Some(account.to_owned()),
+            articles: articles.to_vec(),
+        }
+    }
+
+    pub fn add_article(&mut self, article: Article) {
+        if self.articles.len() < 10 {
+            self.articles.push(article);
+        }
+    }
+}
+
+impl ToJson for SendArticlesRequest {
+    fn to_json(&self) -> Json {
+        if let Some(ref account) = self.account {
+            json!({
+                "msgtype": "news",
+                "touser": (self.openid),
+                "news": {
+                    "articles": (self.articles),
+                },
+                "customservice": {"kf_account": (account)},
+            })
+        } else {
+            json!({
+                "msgtype": "news",
+                "touser": (self.openid),
+                "news": {
+                    "articles": (self.articles),
+                },
+            })
+        }
+    }
+}
+
+make_encodable!(SendArticlesRequest);

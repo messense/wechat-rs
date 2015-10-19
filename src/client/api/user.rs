@@ -2,19 +2,20 @@ use std::collections::HashMap;
 
 use rustc_serialize::json::Json;
 
+use session::SessionStore;
 use client::{WeChatClient, WeChatResult};
 use client::response::{User, Followers};
 
 
 #[derive(Debug, Clone)]
-pub struct WeChatUser<'a> {
-    client: &'a WeChatClient,
+pub struct WeChatUser<'a, T: SessionStore + 'a> {
+    client: &'a WeChatClient<T>,
 }
 
-impl<'a> WeChatUser<'a> {
+impl<'a, T: SessionStore> WeChatUser<'a, T> {
 
     #[inline]
-    pub fn new(client: &'a WeChatClient) -> WeChatUser<'a> {
+    pub fn new(client: &'a WeChatClient<T>) -> WeChatUser<'a, T> {
         WeChatUser {
             client: client,
         }

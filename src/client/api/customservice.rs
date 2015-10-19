@@ -1,20 +1,20 @@
 use rustc_serialize::hex::ToHex;
 use openssl::crypto::hash;
 
+use session::SessionStore;
 use client::{WeChatClient, WeChatResult};
-
 use client::response::{KFAccount, OnlineKFAccount};
 
 
 #[derive(Debug, Clone)]
-pub struct WeChatCustomService<'a> {
-    client: &'a WeChatClient,
+pub struct WeChatCustomService<'a, T: SessionStore + 'a> {
+    client: &'a WeChatClient<T>,
 }
 
-impl<'a> WeChatCustomService<'a> {
+impl<'a, T: SessionStore> WeChatCustomService<'a, T> {
 
     #[inline]
-    pub fn new(client: &'a WeChatClient) -> WeChatCustomService<'a> {
+    pub fn new(client: &'a WeChatClient<T>) -> WeChatCustomService<'a, T> {
         WeChatCustomService {
             client: client,
         }

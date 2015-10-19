@@ -1,17 +1,19 @@
 use rustc_serialize::Encodable;
 
+use session::SessionStore;
 use client::{WeChatClient, WeChatResult};
 use client::response::QRCodeTicket;
 
+
 #[derive(Debug, Clone)]
-pub struct WeChatQRCode<'a> {
-    client: &'a WeChatClient,
+pub struct WeChatQRCode<'a, T: SessionStore + 'a> {
+    client: &'a WeChatClient<T>,
 }
 
-impl<'a> WeChatQRCode<'a> {
+impl<'a, T: SessionStore> WeChatQRCode<'a, T> {
 
     #[inline]
-    pub fn new(client: &'a WeChatClient) -> WeChatQRCode<'a> {
+    pub fn new(client: &'a WeChatClient<T>) -> WeChatQRCode<'a, T> {
         WeChatQRCode {
             client: client,
         }
@@ -34,12 +36,12 @@ impl<'a> WeChatQRCode<'a> {
         })
     }
 
-    pub fn get_url_with_ticket(ticket: &str) -> String {
+    pub fn get_url_with_ticket(&self, ticket: &str) -> String {
         format!("https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket={}", ticket)
     }
 
-    pub fn get_url(qrcode_ticket: &QRCodeTicket) -> String {
+    pub fn get_url(&self, qrcode_ticket: &QRCodeTicket) -> String {
         let ticket = &qrcode_ticket.ticket;
-        Self::get_url_with_ticket(ticket)
+        self.get_url_with_ticket(ticket)
     }
 }

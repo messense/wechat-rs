@@ -19,7 +19,7 @@ fn test_qrcode_create_temp(){
 
     assert!(res.is_ok());
 
-    let qrcode_url = WeChatQRCode::get_url(&res.unwrap());
+    let qrcode_url = qrcode.get_url(&res.unwrap());
     assert!(qrcode_url.len() > 0);
 }
 
@@ -36,6 +36,6 @@ fn test_qrcode_create_perm(){
 
     assert!(res.is_ok());
 
-    let qrcode_url = WeChatQRCode::get_url(&res.unwrap());
+    let qrcode_url = qrcode.get_url(&res.unwrap());
     assert!(qrcode_url.len() > 0);
 }

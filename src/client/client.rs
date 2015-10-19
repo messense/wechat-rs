@@ -7,20 +7,20 @@ use rustc_serialize::Encodable;
 
 use errors::WeChatError;
 use client::WeChatResult;
-use session::{SessionStore, RedisStorage};
+use session::SessionStore;
 
 
 #[derive(Debug, Clone)]
-pub struct WeChatClient {
+pub struct WeChatClient<T: SessionStore> {
     pub appid: String,
     pub secret: String,
-    pub session: RedisStorage,
+    pub session: T,
 }
 
-impl WeChatClient {
+impl<T: SessionStore> WeChatClient<T> {
 
     #[inline]
-    pub fn new(appid: &str, secret: &str, session: RedisStorage) -> WeChatClient {
+    pub fn new(appid: &str, secret: &str, session: T) -> WeChatClient<T> {
         WeChatClient {
             appid: appid.to_owned(),
             secret: secret.to_owned(),
@@ -29,7 +29,7 @@ impl WeChatClient {
     }
 
     #[inline]
-    pub fn with_access_token(appid: &str, secret: &str, access_token: &str, session: RedisStorage) -> WeChatClient {
+    pub fn with_access_token(appid: &str, secret: &str, access_token: &str, session: T) -> WeChatClient<T> {
         let client = Self::new(appid, secret, session);
         let token_key = format!("{}_access_token", appid);
         client.session.set(&token_key, access_token.to_owned(), None);

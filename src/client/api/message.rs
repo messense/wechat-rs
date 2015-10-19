@@ -1,17 +1,18 @@
 use rustc_serialize::Encodable;
 
+use session::SessionStore;
 use client::{WeChatClient, WeChatResult};
 
 
 #[derive(Debug, Clone)]
-pub struct WeChatMessage<'a> {
-    client:  &'a WeChatClient,
+pub struct WeChatMessage<'a, T: SessionStore + 'a> {
+    client:  &'a WeChatClient<T>,
 }
 
-impl<'a> WeChatMessage<'a> {
+impl<'a, T: SessionStore> WeChatMessage<'a, T> {
 
     #[inline]
-    pub fn new(client: &'a WeChatClient) -> WeChatMessage<'a> {
+    pub fn new(client: &'a WeChatClient<T>) -> WeChatMessage<'a, T> {
         WeChatMessage {
             client: client,
         }

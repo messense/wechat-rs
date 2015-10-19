@@ -1,17 +1,18 @@
 use client::{WeChatClient, WeChatResult};
 
+use session::SessionStore;
 use client::response::Group;
 
 
 #[derive(Debug, Clone)]
-pub struct WeChatGroup<'a> {
-    client: &'a WeChatClient,
+pub struct WeChatGroup<'a, T: SessionStore + 'a> {
+    client: &'a WeChatClient<T>,
 }
 
-impl<'a> WeChatGroup<'a> {
+impl<'a, T: SessionStore> WeChatGroup<'a, T> {
 
     #[inline]
-    pub fn new(client: &'a WeChatClient) -> WeChatGroup<'a> {
+    pub fn new(client: &'a WeChatClient<T>) -> WeChatGroup<'a, T> {
         WeChatGroup {
             client: client,
         }

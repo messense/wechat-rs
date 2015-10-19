@@ -21,6 +21,43 @@ pub struct SendVoiceRequest {
     media_id: String,
 }
 
+#[derive(Debug, Clone)]
+pub struct SendVideoRequest {
+    openid: String,
+    account: Option<String>,
+    media_id: String,
+    thumb_media_id: String,
+    title: Option<String>,
+    description: Option<String>,
+}
+
+#[derive(Debug, Clone)]
+pub struct SendMusicRequest {
+    openid: String,
+    account: Option<String>,
+    music_url: String,
+    hq_music_url: String,
+    thumb_media_id: String,
+    title: Option<String>,
+    description: Option<String>,
+}
+
+#[derive(Debug, Clone)]
+pub struct Article {
+    title: String,
+    url: String,
+    description: Option<String>,
+    image: Option<String>,
+}
+
+#[derive(Debug, Clone)]
+pub struct SendArticlesRequest {
+    openid: String,
+    account: Option<String>,
+    articles: Vec<Article>,
+}
+
+
 impl SendTextRequest {
     pub fn new(openid: &str, content: &str) -> SendTextRequest {
         SendTextRequest {
@@ -59,6 +96,7 @@ impl ToJson for SendTextRequest {
 }
 
 make_encodable!(SendTextRequest);
+
 
 impl SendImageRequest {
     pub fn new(openid: &str, media_id: &str) -> SendImageRequest {
@@ -99,6 +137,7 @@ impl ToJson for SendImageRequest {
 
 make_encodable!(SendImageRequest);
 
+
 impl SendVoiceRequest {
     pub fn new(openid: &str, media_id: &str) -> SendVoiceRequest {
         SendVoiceRequest {
@@ -116,6 +155,7 @@ impl SendVoiceRequest {
         }
     }
 }
+
 impl ToJson for SendVoiceRequest {
     fn to_json(&self) -> Json {
         if let Some(ref account) = self.account {
@@ -134,4 +174,61 @@ impl ToJson for SendVoiceRequest {
         }
     }
 }
+
 make_encodable!(SendVoiceRequest);
+
+
+impl SendVideoRequest {
+    pub fn new(openid: &str, media_id: &str, thumb_media_id: &str, title: Option<String>, description: Option<String>) -> SendVideoRequest {
+        SendVideoRequest {
+            openid: openid.to_owned(),
+            account: None,
+            media_id: media_id.to_owned(),
+            thumb_media_id: thumb_media_id.to_owned(),
+            title: title,
+            description: description,
+        }
+    }
+
+    pub fn with_account(openid: &str, account: &str, media_id: &str, thumb_media_id: &str, title: Option<String>, description: Option<String>) -> SendVideoRequest {
+        SendVideoRequest {
+            openid: openid.to_owned(),
+            account: Some(account.to_owned()),
+            media_id: media_id.to_owned(),
+            thumb_media_id: thumb_media_id.to_owned(),
+            title: title,
+            description: description,
+        }
+    }
+}
+
+impl ToJson for SendVideoRequest {
+    fn to_json(&self) -> Json {
+        if let Some(ref account) = self.account {
+            json!({
+                "msgtype": "video",
+                "touser": (self.openid),
+                "video": {
+                    "media_id": (self.media_id),
+                    "thumb_media_id": (self.thumb_media_id),
+                    "title": (self.title),
+                    "description": (self.description),
+                },
+                "customservice": {"kf_account": (account)},
+            })
+        } else {
+            json!({
+                "msgtype": "video",
+                "touser": (self.openid),
+                "video": {
+                    "media_id": (self.media_id),
+                    "thumb_media_id": (self.thumb_media_id),
+                    "title": (self.title),
+                    "description": (self.description),
+                },
+            })
+        }
+    }
+}
+
+make_encodable!(SendVideoRequest);

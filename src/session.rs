@@ -2,9 +2,9 @@ use redis::{self, Commands, PipelineCommands, FromRedisValue, ToRedisArgs};
 
 
 pub trait SessionStore {
-    fn get<T: FromRedisValue>(&self, key: &str, default: Option<T>) -> Option<T>;
-    fn set<T: ToRedisArgs>(&self, key: &str, value: T, ttl: Option<usize>);
-    fn del(&self, key: &str);
+    fn get<K: AsRef<str>, T: FromRedisValue>(&self, key: K, default: Option<T>) -> Option<T>;
+    fn set<K: AsRef<str>, T: ToRedisArgs>(&self, key: K, value: T, ttl: Option<usize>);
+    fn del<K: AsRef<str>>(&self, key: K);
 }
 
 #[derive(Debug, Clone)]
@@ -19,8 +19,8 @@ impl RedisStorage {
         }
     }
 
-    pub fn from_url(url: &str) -> RedisStorage {
-        let client = redis::Client::open(url).unwrap();
+    pub fn from_url<U: AsRef<str>>(url: U) -> RedisStorage {
+        let client = redis::Client::open(url.as_ref()).unwrap();
         RedisStorage {
             client: client,
         }
@@ -28,13 +28,13 @@ impl RedisStorage {
 }
 
 impl SessionStore for RedisStorage {
-    fn get<T: FromRedisValue>(&self, key: &str, default: Option<T>) -> Option<T> {
+    fn get<K: AsRef<str>, T: FromRedisValue>(&self, key: K, default: Option<T>) -> Option<T> {
         let conn = self.client.get_connection();
         if conn.is_err() {
             return default;
         }
         let conn = conn.unwrap();
-        let data = conn.get(key);
+        let data = conn.get(key.as_ref());
         if data.is_err() {
             return default;
         }
@@ -45,7 +45,8 @@ impl SessionStore for RedisStorage {
         }
     }
 
-    fn set<T: ToRedisArgs>(&self, key: &str, value: T, ttl: Option<usize>) {
+    fn set<K: AsRef<str>, T: ToRedisArgs>(&self, key: K, value: T, ttl: Option<usize>) {
+        let key = key.as_ref();
         let conn = self.client.get_connection();
         if conn.is_err() {
             return;
@@ -58,12 +59,12 @@ impl SessionStore for RedisStorage {
         }
     }
 
-    fn del(&self, key: &str) {
+    fn del<K: AsRef<str>>(&self, key: K) {
         let conn = self.client.get_connection();
         if conn.is_err() {
             return;
         }
         let conn = conn.unwrap();
-        let _: () = redis::pipe().del(key).ignore().query(&conn).unwrap_or(());
+        let _: () = redis::pipe().del(key.as_ref()).ignore().query(&conn).unwrap_or(());
     }
 }

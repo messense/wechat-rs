@@ -2,16 +2,16 @@ use rustc_serialize::hex::ToHex;
 use openssl::crypto::hash;
 
 
-pub fn check_signature(token: &str, signature: &str, timestamp: i64, nonce: &str) -> bool {
+pub fn check_signature<S: Into<String>, T: AsRef<str>>(token: S, signature: T, timestamp: i64, nonce: S) -> bool {
     let mut data = vec![
-        token.to_owned(),
+        token.into(),
         timestamp.to_string(),
-        nonce.to_owned(),
+        nonce.into(),
     ];
     data.sort();
     let data_str = data.join("");
     let real_sign = hash::hash(hash::Type::SHA1, data_str.as_bytes());
-    signature == &real_sign.to_hex()
+    signature.as_ref() == &real_sign.to_hex()
 }
 
 #[cfg(test)]

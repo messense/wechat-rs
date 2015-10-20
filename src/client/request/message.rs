@@ -8,19 +8,19 @@ pub struct SendTextRequest {
 }
 
 impl SendTextRequest {
-    pub fn new(openid: &str, content: &str) -> SendTextRequest {
+    pub fn new<S: Into<String>>(openid: S, content: S) -> SendTextRequest {
         SendTextRequest {
-            openid: openid.to_owned(),
-            content: content.to_owned(),
+            openid: openid.into(),
+            content: content.into(),
             account: None,
         }
     }
 
-    pub fn with_account(openid: &str, content: &str, account: &str) -> SendTextRequest {
+    pub fn with_account<S: Into<String>>(openid: S, content: S, account: S) -> SendTextRequest {
         SendTextRequest {
-            openid: openid.to_owned(),
-            content: content.to_owned(),
-            account: Some(account.to_owned()),
+            openid: openid.into(),
+            content: content.into(),
+            account: Some(account.into()),
         }
     }
 }
@@ -55,19 +55,19 @@ pub struct SendImageRequest {
 }
 
 impl SendImageRequest {
-    pub fn new(openid: &str, media_id: &str) -> SendImageRequest {
+    pub fn new<S: Into<String>>(openid: S, media_id: S) -> SendImageRequest {
         SendImageRequest {
-            openid: openid.to_owned(),
+            openid: openid.into(),
             account: None,
-            media_id: media_id.to_owned(),
+            media_id: media_id.into(),
         }
     }
 
-    pub fn with_account(openid: &str, media_id: &str, account: &str) -> SendImageRequest {
+    pub fn with_account<S: Into<String>>(openid: S, media_id: S, account: S) -> SendImageRequest {
         SendImageRequest {
-            openid: openid.to_owned(),
-            account: Some(account.to_owned()),
-            media_id: media_id.to_owned(),
+            openid: openid.into(),
+            account: Some(account.into()),
+            media_id: media_id.into(),
         }
     }
 }
@@ -102,19 +102,19 @@ pub struct SendVoiceRequest {
 }
 
 impl SendVoiceRequest {
-    pub fn new(openid: &str, media_id: &str) -> SendVoiceRequest {
+    pub fn new<S: Into<String>>(openid: S, media_id: S) -> SendVoiceRequest {
         SendVoiceRequest {
-            openid: openid.to_owned(),
+            openid: openid.into(),
             account: None,
-            media_id: media_id.to_owned(),
+            media_id: media_id.into(),
         }
     }
 
-    pub fn with_account(openid: &str, media_id: &str, account: &str) -> SendVoiceRequest {
+    pub fn with_account<S: Into<String>>(openid: S, media_id: S, account: S) -> SendVoiceRequest {
         SendVoiceRequest {
-            openid: openid.to_owned(),
-            account: Some(account.to_owned()),
-            media_id: media_id.to_owned(),
+            openid: openid.into(),
+            account: Some(account.into()),
+            media_id: media_id.into(),
         }
     }
 }
@@ -152,23 +152,23 @@ pub struct SendVideoRequest {
 }
 
 impl SendVideoRequest {
-    pub fn new(openid: &str, media_id: &str, thumb_media_id: &str, title: Option<String>, description: Option<String>) -> SendVideoRequest {
+    pub fn new<S: Into<String>>(openid: S, media_id: S, thumb_media_id: S, title: Option<String>, description: Option<String>) -> SendVideoRequest {
         SendVideoRequest {
-            openid: openid.to_owned(),
+            openid: openid.into(),
             account: None,
-            media_id: media_id.to_owned(),
-            thumb_media_id: thumb_media_id.to_owned(),
+            media_id: media_id.into(),
+            thumb_media_id: thumb_media_id.into(),
             title: title,
             description: description,
         }
     }
 
-    pub fn with_account(openid: &str, account: &str, media_id: &str, thumb_media_id: &str, title: Option<String>, description: Option<String>) -> SendVideoRequest {
+    pub fn with_account<S: Into<String>>(openid: S, account: S, media_id: S, thumb_media_id: S, title: Option<String>, description: Option<String>) -> SendVideoRequest {
         SendVideoRequest {
-            openid: openid.to_owned(),
-            account: Some(account.to_owned()),
-            media_id: media_id.to_owned(),
-            thumb_media_id: thumb_media_id.to_owned(),
+            openid: openid.into(),
+            account: Some(account.into()),
+            media_id: media_id.into(),
+            thumb_media_id: thumb_media_id.into(),
             title: title,
             description: description,
         }
@@ -219,25 +219,25 @@ pub struct SendMusicRequest {
 }
 
 impl SendMusicRequest {
-    pub fn new(openid: &str, music_url: &str, hq_music_url: &str, thumb_media_id: &str, title: Option<String>, description: Option<String>) -> SendMusicRequest {
+    pub fn new<S: Into<String>>(openid: S, music_url: S, hq_music_url: S, thumb_media_id: S, title: Option<String>, description: Option<String>) -> SendMusicRequest {
         SendMusicRequest {
-            openid: openid.to_owned(),
+            openid: openid.into(),
             account: None,
-            music_url: music_url.to_owned(),
-            hq_music_url: hq_music_url.to_owned(),
-            thumb_media_id: thumb_media_id.to_owned(),
+            music_url: music_url.into(),
+            hq_music_url: hq_music_url.into(),
+            thumb_media_id: thumb_media_id.into(),
             title: title,
             description: description,
         }
     }
 
-    pub fn with_account(openid: &str, account: &str, music_url: &str, hq_music_url: &str, thumb_media_id: &str, title: Option<String>, description: Option<String>) -> SendMusicRequest {
+    pub fn with_account<S: Into<String>>(openid: S, account: S, music_url: S, hq_music_url: S, thumb_media_id: S, title: Option<String>, description: Option<String>) -> SendMusicRequest {
         SendMusicRequest {
-            openid: openid.to_owned(),
-            account: Some(account.to_owned()),
-            music_url: music_url.to_owned(),
-            hq_music_url: hq_music_url.to_owned(),
-            thumb_media_id: thumb_media_id.to_owned(),
+            openid: openid.into(),
+            account: Some(account.into()),
+            music_url: music_url.into(),
+            hq_music_url: hq_music_url.into(),
+            thumb_media_id: thumb_media_id.into(),
             title: title,
             description: description,
         }
@@ -287,10 +287,10 @@ pub struct Article {
 }
 
 impl Article {
-    pub fn new(title: &str, url: &str, description: Option<String>, image: Option<String>) -> Article {
+    pub fn new<S: Into<String>>(title: S, url: S, description: Option<String>, image: Option<String>) -> Article {
         Article {
-            title: title.to_owned(),
-            url: url.to_owned(),
+            title: title.into(),
+            url: url.into(),
             description: description,
             image: image,
         }
@@ -316,18 +316,18 @@ pub struct SendArticlesRequest {
 }
 
 impl SendArticlesRequest {
-    pub fn new(openid: &str, articles: &[Article]) -> SendArticlesRequest {
+    pub fn new<S: Into<String>>(openid: S, articles: &[Article]) -> SendArticlesRequest {
         SendArticlesRequest {
-            openid: openid.to_owned(),
+            openid: openid.into(),
             account: None,
             articles: articles.to_vec(),
         }
     }
 
-    pub fn with_account(openid: &str, account: &str, articles: &[Article]) -> SendArticlesRequest {
+    pub fn with_account<S: Into<String>>(openid: S, account: S, articles: &[Article]) -> SendArticlesRequest {
         SendArticlesRequest {
-            openid: openid.to_owned(),
-            account: Some(account.to_owned()),
+            openid: openid.into(),
+            account: Some(account.into()),
             articles: articles.to_vec(),
         }
     }

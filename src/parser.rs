@@ -4,7 +4,8 @@ use messages::MessageParser;
 use messages::Message;
 
 
-pub fn parse_message(xml: &str) -> Message {
+pub fn parse_message<S: AsRef<str>>(xml: S) -> Message {
+    let xml = xml.as_ref();
     let package = xmlutil::parse(xml);
     let doc = package.as_document();
     let msg_type_str = xmlutil::evaluate(&doc, "//xml/MsgType/text()").string().to_lowercase();

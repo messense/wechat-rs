@@ -24,19 +24,21 @@ pub struct WeChatClient<T: SessionStore> {
 impl<T: SessionStore> WeChatClient<T> {
 
     #[inline]
-    pub fn new(appid: &str, secret: &str, session: T) -> WeChatClient<T> {
+    pub fn new<S: Into<String>>(appid: S, secret: S, session: T) -> WeChatClient<T> {
         WeChatClient {
-            appid: appid.to_owned(),
-            secret: secret.to_owned(),
+            appid: appid.into(),
+            secret: secret.into(),
             session: session,
         }
     }
 
     #[inline]
-    pub fn with_access_token(appid: &str, secret: &str, access_token: &str, session: T) -> WeChatClient<T> {
-        let client = Self::new(appid, secret, session);
+    pub fn with_access_token<S: Into<String>>(appid: S, secret: S, access_token: S, session: T) -> WeChatClient<T> {
+        let appid = appid.into();
+        let secret = secret.into();
+        let client = Self::new(appid.clone(), secret, session);
         let token_key = format!("{}_access_token", appid);
-        client.session.set(&token_key, access_token.to_owned(), None);
+        client.session.set(&token_key, access_token.into(), None);
         client
     }
 

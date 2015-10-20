@@ -88,6 +88,10 @@ impl<T: SessionStore> WeChatClient<T> {
     }
 
     pub fn upload_file<R: Read>(&self, url: &str, params: Vec<(&str, &str)>, files: &mut HashMap<String, &mut R>) -> WeChatResult<Json> {
+        if self.access_token().is_empty() {
+            self.fetch_access_token();
+        }
+
         let mut http_url = if !(url.starts_with("http://") || url.starts_with("https://")) {
             let mut url_string = "https://api.weixin.qq.com/cgi-bin/".to_owned();
             url_string = url_string + url;

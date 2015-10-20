@@ -1,8 +1,10 @@
 use rustc_serialize::Encodable;
 use rustc_serialize::json::Json;
 
+use types::WeChatResult;
+use client::WeChatClient;
 use session::SessionStore;
-use client::{WeChatClient, WeChatResult};
+
 
 #[derive(Debug, Clone)]
 pub struct WeChatMenu<'a, T: SessionStore + 'a> {

@@ -2,9 +2,10 @@ use std::collections::HashMap;
 
 use rustc_serialize::json::Json;
 
-use session::SessionStore;
-use client::{WeChatClient, WeChatResult};
+use types::WeChatResult;
+use client::WeChatClient;
 use client::response::{User, Followers};
+use session::SessionStore;
 
 
 #[derive(Debug, Clone)]

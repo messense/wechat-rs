@@ -18,6 +18,7 @@ extern crate log;
 #[macro_use]
 mod macros;
 
+mod types;
 mod xmlutil;
 mod cryptography;
 mod events;
@@ -30,6 +31,7 @@ pub mod replies;
 pub mod client;
 pub mod session;
 
+pub use self::types::WeChatResult;
 pub use self::messages::MessageParser;
 pub use self::messages::Message;
 pub use self::parser::parse_message;

@@ -1,7 +1,7 @@
-use client::{WeChatClient, WeChatResult};
-
-use session::SessionStore;
+use types::WeChatResult;
+use client::WeChatClient;
 use client::response::Group;
+use session::SessionStore;
 
 
 #[derive(Debug, Clone)]

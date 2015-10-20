@@ -5,6 +5,7 @@ use openssl::crypto::hash;
 mod prp;
 
 use errors::WeChatError;
+use types::WeChatResult;
 use self::prp::PrpCrypto;
 
 
@@ -40,7 +41,7 @@ impl WeChatCrypto {
         signature.to_hex()
     }
 
-    pub fn check_signature(&self, signature: &str, timestamp: i64, nonce: &str, echo_str: &str) -> Result<String, WeChatError> {
+    pub fn check_signature(&self, signature: &str, timestamp: i64, nonce: &str, echo_str: &str) -> WeChatResult<String> {
         let real_signature = self.get_signature(timestamp, nonce, echo_str);
         if signature != &real_signature {
             return Err(WeChatError::InvalidSignature);
@@ -50,7 +51,7 @@ impl WeChatCrypto {
         Ok(msg)
     }
 
-    pub fn encrypt_message(&self, msg: &str, timestamp: i64, nonce: &str) -> Result<String, WeChatError> {
+    pub fn encrypt_message(&self, msg: &str, timestamp: i64, nonce: &str) -> WeChatResult<String> {
         let prp = PrpCrypto::new(&self.key);
         let encrypted_msg = try!(prp.encrypt(msg, &self._id));
         let signature = self.get_signature(timestamp, nonce, &encrypted_msg);
@@ -69,7 +70,7 @@ impl WeChatCrypto {
         Ok(msg)
     }
 
-    pub fn decrypt_message(&self, xml: &str, signature: &str, timestamp: i64, nonce: &str) -> Result<String, WeChatError> {
+    pub fn decrypt_message(&self, xml: &str, signature: &str, timestamp: i64, nonce: &str) -> WeChatResult<String> {
         use super::xmlutil;
         let package = xmlutil::parse(xml);
         let doc = package.as_document();

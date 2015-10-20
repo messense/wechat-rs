@@ -10,7 +10,7 @@ use rustc_serialize::Encodable;
 use multipart::client::Multipart;
 
 use errors::WeChatError;
-use client::WeChatResult;
+use types::WeChatResult;
 use session::SessionStore;
 
 

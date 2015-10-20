@@ -1,7 +1,8 @@
 use rustc_serialize::Encodable;
 
+use types::WeChatResult;
+use client::WeChatClient;
 use session::SessionStore;
-use client::{WeChatClient, WeChatResult};
 
 
 #[derive(Debug, Clone)]

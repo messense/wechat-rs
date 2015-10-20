@@ -5,7 +5,8 @@ use rustc_serialize::hex::ToHex;
 use openssl::crypto::hash;
 
 use session::SessionStore;
-use client::{WeChatClient, WeChatResult};
+use types::WeChatResult;
+use client::WeChatClient;
 use client::response::{KFAccount, OnlineKFAccount};
 
 

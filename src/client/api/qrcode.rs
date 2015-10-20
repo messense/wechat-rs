@@ -1,8 +1,9 @@
 use rustc_serialize::Encodable;
 
-use session::SessionStore;
-use client::{WeChatClient, WeChatResult};
+use types::WeChatResult;
+use client::WeChatClient;
 use client::response::QRCodeTicket;
+use session::SessionStore;
 
 
 #[derive(Debug, Clone)]

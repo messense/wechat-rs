@@ -7,7 +7,9 @@ use rustc_serialize::base64::{FromBase64, ToBase64};
 use byteorder::{NativeEndian, WriteBytesExt, ReadBytesExt};
 use openssl::crypto::symm;
 
+use types::WeChatResult;
 use errors::WeChatError;
+
 
 #[derive(Debug, Eq, PartialEq)]
 pub struct PrpCrypto {
@@ -29,7 +31,7 @@ impl PrpCrypto {
         }
     }
 
-    pub fn encrypt(&self, plaintext: &str, _id: &str) -> Result<String, WeChatError> {
+    pub fn encrypt(&self, plaintext: &str, _id: &str) -> WeChatResult<String> {
         let mut wtr = PrpCrypto::get_random_string().into_bytes();
         wtr.write_u32::<NativeEndian>((plaintext.len() as u32).to_be()).unwrap();
         wtr.extend(plaintext.bytes());
@@ -39,7 +41,7 @@ impl PrpCrypto {
         Ok(b64encoded)
     }
 
-    pub fn decrypt(&self, ciphertext: &str, _id: &str) -> Result<String, WeChatError> {
+    pub fn decrypt(&self, ciphertext: &str, _id: &str) -> WeChatResult<String> {
         let b64decoded = try!(ciphertext.from_base64());
         let text = symm::decrypt(symm::Type::AES_256_CBC, &self.key, &self.key[..16], &b64decoded);
         let mut rdr = Cursor::new(text[16..20].to_vec());

@@ -1,7 +1,9 @@
 use rustc_serialize::json::Json;
 
+use types::WeChatResult;
+use client::WeChatClient;
 use session::SessionStore;
-use client::{WeChatClient, WeChatResult};
+
 
 #[derive(Debug, Clone)]
 pub struct WeChatMisc<'a, T: SessionStore + 'a> {

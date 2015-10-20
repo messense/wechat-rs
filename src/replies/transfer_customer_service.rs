@@ -10,10 +10,10 @@ pub struct TransferCustomerServiceReply {
 
 impl TransferCustomerServiceReply {
     #[inline]
-    pub fn new(source: &str, target: &str) -> TransferCustomerServiceReply {
+    pub fn new<S: Into<String>>(source: S, target: S) -> TransferCustomerServiceReply {
         TransferCustomerServiceReply {
-            source: source.to_owned(),
-            target: target.to_owned(),
+            source: source.into(),
+            target: target.into(),
             time: time::get_time().sec,
         }
     }

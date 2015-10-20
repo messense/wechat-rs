@@ -11,12 +11,12 @@ pub struct TextReply {
 
 impl TextReply {
     #[inline]
-    pub fn new(source: &str, target: &str, content: &str) -> TextReply {
+    pub fn new<S: Into<String>>(source: S, target: S, content: S) -> TextReply {
         TextReply {
-            source: source.to_owned(),
-            target: target.to_owned(),
+            source: source.into(),
+            target: target.into(),
             time: time::get_time().sec,
-            content: content.to_owned(),
+            content: content.into(),
         }
     }
 }

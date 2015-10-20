@@ -11,12 +11,12 @@ pub struct ImageReply {
 
 impl ImageReply {
     #[inline]
-    pub fn new(source: &str, target: &str, media_id: &str) -> ImageReply {
+    pub fn new<S: Into<String>>(source: S, target: S, media_id: S) -> ImageReply {
         ImageReply {
-            source: source.to_owned(),
-            target: target.to_owned(),
+            source: source.into(),
+            target: target.into(),
             time: time::get_time().sec,
-            media_id: media_id.to_owned(),
+            media_id: media_id.into(),
         }
     }
 }

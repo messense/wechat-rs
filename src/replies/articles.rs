@@ -21,33 +21,53 @@ pub struct ArticlesReply {
 impl Article {
     
     #[inline]
-    pub fn new(title: &str, url: &str) -> Article {
+    pub fn new<S: Into<String>>(title: S, url: S) -> Article {
         Article {
-            title: title.to_owned(),
-            url: url.to_owned(),
+            title: title.into(),
+            url: url.into(),
             image: "".to_owned(),
             description: "".to_owned(),
         }
     }
 
     #[inline]
-    pub fn with_image(title: &str, url: &str, image: &str) -> Article {
+    pub fn with_image<S: Into<String>>(title: S, url: S, image: S) -> Article {
         Article {
-            title: title.to_owned(),
-            url: url.to_owned(),
-            image: image.to_owned(),
+            title: title.into(),
+            url: url.into(),
+            image: image.into(),
             description: "".to_owned(),
         }
     }
 
     #[inline]
-    pub fn with_description(title: &str, url: &str, description: &str) -> Article {
+    pub fn with_description<S: Into<String>>(title: S, url: S, description: S) -> Article {
         Article {
-            title: title.to_owned(),
-            url: url.to_owned(),
+            title: title.into(),
+            url: url.into(),
             image: "".to_owned(),
-            description: description.to_owned(),
+            description: description.into(),
         }
+    }
+
+    pub fn set_title<S: Into<String>>(&mut self, title: S) -> &mut Self {
+        self.title = title.into();
+        self
+    }
+
+    pub fn set_url<S: Into<String>>(&mut self, url: S) -> &mut Self {
+        self.url = url.into();
+        self
+    }
+
+    pub fn set_image<S: Into<String>>(&mut self, image: S) -> &mut Self {
+        self.image = image.into();
+        self
+    }
+
+    pub fn set_description<S: Into<String>>(&mut self, description: S) -> &mut Self {
+        self.description = description.into();
+        self
     }
 
     fn render(&self) -> String {
@@ -67,20 +87,20 @@ impl Article {
 
 impl ArticlesReply {
     #[inline]
-    pub fn new(source: &str, target: &str) -> ArticlesReply {
+    pub fn new<S: Into<String>>(source: S, target: S) -> ArticlesReply {
         ArticlesReply {
-            source: source.to_owned(),
-            target: target.to_owned(),
+            source: source.into(),
+            target: target.into(),
             time: time::get_time().sec,
             articles: vec![],
         }
     }
 
     #[inline]
-    pub fn with_articles(source: &str, target: &str, articles: &[Article]) -> ArticlesReply {
+    pub fn with_articles<S: Into<String>>(source: S, target: S, articles: &[Article]) -> ArticlesReply {
         ArticlesReply {
-            source: source.to_owned(),
-            target: target.to_owned(),
+            source: source.into(),
+            target: target.into(),
             time: time::get_time().sec,
             articles: articles.to_vec(),
         }

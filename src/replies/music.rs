@@ -15,12 +15,12 @@ pub struct MusicReply {
 
 impl MusicReply {
     #[inline]
-    pub fn new(source: &str, target: &str, thumb_media_id: &str) -> MusicReply {
+    pub fn new<S: Into<String>>(source: S, target: S, thumb_media_id: S) -> MusicReply {
         MusicReply {
-            source: source.to_owned(),
-            target: target.to_owned(),
+            source: source.into(),
+            target: target.into(),
             time: time::get_time().sec,
-            thumb_media_id: thumb_media_id.to_owned(),
+            thumb_media_id: thumb_media_id.into(),
             title: "".to_owned(),
             description: "".to_owned(),
             music_url: "".to_owned(),

@@ -1,3 +1,6 @@
+use std::io::Read;
+use std::collections::HashMap;
+
 use rustc_serialize::hex::ToHex;
 use openssl::crypto::hash;
 
@@ -111,5 +114,18 @@ impl<'a, T: SessionStore> WeChatCustomService<'a, T> {
             accounts.push(account);
         }
         Ok(accounts)
+    }
+
+    pub fn upload_avatar<R: Read>(&self, account: &str, avatar: &mut R) -> WeChatResult<()> {
+        let mut files = HashMap::new();
+        files.insert("media".to_owned(), avatar);
+        try!(
+            self.client.upload_file(
+                "https://api.weixin.qq.com/customservice/kfaccount/uploadheadimg",
+                vec![("kf_account", account)],
+                &mut files
+            )
+        );
+        Ok(())
     }
 }

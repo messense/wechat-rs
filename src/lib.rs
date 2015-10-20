@@ -11,6 +11,7 @@ extern crate byteorder;
 extern crate hyper;
 extern crate openssl;
 extern crate redis;
+extern crate multipart;
 #[macro_use]
 extern crate log;
 

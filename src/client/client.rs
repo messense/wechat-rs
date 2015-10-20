@@ -1,9 +1,13 @@
+use std::io::Read;
+use std::collections::HashMap;
+
 use url::Url;
 use hyper::{self, Client};
-use hyper::client::Response;
+use hyper::client::{Request, Response};
 use hyper::method::Method;
 use rustc_serialize::json::{self, Json, Object};
 use rustc_serialize::Encodable;
+use multipart::client::Multipart;
 
 use errors::WeChatError;
 use client::WeChatResult;
@@ -81,6 +85,40 @@ impl<T: SessionStore> WeChatClient<T> {
         }
         Ok(res)
         
+    }
+
+    pub fn upload_file<R: Read>(&self, url: &str, params: Vec<(&str, &str)>, files: &mut HashMap<String, &mut R>) -> WeChatResult<Json> {
+        let mut http_url = if !(url.starts_with("http://") || url.starts_with("https://")) {
+            let mut url_string = "https://api.weixin.qq.com/cgi-bin/".to_owned();
+            url_string = url_string + url;
+            Url::parse(&url_string).unwrap()
+        } else {
+            Url::parse(url).unwrap()
+        };
+        let access_token = self.access_token();
+        let mut querys = params.clone();
+        if !access_token.is_empty() {
+            debug!("Using access_token: {}", access_token);
+            querys.push(("access_token", &access_token));
+        }
+        http_url.set_query_from_pairs(querys.into_iter());
+        let request = Request::new(Method::Post, http_url).unwrap();
+        let mut req = Multipart::from_request(request).unwrap();
+        for (name, stream) in files.iter_mut() {
+            req.write_stream(name, stream, None, None);
+        }
+        let mut res = match req.send() {
+            Ok(_res) => _res,
+            Err(_) => {
+                error!("Send request error");
+                return Err(WeChatError::ClientError { errcode: -1, errmsg: "Send request error".to_owned() });
+            }
+        };
+        if res.status != hyper::Ok {
+            error!("Response status error");
+            return Err(WeChatError::ClientError { errcode: -2, errmsg: "Response status error".to_owned() })
+        }
+        self.json_decode(&mut res)
     }
 
     #[inline]

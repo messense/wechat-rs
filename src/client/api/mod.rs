@@ -6,6 +6,7 @@ mod user;
 mod group;
 mod customservice;
 mod message;
+mod media;
 
 pub use self::misc::WeChatMisc;
 pub use self::semantic::WeChatSemantic;
@@ -15,3 +16,4 @@ pub use self::user::WeChatUser;
 pub use self::group::WeChatGroup;
 pub use self::customservice::WeChatCustomService;
 pub use self::message::WeChatMessage;
+pub use self::media::WeChatMedia;

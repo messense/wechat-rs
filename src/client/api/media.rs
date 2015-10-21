@@ -1,8 +1,7 @@
-use std::io::Read;
+use std::io::{Read, Seek, SeekFrom, Cursor};
 use std::collections::HashMap;
 
 use hyper::method::Method;
-use hyper::client::Response;
 use rustc_serialize::json::{Json, Object};
 
 use types::WeChatResult;
@@ -44,7 +43,7 @@ impl<'a, T: SessionStore> WeChatMedia<'a, T> {
         })
     }
 
-    pub fn get<S: AsRef<str>>(&self, media_id: S) -> WeChatResult<Response> {
+    pub fn get<S: AsRef<str>>(&self, media_id: S) -> WeChatResult<Cursor<Vec<u8>>> {
         let mut res = try!(
             self.client.request(
                 Method::Get,
@@ -53,7 +52,10 @@ impl<'a, T: SessionStore> WeChatMedia<'a, T> {
                 &Object::new()
             )
         );
-        match Json::from_reader(&mut res) {
+        let mut buff = vec![];
+        try!(res.read_to_end(&mut buff));
+        let mut cursor = Cursor::new(buff);
+        match Json::from_reader(&mut cursor) {
             Ok(obj) => {
                 match obj.find("errcode") {
                     Some(code) => {
@@ -74,6 +76,7 @@ impl<'a, T: SessionStore> WeChatMedia<'a, T> {
             },
             Err(_) => {}
         }
-        Ok(res)
+        try!(cursor.seek(SeekFrom::Start(0u64)));
+        Ok(cursor)
     }
 }

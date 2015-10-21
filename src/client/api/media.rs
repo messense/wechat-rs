@@ -43,6 +43,17 @@ impl<'a, T: SessionStore> WeChatMedia<'a, T> {
         })
     }
 
+    pub fn upload_image<R: Read>(&self, media:&mut R) -> WeChatResult<String> {
+        let mut files = HashMap::new();
+        files.insert("media".to_owned(), media);
+        let res = try!(
+            self.client.upload_file("media/uploadimg", vec![], &mut files)
+        );
+        let url = &res["url"];
+        let url = url.as_string().unwrap();
+        Ok(url.to_owned())
+    }
+
     pub fn get<S: AsRef<str>>(&self, media_id: S) -> WeChatResult<Cursor<Vec<u8>>> {
         let mut res = try!(
             self.client.request(

@@ -1,7 +1,12 @@
 use std::io::Read;
 use std::collections::HashMap;
 
+use hyper::method::Method;
+use hyper::client::Response;
+use rustc_serialize::json::{Json, Object};
+
 use types::WeChatResult;
+use errors::WeChatError;
 use client::WeChatClient;
 use session::SessionStore;
 use client::response::Media;
@@ -37,5 +42,38 @@ impl<'a, T: SessionStore> WeChatMedia<'a, T> {
             media_id: media_id.to_owned(),
             created_at: created_at,
         })
+    }
+
+    pub fn get<S: AsRef<str>>(&self, media_id: S) -> WeChatResult<Response> {
+        let mut res = try!(
+            self.client.request(
+                Method::Get,
+                "media/get",
+                vec![("media_id", media_id.as_ref())],
+                &Object::new()
+            )
+        );
+        match Json::from_reader(&mut res) {
+            Ok(obj) => {
+                match obj.find("errcode") {
+                    Some(code) => {
+                        let errcode = code.as_i64().unwrap();
+                        let errmsg = match obj.find("errmsg") {
+                            Some(msg) => {
+                                msg.as_string().unwrap()
+                            },
+                            None => { "" }
+                        };
+                        return Err(WeChatError::ClientError {
+                            errcode: errcode as i32,
+                            errmsg: errmsg.to_owned()
+                        });
+                    },
+                    None => {},
+                }
+            },
+            Err(_) => {}
+        }
+        Ok(res)
     }
 }

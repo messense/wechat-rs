@@ -4,6 +4,7 @@ use std::collections::HashMap;
 use types::WeChatResult;
 use client::WeChatClient;
 use session::SessionStore;
+use client::request::ArticleMaterial;
 use client::response::Material;
 
 
@@ -24,7 +25,7 @@ impl<'a, T: SessionStore> WeChatMaterial<'a, T> {
         let mut files = HashMap::new();
         files.insert("media".to_owned(), media);
         let res = try!(
-            self.client.upload_file("media/upload", vec![("type", media_type.as_ref())], &mut files)
+            self.client.upload_file("material/add_material", vec![("type", media_type.as_ref())], &mut files)
         );
         let media_id = &res["media_id"];
         let media_id = media_id.as_string().unwrap();
@@ -32,6 +33,17 @@ impl<'a, T: SessionStore> WeChatMaterial<'a, T> {
         Ok(Material {
             media_id: media_id.to_owned(),
             url: url,
+        })
+    }
+
+    pub fn add_articles(&self, articles: &[ArticleMaterial]) -> WeChatResult<Material> {
+        let data = json!({"articles": (articles)});
+        let res = try!(self.client.post("material/add_news", vec![], &data));
+        let media_id = &res["media_id"];
+        let media_id = media_id.as_string().unwrap();
+        Ok(Material {
+            media_id: media_id.to_owned(),
+            url: None,
         })
     }
 }

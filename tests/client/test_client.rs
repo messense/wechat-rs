@@ -46,3 +46,36 @@ fn test_call_api_with_access_token_provided() {
     let ips = ip_list.as_array().unwrap();
     assert!(ips.len() > 0);
 }
+
+#[test]
+fn test_call_get_api_with_invalid_access_token_auto_retry() {
+    let session = RedisStorage::from_url(REDIS_URI);
+    let client = WeChatClient::with_access_token(APPID, SECRET, "invalid access_token", session);
+    let res = client.get("getcallbackip", vec![]);
+    println!("{:?}", res);
+    let data = match res {
+        Ok(data) => data,
+        Err(_) => { panic!("Error calling API"); },
+    };
+    let ip_list = data.find("ip_list").unwrap();
+    let ips = ip_list.as_array().unwrap();
+    assert!(ips.len() > 0);
+}
+
+#[test]
+fn test_call_post_api_with_invalid_access_token_auto_retry() {
+    use wechat::client::WeChatSemantic;
+
+    let session = RedisStorage::from_url(REDIS_URI);
+    let client = WeChatClient::with_access_token(APPID, SECRET, "invalid access_token", session);
+    let semantic = WeChatSemantic::new(&client);
+    let query = json!({
+        "query": "故宫门票多少钱",
+        "category": "travel",
+        "city": "北京",
+        "appid": (client.appid)
+    });
+    let res = semantic.search(&query);
+    println!("{:?}", res);
+    assert!(res.is_ok());
+}

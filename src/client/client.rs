@@ -15,6 +15,9 @@ use types::WeChatResult;
 use session::SessionStore;
 
 
+const REFETCH_ACCESS_TOKEN_ERRCODES: [i32; 3] = [40001, 40014, 42001];
+
+
 #[derive(Debug, Clone)]
 pub struct WeChatClient<T: SessionStore> {
     pub appid: String,
@@ -167,8 +170,28 @@ impl<T: SessionStore> WeChatClient<T> {
         if self.access_token().is_empty() {
             self.fetch_access_token();
         }
-        let mut res = try!(self.request(Method::Post, url, params, data));
-        self.json_decode(&mut res)
+        let mut res = try!(self.request(Method::Post, url, params.clone(), data));
+        let data = match self.json_decode(&mut res) {
+            Ok(_data) => _data,
+            Err(err) => {
+                if let WeChatError::ClientError { errcode, ref errmsg } = err {
+                    if REFETCH_ACCESS_TOKEN_ERRCODES.contains(&errcode) {
+                        // access_token expired, fetch a new one and retry request
+                        self.fetch_access_token();
+                        let mut res1 = try!(self.request(Method::Post, url, params, data));
+                        try!(self.json_decode(&mut res1))
+                    } else {
+                        return Err(WeChatError::ClientError {
+                            errcode: errcode,
+                            errmsg: errmsg.to_owned(),
+                        });
+                    }
+                } else {
+                    return Err(err);
+                }
+            },
+        };
+        Ok(data)
     }
 
     #[inline]
@@ -176,8 +199,28 @@ impl<T: SessionStore> WeChatClient<T> {
         if self.access_token().is_empty() {
             self.fetch_access_token();
         }
-        let mut res = try!(self.request(Method::Get, url, params, &Object::new()));
-        self.json_decode(&mut res)
+        let mut res = try!(self.request(Method::Get, url, params.clone(), &Object::new()));
+        let data = match self.json_decode(&mut res) {
+            Ok(_data) => _data,
+            Err(err) => {
+                if let WeChatError::ClientError { errcode, ref errmsg } = err {
+                    if REFETCH_ACCESS_TOKEN_ERRCODES.contains(&errcode) {
+                        // access_token expired, fetch a new one and retry request
+                        self.fetch_access_token();
+                        let mut res1 = try!(self.request(Method::Get, url, params, &Object::new()));
+                        try!(self.json_decode(&mut res1))
+                    } else {
+                        return Err(WeChatError::ClientError {
+                            errcode: errcode,
+                            errmsg: errmsg.to_owned(),
+                        });
+                    }
+                } else {
+                    return Err(err);
+                }
+            },
+        };
+        Ok(data)
     }
 
     pub fn fetch_access_token(&self) -> Option<String> {

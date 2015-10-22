@@ -18,6 +18,8 @@ pub use self::music::MusicReply;
 pub use self::articles::ArticlesReply;
 pub use self::transfer_customer_service::TransferCustomerServiceReply;
 
+
+#[derive(Debug, Clone)]
 pub enum Reply {
     TextReply(TextReply),
     ImageReply(ImageReply),

@@ -51,3 +51,11 @@ pub enum Message {
     ClickEvent(ClickEvent),
     ViewEvent(ViewEvent),
 }
+
+impl Message {
+    pub fn parse<S: AsRef<str>>(xml: S) -> Message {
+        use parser::parse_message;
+
+        parse_message(xml.as_ref())
+    }
+}

@@ -1,7 +1,6 @@
 extern crate wechat;
 
 use wechat::Message;
-use wechat::parse_message;
 
 #[test]
 fn test_parse_text_message() {
@@ -13,7 +12,7 @@ fn test_parse_text_message() {
     <Content><![CDATA[this is a test]]></Content>\
     <MsgId>1234567890123456</MsgId>\
     </xml>";
-    let _msg = parse_message(xml);
+    let _msg = Message::parse(xml);
     let msg = match _msg {
         Message::TextMessage(ref m) => m,
         _ => panic!("Error parsing text message"),
@@ -37,7 +36,7 @@ fn test_parse_image_message() {
     <MediaId><![CDATA[media_id]]></MediaId>\
     <MsgId>1234567890123456</MsgId>\
     </xml>";
-    let _msg = parse_message(xml);
+    let _msg = Message::parse(xml);
     let msg = match _msg {
         Message::ImageMessage(ref m) => m,
         _ => panic!("Error parsing image message"),
@@ -62,7 +61,7 @@ fn test_parse_voice_message() {
     <Format><![CDATA[Format]]></Format>\
     <MsgId>1234567890123456</MsgId>\
     </xml>";
-    let _msg = parse_message(xml);
+    let _msg = Message::parse(xml);
     let msg = match _msg {
         Message::VoiceMessage(ref m) => m,
         _ => panic!("Error parsing voice message"),
@@ -88,7 +87,7 @@ fn test_parse_video_message() {
     <ThumbMediaId><![CDATA[thumb_media_id]]></ThumbMediaId>\
     <MsgId>1234567890123456</MsgId>\
     </xml>";
-    let _msg = parse_message(xml);
+    let _msg = Message::parse(xml);
     let msg = match _msg {
         Message::VideoMessage(ref m) => m,
         _ => panic!("Error parsing video message"),
@@ -113,7 +112,7 @@ fn test_parse_shortvideo_message() {
     <ThumbMediaId><![CDATA[thumb_media_id]]></ThumbMediaId>\
     <MsgId>1234567890123456</MsgId>\
     </xml>";
-    let _msg = parse_message(xml);
+    let _msg = Message::parse(xml);
     let msg = match _msg {
         Message::ShortVideoMessage(ref m) => m,
         _ => panic!("Error parsing shortvideo message"),
@@ -139,7 +138,7 @@ fn test_parse_link_message() {
     <Url><![CDATA[url]]></Url>\
     <MsgId>1234567890123456</MsgId>\
     </xml>";
-    let _msg = parse_message(xml);
+    let _msg = Message::parse(xml);
     let msg = match _msg {
         Message::LinkMessage(ref m) => m,
         _ => panic!("Error parsing link message"),
@@ -167,7 +166,7 @@ fn test_parse_location_message() {
     <Label><![CDATA[位置信息]]></Label>
     <MsgId>1234567890123456</MsgId>\
     </xml>";
-    let _msg = parse_message(xml);
+    let _msg = Message::parse(xml);
     let msg = match _msg {
         Message::LocationMessage(ref m) => m,
         _ => panic!("Error parsing location message"),
@@ -193,7 +192,7 @@ fn test_parse_unknown_message() {
     <Content><![CDATA[this is a test]]></Content>\
     <MsgId>1234567890123456</MsgId>\
     </xml>";
-    let _msg = parse_message(xml);
+    let _msg = Message::parse(xml);
     match _msg {
         Message::UnknownMessage(_) => {},
         _ => panic!("Error parsing unknown message"),
@@ -209,7 +208,7 @@ fn test_parse_subscribe_event() {
     <MsgType><![CDATA[event]]></MsgType>\
     <Event><![CDATA[subscribe]]></Event>\
     </xml>";
-    let _msg = parse_message(xml);
+    let _msg = Message::parse(xml);
     let msg = match _msg {
         Message::SubscribeEvent(ref m) => m,
         _ => panic!("Error parsing subscribe event"),
@@ -230,7 +229,7 @@ fn test_parse_unsubscribe_event() {
     <MsgType><![CDATA[event]]></MsgType>\
     <Event><![CDATA[unsubscribe]]></Event>\
     </xml>";
-    let _msg = parse_message(xml);
+    let _msg = Message::parse(xml);
     let msg = match _msg {
         Message::UnsubscribeEvent(ref m) => m,
         _ => panic!("Error parsing unsubscribe event"),
@@ -253,7 +252,7 @@ fn test_parse_scan_event() {
     <EventKey><![CDATA[SCENE_VALUE]]></EventKey>\
     <Ticket><![CDATA[TICKET]]></Ticket>\
     </xml>";
-    let _msg = parse_message(xml);
+    let _msg = Message::parse(xml);
     let msg = match _msg {
         Message::ScanEvent(ref m) => m,
         _ => panic!("Error parsing scan event"),
@@ -279,7 +278,7 @@ fn test_parse_location_event() {
     <Longitude>113.352425</Longitude>\
     <Precision>119.385040</Precision>\
     </xml>";
-    let _msg = parse_message(xml);
+    let _msg = Message::parse(xml);
     let msg = match _msg {
         Message::LocationEvent(ref m) => m,
         _ => panic!("Error parsing location event"),
@@ -304,7 +303,7 @@ fn test_parse_click_event() {
     <Event><![CDATA[CLICK]]></Event>
     <EventKey><![CDATA[EVENTKEY]]></EventKey>
     </xml>";
-    let _msg = parse_message(xml);
+    let _msg = Message::parse(xml);
     let msg = match _msg {
         Message::ClickEvent(ref m) => m,
         _ => panic!("Error parsing click event"),
@@ -327,7 +326,7 @@ fn test_parse_view_event() {
     <Event><![CDATA[VIEW]]></Event>
     <EventKey><![CDATA[www.qq.com]]></EventKey>
     </xml>";
-    let _msg = parse_message(xml);
+    let _msg = Message::parse(xml);
     let msg = match _msg {
         Message::ViewEvent(ref m) => m,
         _ => panic!("Error parsing view event"),
@@ -351,7 +350,7 @@ fn test_parse_subscribe_scan_event() {
     <EventKey><![CDATA[qrscene_123123]]></EventKey>\
     <Ticket><![CDATA[TICKET]]></Ticket>\
     </xml>";
-    let _msg = parse_message(xml);
+    let _msg = Message::parse(xml);
     let msg = match _msg {
         Message::SubscribeScanEvent(ref m) => m,
         _ => panic!("Error parsing subscribe_scan event"),

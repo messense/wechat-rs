@@ -1,6 +1,7 @@
 use std::io::Read;
 use std::collections::HashMap;
 
+use time;
 use url::Url;
 use hyper::{self, Client};
 use hyper::client::{Request, Response};
@@ -45,8 +46,15 @@ impl<T: SessionStore> WeChatClient<T> {
     #[inline]
     pub fn access_token(&self) -> String {
         let token_key = format!("{}_access_token", self.appid);
+        let expires_key = format!("{}_expires_at", self.appid);
         let token: String = self.session.get(&token_key, Some("".to_owned())).unwrap();
-        token
+        let timestamp = time::get_time().sec;
+        let expires_at: i64 = self.session.get(&expires_key, Some(timestamp)).unwrap();
+        if expires_at <= timestamp {
+            "".to_owned()
+        } else {
+            token
+        }
     }
 
     pub fn request<D: Encodable>(&self, method: Method, url: &str, params: Vec<(&str, &str)>, data: &D) -> WeChatResult<Response> {
@@ -199,10 +207,13 @@ impl<T: SessionStore> WeChatClient<T> {
             Some(expires) => expires.as_u64().unwrap() as usize,
             None => 7200usize,
         };
+        let expires_at = time::get_time().sec + expires_in as i64;
         let token_str = match *token {
             Json::String(ref v) => {
                 let token_key = format!("{}_access_token", self.appid);
+                let expires_key = format!("{}_expires_at", self.appid);
                 self.session.set(&token_key, v.to_owned(), Some(expires_in));
+                self.session.set(&expires_key, expires_at, Some(expires_in));
                 Some(format!("{}", v))
             },
             _ => None,

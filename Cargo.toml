@@ -1,6 +1,6 @@
 [package]
 name = "wechat"
-version = "0.1.1"
+version = "0.2.0"
 authors = ["messense <messense@icloud.com>"]
 description = "WeChat SDK for Rust"
 repository = "https://github.com/messense/wechat-rs"

@@ -29,3 +29,18 @@ pub enum Reply {
     ArticlesReply(ArticlesReply),
     TransferCustomerServiceReply(TransferCustomerServiceReply),
 }
+
+impl Reply {
+    pub fn render(&self) -> String {
+        let reply = match *self {
+            Reply::TextReply(ref r) => r.render(),
+            Reply::ImageReply(ref r) => r.render(),
+            Reply::VoiceReply(ref r) => r.render(),
+            Reply::VideoReply(ref r) => r.render(),
+            Reply::MusicReply(ref r) => r.render(),
+            Reply::ArticlesReply(ref r) => r.render(),
+            Reply::TransferCustomerServiceReply(ref r) => r.render(),
+        };
+        reply
+    }
+}

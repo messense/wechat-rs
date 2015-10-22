@@ -100,11 +100,7 @@ impl<T: SessionStore> WeChatClient<T> {
         
     }
 
-    pub fn upload_file<R: Read>(&self, url: &str, params: Vec<(&str, &str)>, files: &mut HashMap<String, &mut R>) -> WeChatResult<Json> {
-        if self.access_token().is_empty() {
-            self.fetch_access_token();
-        }
-
+    fn _upload_file<R: Read>(&self, url: &str, params: Vec<(&str, &str)>, files: &mut HashMap<String, &mut R>) -> WeChatResult<Response> {
         let mut http_url = if !(url.starts_with("http://") || url.starts_with("https://")) {
             let mut url_string = "https://api.weixin.qq.com/cgi-bin/".to_owned();
             url_string = url_string + url;
@@ -124,7 +120,7 @@ impl<T: SessionStore> WeChatClient<T> {
         for (name, stream) in files.iter_mut() {
             req.write_stream(name, stream, None, None);
         }
-        let mut res = match req.send() {
+        let res = match req.send() {
             Ok(_res) => _res,
             Err(_) => {
                 error!("Send request error");
@@ -135,7 +131,32 @@ impl<T: SessionStore> WeChatClient<T> {
             error!("Response status error");
             return Err(WeChatError::ClientError { errcode: -2, errmsg: "Response status error".to_owned() })
         }
-        self.json_decode(&mut res)
+        Ok(res)
+    }
+
+    pub fn upload_file<R: Read>(&self, url: &str, params: Vec<(&str, &str)>, files: &mut HashMap<String, &mut R>) -> WeChatResult<Json> {
+        if self.access_token().is_empty() {
+            self.fetch_access_token();
+        }
+        let mut res = try!(self._upload_file(url, params.clone(), files));
+        let data = match self.json_decode(&mut res) {
+            Ok(_data) => _data,
+            Err(err) => {
+                if let WeChatError::ClientError { errcode, .. } = err {
+                    if REFETCH_ACCESS_TOKEN_ERRCODES.contains(&errcode) {
+                        // access_token expired, fetch a new one and retry request
+                        self.fetch_access_token();
+                        let mut res1 = try!(self._upload_file(url, params, files));
+                        try!(self.json_decode(&mut res1))
+                    } else {
+                        return Err(err);
+                    }
+                } else {
+                    return Err(err);
+                }
+            },
+        };
+        Ok(data)
     }
 
     #[inline]

@@ -195,10 +195,14 @@ impl<T: SessionStore> WeChatClient<T> {
             Some(token) => token,
             None => { return None; }
         };
+        let expires_in = match data.find("expires_in") {
+            Some(expires) => expires.as_u64().unwrap() as usize,
+            None => 7200usize,
+        };
         let token_str = match *token {
             Json::String(ref v) => {
                 let token_key = format!("{}_access_token", self.appid);
-                self.session.set(&token_key, v.to_owned(), Some(7200usize));
+                self.session.set(&token_key, v.to_owned(), Some(expires_in));
                 Some(format!("{}", v))
             },
             _ => None,

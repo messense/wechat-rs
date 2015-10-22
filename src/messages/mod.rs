@@ -33,6 +33,7 @@ pub use events::ClickEvent;
 pub use events::ViewEvent;
 
 // an enum or messages and events
+#[derive(Debug, Clone)]
 pub enum Message {
     TextMessage(TextMessage),
     ImageMessage(ImageMessage),

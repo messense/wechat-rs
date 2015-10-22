@@ -174,17 +174,14 @@ impl<T: SessionStore> WeChatClient<T> {
         let data = match self.json_decode(&mut res) {
             Ok(_data) => _data,
             Err(err) => {
-                if let WeChatError::ClientError { errcode, ref errmsg } = err {
+                if let WeChatError::ClientError { errcode, .. } = err {
                     if REFETCH_ACCESS_TOKEN_ERRCODES.contains(&errcode) {
                         // access_token expired, fetch a new one and retry request
                         self.fetch_access_token();
                         let mut res1 = try!(self.request(Method::Post, url, params, data));
                         try!(self.json_decode(&mut res1))
                     } else {
-                        return Err(WeChatError::ClientError {
-                            errcode: errcode,
-                            errmsg: errmsg.to_owned(),
-                        });
+                        return Err(err);
                     }
                 } else {
                     return Err(err);
@@ -203,17 +200,14 @@ impl<T: SessionStore> WeChatClient<T> {
         let data = match self.json_decode(&mut res) {
             Ok(_data) => _data,
             Err(err) => {
-                if let WeChatError::ClientError { errcode, ref errmsg } = err {
+                if let WeChatError::ClientError { errcode, .. } = err {
                     if REFETCH_ACCESS_TOKEN_ERRCODES.contains(&errcode) {
                         // access_token expired, fetch a new one and retry request
                         self.fetch_access_token();
                         let mut res1 = try!(self.request(Method::Get, url, params, &Object::new()));
                         try!(self.json_decode(&mut res1))
                     } else {
-                        return Err(WeChatError::ClientError {
-                            errcode: errcode,
-                            errmsg: errmsg.to_owned(),
-                        });
+                        return Err(err);
                     }
                 } else {
                     return Err(err);

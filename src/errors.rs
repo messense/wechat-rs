@@ -27,13 +27,12 @@ impl fmt::Display for WeChatError {
 
 impl error::Error for WeChatError {
 
-    #[allow(unused_variables)]
     fn description(&self) -> &str {
         match *self {
             WeChatError::InvalidSignature => "Invalid signature",
             WeChatError::InvalidAppId => "Invalid app_id",
             WeChatError::InvalidBase64(ref err) => err.description(),
-            WeChatError::ClientError { errcode, ref errmsg } => errmsg,
+            WeChatError::ClientError { ref errmsg, .. } => errmsg,
             WeChatError::IOError(ref err) => err.description(),
         }
     }

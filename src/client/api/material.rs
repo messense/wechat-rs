@@ -5,7 +5,7 @@ use types::WeChatResult;
 use client::WeChatClient;
 use session::SessionStore;
 use client::request::ArticleMaterial;
-use client::response::{Material, MaterialCount};
+use client::response::{Material, MaterialCount, MaterialItem, MaterialItemList};
 
 
 #[derive(Debug, Clone)]
@@ -78,6 +78,47 @@ impl<'a, T: SessionStore> WeChatMaterial<'a, T> {
             video_count: video_count as usize,
             image_count: image_count as usize,
             articles_count: articles_count as usize,
+        })
+    }
+
+    pub fn get_list<S: AsRef<str>>(&self, media_type: S, offset: usize, count: usize) -> WeChatResult<MaterialItemList> {
+        let data = json!({
+            "type": (media_type.as_ref()),
+            "offset": (offset),
+            "count": (count),
+        });
+        let res = try!(self.client.post("material/batchget_material", vec![], &data));
+        let total_count = &res["total_count"];
+        let total_count = total_count.as_u64().unwrap();
+        let item_count = &res["item_count"];
+        let item_count = item_count.as_u64().unwrap();
+        let mut items = vec![];
+        match res.find("item") {
+            Some(items_json) => {
+                let items_json = items_json.as_array().unwrap();
+                for item_json in items_json.iter() {
+                    let media_id = &item_json["media_id"];
+                    let media_id = media_id.as_string().unwrap();
+                    let name = &item_json["name"];
+                    let name = name.as_string().unwrap();
+                    let url = &item_json["url"];
+                    let url = url.as_string().unwrap();
+                    let update_time = &item_json["update_time"];
+                    let update_time = update_time.as_u64().unwrap();
+                    items.push(MaterialItem {
+                        media_id: media_id.to_owned(),
+                        name: name.to_owned(),
+                        url: url.to_owned(),
+                        update_time: update_time,
+                    });
+                }
+            },
+            None => {},
+        };
+        Ok(MaterialItemList {
+            total_count: total_count,
+            item_count: item_count,
+            items: items,
         })
     }
 }

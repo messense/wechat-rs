@@ -11,3 +11,18 @@ pub struct MaterialCount {
     pub image_count: usize,
     pub articles_count: usize,
 }
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct MaterialItem {
+    pub media_id: String,
+    pub name: String,
+    pub url: String,
+    pub update_time: u64,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct MaterialItemList {
+    pub total_count: u64,
+    pub item_count: u64,
+    pub items: Vec<MaterialItem>,
+}

@@ -20,7 +20,7 @@ fn test_user_get() {
     assert!(res.is_ok());
 
     let user = res.unwrap();
-    assert!(OPENID == &user.openid);
+    assert_eq!(OPENID, &user.openid);
 }
 
 #[test]
@@ -33,7 +33,7 @@ fn test_user_get_with_lang() {
     assert!(res.is_ok());
 
     let user = res.unwrap();
-    assert!(OPENID == &user.openid);
+    assert_eq!(OPENID, &user.openid);
 }
 
 #[test]

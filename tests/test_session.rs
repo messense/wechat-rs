@@ -14,7 +14,7 @@ fn test_redis_storage_set_then_get_del() {
     session.del("test_session_1");
     session.set("test_session_1", 1usize, None);
     let data: usize = session.get("test_session_1", None).unwrap();
-    assert!(1usize == data);
+    assert_eq!(1usize, data);
     session.del("test_session_1");
 }
 
@@ -36,5 +36,5 @@ fn test_redis_storage_get_with_default() {
     session.del("test_session_3");
     let data: Option<usize> = session.get("test_session_3", Some(1usize));
     let data = data.unwrap();
-    assert!(1usize == data);
+    assert_eq!(1usize, data);
 }

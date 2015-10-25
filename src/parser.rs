@@ -42,6 +42,7 @@ fn parse_event(event: &str, xml: &str) -> Message {
         "location" => Message::LocationEvent(messages::LocationEvent::from_xml(xml)),
         "click" => Message::ClickEvent(messages::ClickEvent::from_xml(xml)),
         "view" => Message::ViewEvent(messages::ViewEvent::from_xml(xml)),
+        "qualification_verify_success" => Message::QualificationVerifySuccessEvent(messages::QualificationVerifySuccessEvent::from_xml(xml)),
         _ => Message::UnknownMessage(messages::UnknownMessage::from_xml(xml)),
     }
 }

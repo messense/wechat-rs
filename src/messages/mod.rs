@@ -31,6 +31,7 @@ pub use events::SubscribeScanEvent;
 pub use events::LocationEvent;
 pub use events::ClickEvent;
 pub use events::ViewEvent;
+pub use events::QualificationVerifySuccessEvent;
 
 // an enum or messages and events
 #[derive(Debug, Clone)]
@@ -50,6 +51,7 @@ pub enum Message {
     LocationEvent(LocationEvent),
     ClickEvent(ClickEvent),
     ViewEvent(ViewEvent),
+    QualificationVerifySuccessEvent(QualificationVerifySuccessEvent),
 }
 
 impl Message {

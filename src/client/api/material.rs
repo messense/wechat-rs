@@ -5,8 +5,15 @@ use types::WeChatResult;
 use client::WeChatClient;
 use session::SessionStore;
 use client::request::ArticleMaterial;
-use client::response::{Material, MaterialCount, MaterialItem, MaterialItemList};
-
+use client::response::{
+    Material,
+    MaterialCount,
+    MaterialItem,
+    MaterialItemList,
+    MaterialArticle,
+    MaterialArticleItem,
+    MaterialArticleList,
+};
 
 #[derive(Debug, Clone)]
 pub struct WeChatMaterial<'a, T: SessionStore + 'a> {
@@ -116,6 +123,77 @@ impl<'a, T: SessionStore> WeChatMaterial<'a, T> {
             None => {},
         };
         Ok(MaterialItemList {
+            total_count: total_count,
+            item_count: item_count,
+            items: items,
+        })
+    }
+
+    pub fn get_article_list<S: AsRef<str>>(&self, offset: usize, count: usize) -> WeChatResult<MaterialArticleList> {
+        let data = json!({
+            "type": "news",
+            "offset": (offset),
+            "count": (count),
+        });
+        let res = try!(self.client.post("material/batchget_material", vec![], &data));
+        let total_count = &res["total_count"];
+        let total_count = total_count.as_u64().unwrap();
+        let item_count = &res["item_count"];
+        let item_count = item_count.as_u64().unwrap();
+        let mut items = vec![];
+        match res.find("item") {
+            Some(items_json) => {
+                let items_json = items_json.as_array().unwrap();
+                for item_json in items_json.iter() {
+                    let media_id = &item_json["media_id"];
+                    let media_id = media_id.as_string().unwrap();
+                    let update_time = &item_json["update_time"];
+                    let update_time = update_time.as_u64().unwrap();
+                    let content_array = &item_json["content"];
+                    let content_array = content_array.as_array().unwrap();
+                    let mut contents = vec![];
+                    for content_json in content_array.iter() {
+                        let title = &content_json["title"];
+                        let title = title.as_string().unwrap();
+                        let thumb_media_id = &content_json["thumb_media_id"];
+                        let thumb_media_id = thumb_media_id.as_string().unwrap();
+                        let author = &content_json["author"];
+                        let author = author.as_string().unwrap();
+                        let digest = &content_json["digest"];
+                        let digest = digest.as_string().unwrap();
+                        let show_cover_pic = &content_json["show_cover_pic"];
+                        let show_cover_pic = show_cover_pic.as_u64().unwrap();
+                        let show_cover = match show_cover_pic {
+                            1u64 => true,
+                            _ => false,
+                        };
+                        let content = &content_json["content"];
+                        let content = content.as_string().unwrap();
+                        let url = &content_json["url"];
+                        let url = url.as_string().unwrap();
+                        let source_url = &content_json["content_source_url"];
+                        let source_url = source_url.as_string().unwrap();
+                        contents.push(MaterialArticle {
+                            title: title.to_owned(),
+                            thumb_media_id: thumb_media_id.to_owned(),
+                            author: author.to_owned(),
+                            digest: digest.to_owned(),
+                            show_cover_pic: show_cover,
+                            content: content.to_owned(),
+                            url: url.to_owned(),
+                            content_source_url: source_url.to_owned(),
+                        });
+                    }
+                    items.push(MaterialArticleItem {
+                        media_id: media_id.to_owned(),
+                        articles: contents,
+                        update_time: update_time,
+                    });
+                }
+            },
+            None => {},
+        };
+        Ok(MaterialArticleList {
             total_count: total_count,
             item_count: item_count,
             items: items,

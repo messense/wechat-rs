@@ -26,3 +26,30 @@ pub struct MaterialItemList {
     pub item_count: u64,
     pub items: Vec<MaterialItem>,
 }
+
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct MaterialArticle {
+    pub title: String,
+    pub thumb_media_id: String,
+    pub author: String,
+    pub digest: String,
+    pub show_cover_pic: bool,
+    pub content: String,
+    pub url: String,
+    pub content_source_url: String,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct MaterialArticleItem {
+    pub media_id: String,
+    pub articles: Vec<MaterialArticle>,
+    pub update_time: u64,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct MaterialArticleList {
+    pub total_count: u64,
+    pub item_count: u64,
+    pub items: Vec<MaterialArticleItem>,
+}

@@ -12,13 +12,13 @@ use client::response::Media;
 
 
 #[derive(Debug, Clone)]
-pub struct WeChatMedia<'a, T: SessionStore + 'a> {
-    client: &'a WeChatClient<T>,
+pub struct WeChatMedia<T: SessionStore> {
+    client: WeChatClient<T>,
 }
 
-impl<'a, T: SessionStore> WeChatMedia<'a, T> {
+impl<T: SessionStore> WeChatMedia<T> {
     #[inline]
-    pub fn new(client: &'a WeChatClient<T>) -> WeChatMedia<'a, T> {
+    pub fn new(client: WeChatClient<T>) -> WeChatMedia<T> {
         WeChatMedia {
             client: client,
         }

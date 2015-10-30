@@ -7,14 +7,14 @@ use session::SessionStore;
 
 
 #[derive(Debug, Clone)]
-pub struct WeChatMenu<'a, T: SessionStore + 'a> {
-    client: &'a WeChatClient<T>,
+pub struct WeChatMenu<T: SessionStore> {
+    client: WeChatClient<T>,
 }
 
-impl<'a, T: SessionStore> WeChatMenu<'a, T> {
+impl<T: SessionStore> WeChatMenu<T> {
 
     #[inline]
-    pub fn new(client: &'a WeChatClient<T>) -> WeChatMenu<'a, T> {
+    pub fn new(client: WeChatClient<T>) -> WeChatMenu<T> {
         WeChatMenu {
             client: client,
         }

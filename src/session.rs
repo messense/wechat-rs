@@ -1,7 +1,7 @@
 use redis::{self, Commands, PipelineCommands, FromRedisValue, ToRedisArgs};
 
 
-pub trait SessionStore {
+pub trait SessionStore: Clone {
     fn get<K: AsRef<str>, T: FromRedisValue>(&self, key: K, default: Option<T>) -> Option<T>;
     fn set<K: AsRef<str>, T: ToRedisArgs>(&self, key: K, value: T, ttl: Option<usize>);
     fn del<K: AsRef<str>>(&self, key: K);

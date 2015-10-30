@@ -1,4 +1,4 @@
-use wechat::WeChatClient;
+use wechat::{WeChat, WeChatClient};
 use wechat::session::RedisStorage;
 
 const APPID: &'static str = "wxd7aa56e2c7b1f4f1";
@@ -64,18 +64,15 @@ fn test_call_get_api_with_invalid_access_token_auto_retry() {
 
 #[test]
 fn test_call_post_api_with_invalid_access_token_auto_retry() {
-    use wechat::client::WeChatSemantic;
-
     let session = RedisStorage::from_url(REDIS_URI);
-    let client = WeChatClient::with_access_token(APPID, SECRET, "invalid access_token", session);
-    let semantic = WeChatSemantic::new(&client);
+    let client = WeChat::with_access_token(APPID, SECRET, "invalid access_token", session);
     let query = json!({
         "query": "故宫门票多少钱",
         "category": "travel",
         "city": "北京",
         "appid": (client.appid)
     });
-    let res = semantic.search(&query);
+    let res = client.semantic.search(&query);
     println!("{:?}", res);
     assert!(res.is_ok());
 }

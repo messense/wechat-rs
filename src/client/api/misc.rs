@@ -6,14 +6,14 @@ use session::SessionStore;
 
 
 #[derive(Debug, Clone)]
-pub struct WeChatMisc<'a, T: SessionStore + 'a> {
-    client: &'a WeChatClient<T>,
+pub struct WeChatMisc<T: SessionStore> {
+    client: WeChatClient<T>,
 }
 
-impl<'a, T: SessionStore> WeChatMisc<'a, T> {
+impl<T: SessionStore> WeChatMisc<T> {
 
     #[inline]
-    pub fn new(client: &'a WeChatClient<T>) -> WeChatMisc<'a, T> {
+    pub fn new(client: WeChatClient<T>) -> WeChatMisc<T> {
         WeChatMisc {
             client: client,
         }

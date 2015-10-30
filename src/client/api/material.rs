@@ -16,13 +16,13 @@ use client::response::{
 };
 
 #[derive(Debug, Clone)]
-pub struct WeChatMaterial<'a, T: SessionStore + 'a> {
-    client: &'a WeChatClient<T>,
+pub struct WeChatMaterial<T: SessionStore> {
+    client: WeChatClient<T>,
 }
 
-impl<'a, T: SessionStore> WeChatMaterial<'a, T> {
+impl<T: SessionStore> WeChatMaterial<T> {
     #[inline]
-    pub fn new(client: &'a WeChatClient<T>) -> WeChatMaterial<'a, T> {
+    pub fn new(client: WeChatClient<T>) -> WeChatMaterial<T> {
         WeChatMaterial {
             client: client,
         }

@@ -11,14 +11,14 @@ use client::response::{KFAccount, OnlineKFAccount};
 
 
 #[derive(Debug, Clone)]
-pub struct WeChatCustomService<'a, T: SessionStore + 'a> {
-    client: &'a WeChatClient<T>,
+pub struct WeChatCustomService<T: SessionStore> {
+    client: WeChatClient<T>,
 }
 
-impl<'a, T: SessionStore> WeChatCustomService<'a, T> {
+impl<T: SessionStore> WeChatCustomService<T> {
 
     #[inline]
-    pub fn new(client: &'a WeChatClient<T>) -> WeChatCustomService<'a, T> {
+    pub fn new(client: WeChatClient<T>) -> WeChatCustomService<T> {
         WeChatCustomService {
             client: client,
         }

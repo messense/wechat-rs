@@ -1,5 +1,4 @@
-use wechat::WeChatClient;
-use wechat::client::WeChatGroup;
+use wechat::WeChat;
 use wechat::session::RedisStorage;
 
 const APPID: &'static str = "wxd7aa56e2c7b1f4f1";
@@ -9,25 +8,24 @@ const REDIS_URI: &'static str = "redis://127.0.0.1/";
 #[test]
 fn test_group_create_update_and_delete() {
     let session = RedisStorage::from_url(REDIS_URI);
-    let client = WeChatClient::new(APPID, SECRET, session);
-    let group_api = WeChatGroup::new(&client);
+    let client = WeChat::new(APPID, SECRET, session);
 
     // create group
-    let res = group_api.create("测试分组");
+    let res = client.group.create("测试分组");
     assert!(res.is_ok());
 
     let group = res.unwrap();
     let group_id = group.id;
 
     // update group name
-    let res = group_api.update(group_id, "Test Group");
+    let res = client.group.update(group_id, "Test Group");
     assert!(res.is_ok());
 
-    let res = group_api.list();
+    let res = client.group.list();
     assert!(res.is_ok());
     let groups = res.unwrap();
     assert!(groups.len() > 0);
 
     // delete group
-    let _ = group_api.delete(group_id);
+    let _ = client.group.delete(group_id);
 }

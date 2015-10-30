@@ -7,14 +7,14 @@ use session::SessionStore;
 
 
 #[derive(Debug, Clone)]
-pub struct WeChatQRCode<'a, T: SessionStore + 'a> {
-    client: &'a WeChatClient<T>,
+pub struct WeChatQRCode<T: SessionStore> {
+    client: WeChatClient<T>,
 }
 
-impl<'a, T: SessionStore> WeChatQRCode<'a, T> {
+impl<T: SessionStore> WeChatQRCode<T> {
 
     #[inline]
-    pub fn new(client: &'a WeChatClient<T>) -> WeChatQRCode<'a, T> {
+    pub fn new(client: WeChatClient<T>) -> WeChatQRCode<T> {
         WeChatQRCode {
             client: client,
         }

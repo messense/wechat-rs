@@ -19,17 +19,17 @@ const REFETCH_ACCESS_TOKEN_ERRCODES: [i32; 3] = [40001, 40014, 42001];
 
 
 #[derive(Debug, Clone)]
-pub struct WeChatClient<T: SessionStore> {
+pub struct APIClient<T: SessionStore> {
     pub appid: String,
     pub secret: String,
     pub session: T,
 }
 
-impl<T: SessionStore> WeChatClient<T> {
+impl<T: SessionStore> APIClient<T> {
 
     #[inline]
-    pub fn new<S: Into<String>>(appid: S, secret: S, session: T) -> WeChatClient<T> {
-        WeChatClient {
+    pub fn new<S: Into<String>>(appid: S, secret: S, session: T) -> APIClient<T> {
+        APIClient {
             appid: appid.into(),
             secret: secret.into(),
             session: session,
@@ -37,7 +37,7 @@ impl<T: SessionStore> WeChatClient<T> {
     }
 
     #[inline]
-    pub fn with_access_token<S: Into<String>>(appid: S, secret: S, access_token: S, session: T) -> WeChatClient<T> {
+    pub fn with_access_token<S: Into<String>>(appid: S, secret: S, access_token: S, session: T) -> APIClient<T> {
         let appid = appid.into();
         let secret = secret.into();
         let client = Self::new(appid.clone(), secret, session);

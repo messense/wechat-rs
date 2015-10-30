@@ -6,19 +6,19 @@ use rustc_serialize::json::{Json, Object};
 
 use types::WeChatResult;
 use errors::WeChatError;
-use client::WeChatClient;
+use client::APIClient;
 use session::SessionStore;
 use client::response::Media;
 
 
 #[derive(Debug, Clone)]
 pub struct WeChatMedia<T: SessionStore> {
-    client: WeChatClient<T>,
+    client: APIClient<T>,
 }
 
 impl<T: SessionStore> WeChatMedia<T> {
     #[inline]
-    pub fn new(client: WeChatClient<T>) -> WeChatMedia<T> {
+    pub fn new(client: APIClient<T>) -> WeChatMedia<T> {
         WeChatMedia {
             client: client,
         }

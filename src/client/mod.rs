@@ -3,13 +3,13 @@ pub mod api;
 pub mod request;
 pub mod response;
 
-pub use self::client::WeChatClient;
+pub use self::client::APIClient;
 use self::api::*;
 
 use session::SessionStore;
 
 #[derive(Debug, Clone)]
-pub struct WeChat<T: SessionStore> {
+pub struct WeChatClient<T: SessionStore> {
     pub appid: String,
     pub secret: String,
     pub user: WeChatUser<T>,
@@ -24,10 +24,10 @@ pub struct WeChat<T: SessionStore> {
     pub customservice: WeChatCustomService<T>,
 }
 
-impl<T: SessionStore> WeChat<T> {
+impl<T: SessionStore> WeChatClient<T> {
 
-    fn from_client(client: WeChatClient<T>) -> WeChat<T> {
-        WeChat {
+    fn from_client(client: APIClient<T>) -> WeChatClient<T> {
+        WeChatClient {
             appid: client.appid.clone(),
             secret: client.secret.clone(),
             user: WeChatUser::new(client.clone()),
@@ -43,13 +43,13 @@ impl<T: SessionStore> WeChat<T> {
         }
     }
 
-    pub fn new<S: Into<String>>(appid: S, secret: S, session: T) -> WeChat<T> {
-        let client = WeChatClient::new(appid.into(), secret.into(), session);
+    pub fn new<S: Into<String>>(appid: S, secret: S, session: T) -> WeChatClient<T> {
+        let client = APIClient::new(appid.into(), secret.into(), session);
         Self::from_client(client)
     }
 
-    pub fn with_access_token<S: Into<String>>(appid: S, secret: S, access_token: S, session: T) -> WeChat<T> {
-        let client = WeChatClient::with_access_token(appid.into(), secret.into(), access_token.into(), session);
+    pub fn with_access_token<S: Into<String>>(appid: S, secret: S, access_token: S, session: T) -> WeChatClient<T> {
+        let client = APIClient::with_access_token(appid.into(), secret.into(), access_token.into(), session);
         Self::from_client(client)
     }
 }

@@ -37,5 +37,4 @@ pub use self::errors::WeChatError;
 pub use self::cryptography::WeChatCrypto;
 pub use self::replies::Reply;
 pub use self::client::WeChatClient;
-pub use self::client::WeChat;
 pub use self::utils::check_signature;

@@ -2,7 +2,7 @@ use std::io::Read;
 use std::collections::HashMap;
 
 use types::WeChatResult;
-use client::WeChatClient;
+use client::APIClient;
 use session::SessionStore;
 use client::request::ArticleMaterial;
 use client::response::{
@@ -17,12 +17,12 @@ use client::response::{
 
 #[derive(Debug, Clone)]
 pub struct WeChatMaterial<T: SessionStore> {
-    client: WeChatClient<T>,
+    client: APIClient<T>,
 }
 
 impl<T: SessionStore> WeChatMaterial<T> {
     #[inline]
-    pub fn new(client: WeChatClient<T>) -> WeChatMaterial<T> {
+    pub fn new(client: APIClient<T>) -> WeChatMaterial<T> {
         WeChatMaterial {
             client: client,
         }

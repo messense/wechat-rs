@@ -6,19 +6,19 @@ use openssl::crypto::hash;
 
 use session::SessionStore;
 use types::WeChatResult;
-use client::WeChatClient;
+use client::APIClient;
 use client::response::{KFAccount, OnlineKFAccount};
 
 
 #[derive(Debug, Clone)]
 pub struct WeChatCustomService<T: SessionStore> {
-    client: WeChatClient<T>,
+    client: APIClient<T>,
 }
 
 impl<T: SessionStore> WeChatCustomService<T> {
 
     #[inline]
-    pub fn new(client: WeChatClient<T>) -> WeChatCustomService<T> {
+    pub fn new(client: APIClient<T>) -> WeChatCustomService<T> {
         WeChatCustomService {
             client: client,
         }

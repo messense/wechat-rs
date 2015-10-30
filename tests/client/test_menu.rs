@@ -1,5 +1,4 @@
 use wechat::WeChatClient;
-use wechat::client::WeChatMenu;
 use wechat::session::RedisStorage;
 
 const APPID: &'static str = "wxd7aa56e2c7b1f4f1";
@@ -10,14 +9,13 @@ const REDIS_URI: &'static str = "redis://127.0.0.1/";
 fn test_menu_apis() {
     let session = RedisStorage::from_url(REDIS_URI);
     let client = WeChatClient::new(APPID, SECRET, session);
-    let menu = WeChatMenu::new(&client);
 
     // delete first
-    let res = menu.delete();
+    let res = client.menu.delete();
     assert!(res.is_ok());
 
     // create new
-    let res = menu.create(&json!({
+    let res = client.menu.create(&json!({
         "button": [
             {"type": "click", "key": "test", "name": "test"},
             {"type": "view", "url": "http://www.qq.com", "name": "QQ"}
@@ -26,15 +24,15 @@ fn test_menu_apis() {
     assert!(res.is_ok());
 
     // try get
-    let res = menu.get();
+    let res = client.menu.get();
     assert!(res.is_ok());
 
     // try get current menu info
-    let res = menu.get_menu_info();
+    let res = client.menu.get_menu_info();
     assert!(res.is_ok());
 
     // try update
-    let res = menu.update(&json!({
+    let res = client.menu.update(&json!({
         "button": [
             {"type": "click", "key": "test", "name": "test"},
             {"type": "view", "url": "http://www.qq.com", "name": "QQ"}
@@ -43,6 +41,6 @@ fn test_menu_apis() {
     assert!(res.is_ok());
 
     // cleanup
-    let res = menu.delete();
+    let res = client.menu.delete();
     assert!(res.is_ok());
 }

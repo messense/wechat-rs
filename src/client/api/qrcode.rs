@@ -1,20 +1,20 @@
 use rustc_serialize::Encodable;
 
 use types::WeChatResult;
-use client::WeChatClient;
+use client::APIClient;
 use client::response::QRCodeTicket;
 use session::SessionStore;
 
 
 #[derive(Debug, Clone)]
-pub struct WeChatQRCode<'a, T: SessionStore + 'a> {
-    client: &'a WeChatClient<T>,
+pub struct WeChatQRCode<T: SessionStore> {
+    client: APIClient<T>,
 }
 
-impl<'a, T: SessionStore> WeChatQRCode<'a, T> {
+impl<T: SessionStore> WeChatQRCode<T> {
 
     #[inline]
-    pub fn new(client: &'a WeChatClient<T>) -> WeChatQRCode<'a, T> {
+    pub fn new(client: APIClient<T>) -> WeChatQRCode<T> {
         WeChatQRCode {
             client: client,
         }

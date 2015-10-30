@@ -1,18 +1,18 @@
 use types::WeChatResult;
-use client::WeChatClient;
+use client::APIClient;
 use client::response::Group;
 use session::SessionStore;
 
 
 #[derive(Debug, Clone)]
-pub struct WeChatGroup<'a, T: SessionStore + 'a> {
-    client: &'a WeChatClient<T>,
+pub struct WeChatGroup<T: SessionStore> {
+    client: APIClient<T>,
 }
 
-impl<'a, T: SessionStore> WeChatGroup<'a, T> {
+impl<T: SessionStore> WeChatGroup<T> {
 
     #[inline]
-    pub fn new(client: &'a WeChatClient<T>) -> WeChatGroup<'a, T> {
+    pub fn new(client: APIClient<T>) -> WeChatGroup<T> {
         WeChatGroup {
             client: client,
         }

@@ -2,19 +2,19 @@ use rustc_serialize::json::Json;
 use rustc_serialize::Encodable;
 
 use types::WeChatResult;
-use client::WeChatClient;
+use client::APIClient;
 use session::SessionStore;
 
 
 #[derive(Debug, Clone)]
-pub struct WeChatSemantic<'a, T: SessionStore + 'a> {
-    client: &'a WeChatClient<T>,
+pub struct WeChatSemantic<T: SessionStore> {
+    client: APIClient<T>,
 }
 
-impl<'a, T: SessionStore> WeChatSemantic<'a, T> {
+impl<T: SessionStore> WeChatSemantic<T> {
 
     #[inline]
-    pub fn new(client: &'a WeChatClient<T>) -> WeChatSemantic<'a, T> {
+    pub fn new(client: APIClient<T>) -> WeChatSemantic<T> {
         WeChatSemantic {
             client: client,
         }

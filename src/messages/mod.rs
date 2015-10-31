@@ -60,4 +60,46 @@ impl Message {
 
         parse_message(xml.as_ref())
     }
+
+    pub fn get_source(&self) -> String {
+        match *self {
+            Message::TextMessage(ref msg) => msg.source.to_owned(),
+            Message::ImageMessage(ref msg) => msg.source.to_owned(),
+            Message::VoiceMessage(ref msg) => msg.source.to_owned(),
+            Message::ShortVideoMessage(ref msg) => msg.source.to_owned(),
+            Message::VideoMessage(ref msg) => msg.source.to_owned(),
+            Message::LocationMessage(ref msg) => msg.source.to_owned(),
+            Message::LinkMessage(ref msg) => msg.source.to_owned(),
+            Message::UnknownMessage(ref msg) => msg.source.to_owned(),
+            Message::SubscribeEvent(ref msg) => msg.source.to_owned(),
+            Message::UnsubscribeEvent(ref msg) => msg.source.to_owned(),
+            Message::SubscribeScanEvent(ref msg) => msg.source.to_owned(),
+            Message::ScanEvent(ref msg) => msg.source.to_owned(),
+            Message::LocationEvent(ref msg) => msg.source.to_owned(),
+            Message::ClickEvent(ref msg) => msg.source.to_owned(),
+            Message::ViewEvent(ref msg) => msg.source.to_owned(),
+            Message::QualificationVerifySuccessEvent(ref msg) => msg.source.to_owned(),
+        }
+    }
+
+    pub fn get_target(&self) -> String {
+        match *self {
+            Message::TextMessage(ref msg) => msg.target.to_owned(),
+            Message::ImageMessage(ref msg) => msg.target.to_owned(),
+            Message::VoiceMessage(ref msg) => msg.target.to_owned(),
+            Message::ShortVideoMessage(ref msg) => msg.target.to_owned(),
+            Message::VideoMessage(ref msg) => msg.target.to_owned(),
+            Message::LocationMessage(ref msg) => msg.target.to_owned(),
+            Message::LinkMessage(ref msg) => msg.target.to_owned(),
+            Message::UnknownMessage(ref msg) => msg.target.to_owned(),
+            Message::SubscribeEvent(ref msg) => msg.target.to_owned(),
+            Message::UnsubscribeEvent(ref msg) => msg.target.to_owned(),
+            Message::SubscribeScanEvent(ref msg) => msg.target.to_owned(),
+            Message::ScanEvent(ref msg) => msg.target.to_owned(),
+            Message::LocationEvent(ref msg) => msg.target.to_owned(),
+            Message::ClickEvent(ref msg) => msg.target.to_owned(),
+            Message::ViewEvent(ref msg) => msg.target.to_owned(),
+            Message::QualificationVerifySuccessEvent(ref msg) => msg.target.to_owned(),
+        }
+    }
 }

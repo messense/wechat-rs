@@ -2,10 +2,10 @@ use rustc_serialize::hex::ToHex;
 use openssl::crypto::hash;
 
 
-pub fn check_signature<S: Into<String>, T: AsRef<str>>(token: S, signature: T, timestamp: i64, nonce: S) -> bool {
+pub fn check_signature<S: Into<String>, T: AsRef<str>>(token: S, signature: T, timestamp: S, nonce: S) -> bool {
     let mut data = vec![
         token.into(),
-        timestamp.to_string(),
+        timestamp.into(),
         nonce.into(),
     ];
     data.sort();
@@ -22,7 +22,7 @@ mod tests {
     fn test_check_signature_should_ok() {
         let token = "test";
         let signature = "f21891de399b4e33a1a93c9a7b8a8fffb5a443ff";
-        let timestamp = 1410685589;
+        let timestamp = "1410685589";
         let nonce = "test";
         assert!(check_signature(token, signature, timestamp, nonce));
     }
@@ -31,7 +31,7 @@ mod tests {
     fn test_check_signature_should_fail() {
         let token = "test";
         let signature = "f21891de399b4e33a1a93c9a7b8a8fffb5a443fe";
-        let timestamp = 1410685589;
+        let timestamp = "1410685589";
         let nonce = "test";
         assert!(!check_signature(token, signature, timestamp, nonce));
     }

@@ -1,0 +1,13 @@
+[package]
+name = "echo"
+version = "0.1.0"
+authors = ["messense <messense@icloud.com>"]
+
+[dependencies]
+iron = "0.2"
+router = "*"
+urlencoded = "*"
+bodyparser = "*"
+
+[dependencies.wechat]
+path = "../../"

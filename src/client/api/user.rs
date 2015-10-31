@@ -1,6 +1,7 @@
 use std::collections::HashMap;
 
 use rustc_serialize::json::Json;
+use jsonway;
 
 use types::WeChatResult;
 use client::APIClient;
@@ -32,10 +33,10 @@ impl<T: SessionStore> WeChatUser<T> {
     }
 
     pub fn update_remark(&self, openid: &str, remark: &str) -> WeChatResult<()> {
-        let data = json!({
-            "openid": (openid),
-            "remark": (remark),
-        });
+        let data = jsonway::object(|obj| {
+            obj.set("openid", openid.to_owned());
+            obj.set("remark", remark.to_owned());
+        }).unwrap();
         try!(self.client.post("user/info/updateremark", vec![], &data));
         Ok(())
     }
@@ -70,7 +71,10 @@ impl<T: SessionStore> WeChatUser<T> {
     }
 
     pub fn get_group_id(&self, openid: &str) -> WeChatResult<u64> {
-        let res = try!(self.client.post("groups/getid", vec![], &json!({"openid": (openid)})));
+        let data = jsonway::object(|obj| {
+            obj.set("openid", openid.to_owned());
+        }).unwrap();
+        let res = try!(self.client.post("groups/getid", vec![], &data));
         let group_id = &res["groupid"];
         let group_id = group_id.as_u64().unwrap();
         Ok(group_id)
@@ -130,7 +134,10 @@ impl<T: SessionStore> WeChatUser<T> {
     }
 
     pub fn get_batch(&self, user_list: &[HashMap<String, String>]) -> WeChatResult<Vec<User>> {
-        let res = try!(self.client.post("user/info/batchget", vec![], &json!({"user_list": (user_list)})));
+        let data = jsonway::object(|obj| {
+            obj.set("user_list", user_list.to_vec());
+        }).unwrap();
+        let res = try!(self.client.post("user/info/batchget", vec![], &data));
         let info_list = &res["user_info_list"];
         let info_list = info_list.as_array().unwrap();
         let mut users = vec![];

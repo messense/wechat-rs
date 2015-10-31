@@ -1,4 +1,5 @@
 use rustc_serialize::json::{Json, ToJson};
+use jsonway;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct SendTextRequest {
@@ -27,20 +28,18 @@ impl SendTextRequest {
 
 impl ToJson for SendTextRequest {
     fn to_json(&self) -> Json {
-        if let Some(ref account) = self.account {
-            json!({
-                "msgtype": "text",
-                "touser": (self.openid),
-                "text": {"content": (self.content)},
-                "customservice": {"kf_account": (account)},
-            })
-        } else {
-            json!({
-                "msgtype": "text",
-                "touser": (self.openid),
-                "text": {"content": (self.content)},
-            })
-        }
+        jsonway::object(|obj| {
+            obj.set("msgtype", "text".to_owned());
+            obj.set("touser", self.openid.to_owned());
+            obj.object("text", |obj| {
+                obj.set("content", self.content.to_owned());
+            });
+            if let Some(ref account) = self.account {
+                obj.object("customservice", |obj| {
+                    obj.set("kf_account", account.to_owned());
+                });
+            }
+        }).unwrap()
     }
 }
 
@@ -73,20 +72,18 @@ impl SendImageRequest {
 }
 impl ToJson for SendImageRequest {
     fn to_json(&self) -> Json {
-        if let Some(ref account) = self.account {
-            json!({
-                "msgtype": "image",
-                "touser": (self.openid),
-                "image": {"media_id": (self.media_id)},
-                "customservice": {"kf_account": (account)},
-            })
-        } else {
-            json!({
-                "msgtype": "image",
-                "touser": (self.openid),
-                "image": {"media_id": (self.media_id)},
-            })
-        }
+        jsonway::object(|obj| {
+            obj.set("msgtype", "image".to_owned());
+            obj.set("touser", self.openid.to_owned());
+            obj.object("image", |obj| {
+                obj.set("media_id", self.media_id.to_owned());
+            });
+            if let Some(ref account) = self.account {
+                obj.object("customservice", |obj| {
+                    obj.set("kf_account", account.to_owned());
+                });
+            }
+        }).unwrap()
     }
 }
 
@@ -121,20 +118,18 @@ impl SendVoiceRequest {
 
 impl ToJson for SendVoiceRequest {
     fn to_json(&self) -> Json {
-        if let Some(ref account) = self.account {
-            json!({
-                "msgtype": "voice",
-                "touser": (self.openid),
-                "voice": {"media_id": (self.media_id)},
-                "customservice": {"kf_account": (account)},
-            })
-        } else {
-            json!({
-                "msgtype": "voice",
-                "touser": (self.openid),
-                "voice": {"media_id": (self.media_id)},
-            })
-        }
+        jsonway::object(|obj| {
+            obj.set("msgtype", "voice".to_owned());
+            obj.set("touser", self.openid.to_owned());
+            obj.object("voice", |obj| {
+                obj.set("media_id", self.media_id.to_owned());
+            });
+            if let Some(ref account) = self.account {
+                obj.object("customservice", |obj| {
+                    obj.set("kf_account", account.to_owned());
+                });
+            }
+        }).unwrap()
     }
 }
 
@@ -177,30 +172,21 @@ impl SendVideoRequest {
 
 impl ToJson for SendVideoRequest {
     fn to_json(&self) -> Json {
-        if let Some(ref account) = self.account {
-            json!({
-                "msgtype": "video",
-                "touser": (self.openid),
-                "video": {
-                    "media_id": (self.media_id),
-                    "thumb_media_id": (self.thumb_media_id),
-                    "title": (self.title),
-                    "description": (self.description),
-                },
-                "customservice": {"kf_account": (account)},
-            })
-        } else {
-            json!({
-                "msgtype": "video",
-                "touser": (self.openid),
-                "video": {
-                    "media_id": (self.media_id),
-                    "thumb_media_id": (self.thumb_media_id),
-                    "title": (self.title),
-                    "description": (self.description),
-                },
-            })
-        }
+        jsonway::object(|obj| {
+            obj.set("msgtype", "video".to_owned());
+            obj.set("touser", self.openid.to_owned());
+            obj.object("video", |obj| {
+                obj.set("media_id", self.media_id.to_owned());
+                obj.set("thumb_media_id", self.thumb_media_id.to_owned());
+                obj.set("title", self.title.to_owned());
+                obj.set("description", self.description.to_owned());
+            });
+            if let Some(ref account) = self.account {
+                obj.object("customservice", |obj| {
+                    obj.set("kf_account", account.to_owned());
+                });
+            }
+        }).unwrap()
     }
 }
 
@@ -246,32 +232,22 @@ impl SendMusicRequest {
 
 impl ToJson for SendMusicRequest {
     fn to_json(&self) -> Json {
-        if let Some(ref account) = self.account {
-            json!({
-                "msgtype": "music",
-                "touser": (self.openid),
-                "music": {
-                    "musicurl": (self.music_url),
-                    "hqmusicurl": (self.hq_music_url),
-                    "thumb_media_id": (self.thumb_media_id),
-                    "title": (self.title),
-                    "description": (self.description),
-                },
-                "customservice": {"kf_account": (account)},
-            })
-        } else {
-            json!({
-                "msgtype": "music",
-                "touser": (self.openid),
-                "music": {
-                    "musicurl": (self.music_url),
-                    "hqmusicurl": (self.hq_music_url),
-                    "thumb_media_id": (self.thumb_media_id),
-                    "title": (self.title),
-                    "description": (self.description),
-                },
-            })
-        }
+        jsonway::object(|obj| {
+            obj.set("msgtype", "music".to_owned());
+            obj.set("touser", self.openid.to_owned());
+            obj.object("music", |obj| {
+                obj.set("musicurl", self.music_url.to_owned());
+                obj.set("hqmusicurl", self.hq_music_url.to_owned());
+                obj.set("thumb_media_id", self.thumb_media_id.to_owned());
+                obj.set("title", self.title.to_owned());
+                obj.set("description", self.description.to_owned());
+            });
+            if let Some(ref account) = self.account {
+                obj.object("customservice", |obj| {
+                    obj.set("kf_account", account.to_owned());
+                });
+            }
+        }).unwrap()
     }
 }
 
@@ -299,12 +275,16 @@ impl Article {
 
 impl ToJson for Article {
     fn to_json(&self) -> Json {
-        json!({
-            "title": (self.title),
-            "url": (self.url),
-            "description": (self.description),
-            "picurl": (self.image),
-        })
+        jsonway::object(|obj| {
+            obj.set("title", self.title.to_owned());
+            obj.set("url", self.url.to_owned());
+            if let Some(ref desc) = self.description {
+                obj.set("description", desc.to_owned());
+            }
+            if let Some(ref picurl) = self.image {
+                obj.set("picurl", picurl.to_owned());
+            }
+        }).unwrap()
     }
 }
 
@@ -341,24 +321,18 @@ impl SendArticlesRequest {
 
 impl ToJson for SendArticlesRequest {
     fn to_json(&self) -> Json {
-        if let Some(ref account) = self.account {
-            json!({
-                "msgtype": "news",
-                "touser": (self.openid),
-                "news": {
-                    "articles": (self.articles),
-                },
-                "customservice": {"kf_account": (account)},
-            })
-        } else {
-            json!({
-                "msgtype": "news",
-                "touser": (self.openid),
-                "news": {
-                    "articles": (self.articles),
-                },
-            })
-        }
+        jsonway::object(|obj| {
+            obj.set("msgtype", "news".to_owned());
+            obj.set("touser", self.openid.to_owned());
+            obj.object("news", |obj| {
+                obj.set("articles", self.articles.clone());
+            });
+            if let Some(ref account) = self.account {
+                obj.object("customservice", |obj| {
+                    obj.set("kf_account", account.to_owned());
+                });
+            }
+        }).unwrap()
     }
 }
 

@@ -1,6 +1,8 @@
 use std::io::Read;
 use std::collections::HashMap;
 
+use jsonway;
+
 use types::WeChatResult;
 use client::APIClient;
 use session::SessionStore;
@@ -44,7 +46,9 @@ impl<T: SessionStore> WeChatMaterial<T> {
     }
 
     pub fn add_articles(&self, articles: &[ArticleMaterial]) -> WeChatResult<Material> {
-        let data = json!({"articles": (articles)});
+        let data = jsonway::object(|obj| {
+            obj.set("articles", articles.to_vec());
+        }).unwrap();
         let res = try!(self.client.post("material/add_news", vec![], &data));
         let media_id = &res["media_id"];
         let media_id = media_id.as_string().unwrap();
@@ -54,18 +58,20 @@ impl<T: SessionStore> WeChatMaterial<T> {
         })
     }
 
-    pub fn update_article<S: AsRef<str>>(&self, media_id: S, index: usize, article: ArticleMaterial) -> WeChatResult<()> {
-        let data = json!({
-            "media_id": (media_id.as_ref()),
-            "index": (index),
-            "articles": (article)
-        });
+    pub fn update_article<S: Into<String>>(&self, media_id: S, index: usize, article: ArticleMaterial) -> WeChatResult<()> {
+        let data = jsonway::object(|obj| {
+            obj.set("media_id", media_id.into());
+            obj.set("index", index);
+            obj.set("articles", article);
+        }).unwrap();
         try!(self.client.post("material/update_news", vec![], &data));
         Ok(())
     }
 
-    pub fn delete<S: AsRef<str>>(&self, media_id: S) -> WeChatResult<()> {
-        let data = json!({"media_id": (media_id.as_ref())});
+    pub fn delete<S: Into<String>>(&self, media_id: S) -> WeChatResult<()> {
+        let data = jsonway::object(|obj| {
+            obj.set("media_id", media_id.into());
+        }).unwrap();
         try!(self.client.post("material/del_material", vec![], &data));
         Ok(())
     }
@@ -88,12 +94,12 @@ impl<T: SessionStore> WeChatMaterial<T> {
         })
     }
 
-    pub fn get_list<S: AsRef<str>>(&self, media_type: S, offset: usize, count: usize) -> WeChatResult<MaterialItemList> {
-        let data = json!({
-            "type": (media_type.as_ref()),
-            "offset": (offset),
-            "count": (count),
-        });
+    pub fn get_list<S: Into<String>>(&self, media_type: S, offset: usize, count: usize) -> WeChatResult<MaterialItemList> {
+        let data = jsonway::object(|obj| {
+            obj.set("type", media_type.into());
+            obj.set("offset", offset);
+            obj.set("count", count);
+        }).unwrap();
         let res = try!(self.client.post("material/batchget_material", vec![], &data));
         let total_count = &res["total_count"];
         let total_count = total_count.as_u64().unwrap();
@@ -129,12 +135,12 @@ impl<T: SessionStore> WeChatMaterial<T> {
         })
     }
 
-    pub fn get_article_list<S: AsRef<str>>(&self, offset: usize, count: usize) -> WeChatResult<MaterialArticleList> {
-        let data = json!({
-            "type": "news",
-            "offset": (offset),
-            "count": (count),
-        });
+    pub fn get_article_list(&self, offset: usize, count: usize) -> WeChatResult<MaterialArticleList> {
+        let data = jsonway::object(|obj| {
+            obj.set("type", "news".to_owned());
+            obj.set("offset", offset);
+            obj.set("count", count);
+        }).unwrap();
         let res = try!(self.client.post("material/batchget_material", vec![], &data));
         let total_count = &res["total_count"];
         let total_count = total_count.as_u64().unwrap();

@@ -1,6 +1,3 @@
-#![feature(plugin)]
-#![plugin(json_macros)]
-
 extern crate time;
 extern crate rand;
 extern crate url;
@@ -12,6 +9,7 @@ extern crate hyper;
 extern crate openssl;
 extern crate redis;
 extern crate multipart;
+extern crate jsonway;
 #[macro_use]
 extern crate log;
 

@@ -1,3 +1,5 @@
+use jsonway;
+
 use types::WeChatResult;
 use client::APIClient;
 use client::response::Group;
@@ -19,11 +21,11 @@ impl<T: SessionStore> WeChatGroup<T> {
     }
 
     pub fn create(&self, name: &str) -> WeChatResult<Group> {
-        let data = json!({
-            "group": {
-                "name": (name)
-            }
-        });
+        let data = jsonway::object(|obj| {
+            obj.object("group", |obj| {
+                obj.set("name", name.to_owned());
+            });
+        }).unwrap();
         let res = try!(self.client.post("groups/create", vec![], &data));
         let group_id = res.find_path(&["group", "id"]).unwrap();
         let group_id = group_id.as_u64().unwrap();
@@ -59,40 +61,40 @@ impl<T: SessionStore> WeChatGroup<T> {
     }
 
     pub fn update(&self, group_id: u64, name: &str) -> WeChatResult<()> {
-        let data = json!({
-            "group": {
-                "id": (group_id),
-                "name": (name)
-            }
-        });
+        let data = jsonway::object(|obj| {
+            obj.object("group", |obj| {
+                obj.set("id", group_id);
+                obj.set("name", name.to_owned());
+            });
+        }).unwrap();
         try!(self.client.post("groups/update", vec![], &data));
         Ok(())
     }
 
     pub fn delete(&self, group_id: u64) -> WeChatResult<()> {
-        let data = json!({
-            "group": {
-                "id": (group_id)
-            }
-        });
+        let data = jsonway::object(|obj| {
+            obj.object("group", |obj| {
+                obj.set("id", group_id);
+            });
+        }).unwrap();
         try!(self.client.post("groups/delete", vec![], &data));
         Ok(())
     }
 
     pub fn move_user(&self, openid: &str, group_id: u64) -> WeChatResult<()> {
-        let data = json!({
-            "openid": (openid),
-            "to_groupid": (group_id)
-        });
+        let data = jsonway::object(|obj| {
+            obj.set("openid", openid.to_owned());
+            obj.set("to_groupid", group_id);
+        }).unwrap();
         try!(self.client.post("groups/members/update", vec![], &data));
         Ok(())
     }
 
     pub fn move_users(&self, openids: Vec<String>, group_id: u64) -> WeChatResult<()> {
-        let data = json!({
-            "openid_list": (openids),
-            "to_groupid": (group_id)
-        });
+        let data = jsonway::object(|obj| {
+            obj.set("openid_list", openids);
+            obj.set("to_groupid", group_id);
+        }).unwrap();
         try!(self.client.post("groups/members/batchupdate", vec![], &data));
         Ok(())
     }

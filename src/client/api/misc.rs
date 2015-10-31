@@ -1,4 +1,5 @@
 use rustc_serialize::json::Json;
+use jsonway;
 
 use types::WeChatResult;
 use client::APIClient;
@@ -33,10 +34,10 @@ impl<T: SessionStore> WeChatMisc<T> {
     }
 
     pub fn short_url(&self, long_url: &str) -> WeChatResult<String> {
-        let body = json!({
-            "action": "long2short",
-            "long_url": (long_url)
-        });
+        let body = jsonway::object(|obj| {
+            obj.set("action", "long2short".to_owned());
+            obj.set("long_url", long_url.to_owned());
+        }).unwrap();
         let data = try!(self.client.post("shorturl", vec![], body.as_object().unwrap()));
         let short = &data["short_url"];
         let short = short.as_string().unwrap();

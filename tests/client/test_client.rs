@@ -1,3 +1,5 @@
+use jsonway;
+
 use wechat::WeChatClient;
 use wechat::client::APIClient;
 use wechat::session::RedisStorage;
@@ -67,12 +69,12 @@ fn test_call_get_api_with_invalid_access_token_auto_retry() {
 fn test_call_post_api_with_invalid_access_token_auto_retry() {
     let session = RedisStorage::from_url(REDIS_URI);
     let client = WeChatClient::with_access_token(APPID, SECRET, "invalid access_token", session);
-    let query = json!({
-        "query": "故宫门票多少钱",
-        "category": "travel",
-        "city": "北京",
-        "appid": (client.appid)
-    });
+    let query = jsonway::object(|obj| {
+        obj.set("query", "故宫门票多少钱".to_owned());
+        obj.set("category", "travel".to_owned());
+        obj.set("city", "北京".to_owned());
+        obj.set("appid", client.appid.to_owned());
+    }).unwrap();
     let res = client.semantic.search(&query);
     println!("{:?}", res);
     assert!(res.is_ok());

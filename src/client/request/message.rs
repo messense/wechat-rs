@@ -275,12 +275,16 @@ impl Article {
 
 impl ToJson for Article {
     fn to_json(&self) -> Json {
-        json!({
-            "title": (self.title),
-            "url": (self.url),
-            "description": (self.description),
-            "picurl": (self.image),
-        })
+        jsonway::object(|obj| {
+            obj.set("title", self.title.to_owned());
+            obj.set("url", self.url.to_owned());
+            if let Some(ref desc) = self.description {
+                obj.set("description", desc.to_owned());
+            }
+            if let Some(ref picurl) = self.image {
+                obj.set("picurl", picurl.to_owned());
+            }
+        }).unwrap()
     }
 }
 

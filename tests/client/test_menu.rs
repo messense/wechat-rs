@@ -1,3 +1,5 @@
+use jsonway;
+
 use wechat::WeChatClient;
 use wechat::session::RedisStorage;
 
@@ -14,13 +16,24 @@ fn test_menu_apis() {
     let res = client.menu.delete();
     assert!(res.is_ok());
 
+    let data = jsonway::object(|obj| {
+        obj.array("button", |obj| {
+            obj.push(jsonway::object(|btn| {
+                btn.set("type", "click".to_owned());
+                btn.set("key", "test".to_owned());
+                btn.set("name", "test".to_owned());
+            }).unwrap());
+            obj.push(jsonway::object(|btn| {
+                btn.set("type", "view".to_owned());
+                btn.set("url", "http://www.qq.com".to_owned());
+                btn.set("name", "QQ".to_owned());
+            }).unwrap());
+        });
+    }).unwrap();
+    println!("{:?}", data);
     // create new
-    let res = client.menu.create(&json!({
-        "button": [
-            {"type": "click", "key": "test", "name": "test"},
-            {"type": "view", "url": "http://www.qq.com", "name": "QQ"}
-        ]
-    }));
+    let res = client.menu.create(&data);
+    println!("{:?}", res);
     assert!(res.is_ok());
 
     // try get
@@ -32,12 +45,7 @@ fn test_menu_apis() {
     assert!(res.is_ok());
 
     // try update
-    let res = client.menu.update(&json!({
-        "button": [
-            {"type": "click", "key": "test", "name": "test"},
-            {"type": "view", "url": "http://www.qq.com", "name": "QQ"}
-        ]
-    }));
+    let res = client.menu.update(&data);
     assert!(res.is_ok());
 
     // cleanup

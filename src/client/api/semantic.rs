@@ -1,5 +1,6 @@
 use rustc_serialize::json::Json;
 use rustc_serialize::Encodable;
+use jsonway;
 
 use types::WeChatResult;
 use client::APIClient;
@@ -21,11 +22,11 @@ impl<T: SessionStore> WeChatSemantic<T> {
     }
 
     pub fn search_simple(&self, query: &str, category: &str) -> WeChatResult<Json> {
-        let body = json!({
-            "query": (query),
-            "category": (category),
-            "appid": (self.client.appid)
-        });
+        let body = jsonway::object(|obj| {
+            obj.set("query", query.to_owned());
+            obj.set("category", category.to_owned());
+            obj.set("appid", self.client.appid.to_owned());
+        }).unwrap();
         self.search(&body)
     }
 

@@ -20,7 +20,6 @@ byteorder = "0.3"
 rustc-serialize = "0.3"
 hyper = "0.6"
 jsonway = "0.3"
-json_macros = "0.2"
 openssl = "0.6"
 multipart = "0.3"
 

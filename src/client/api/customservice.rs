@@ -3,6 +3,7 @@ use std::collections::HashMap;
 
 use rustc_serialize::hex::ToHex;
 use openssl::crypto::hash;
+use jsonway;
 
 use session::SessionStore;
 use types::WeChatResult;
@@ -27,11 +28,11 @@ impl<T: SessionStore> WeChatCustomService<T> {
     pub fn add_account(&self, account: &str, nickname: &str, password: &str) -> WeChatResult<()> {
         let encrypted_password = hash::hash(hash::Type::MD5, password.as_bytes());
         let encrypted_password = encrypted_password.to_hex();
-        let data  = json!({
-            "kf_account": (account),
-            "nickname": (nickname),
-            "password": (encrypted_password)
-        });
+        let data = jsonway::object(|obj| {
+            obj.set("kf_account", account.to_owned());
+            obj.set("nickname", nickname.to_owned());
+            obj.set("password", encrypted_password);
+        }).unwrap();
         try!(self.client.post(
             "https://api.weixin.qq.com/customservice/kfaccount/add",
             vec![],
@@ -43,11 +44,11 @@ impl<T: SessionStore> WeChatCustomService<T> {
     pub fn update_account(&self, account: &str, nickname: &str, password: &str) -> WeChatResult<()> {
         let encrypted_password = hash::hash(hash::Type::MD5, password.as_bytes());
         let encrypted_password = encrypted_password.to_hex();
-        let data  = json!({
-            "kf_account": (account),
-            "nickname": (nickname),
-            "password": (encrypted_password)
-        });
+        let data = jsonway::object(|obj| {
+            obj.set("kf_account", account.to_owned());
+            obj.set("nickname", nickname.to_owned());
+            obj.set("password", encrypted_password);
+        }).unwrap();
         try!(self.client.post(
             "https://api.weixin.qq.com/customservice/kfaccount/update",
             vec![],

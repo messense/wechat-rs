@@ -1,6 +1,3 @@
-#![feature(plugin)]
-#![plugin(json_macros)]
-
 extern crate time;
 extern crate rand;
 extern crate url;

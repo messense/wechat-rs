@@ -1,4 +1,5 @@
 use rustc_serialize::json::{Json, ToJson};
+use jsonway;
 
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -32,15 +33,15 @@ impl ArticleMaterial {
 
 impl ToJson for ArticleMaterial {
     fn to_json(&self) -> Json {
-        json!({
-            "title": (self.title),
-            "thumb_media_id": (self.thumb_media_id),
-            "author": (self.author),
-            "digest": (self.digest),
-            "show_cover_pic": (self.show_cover_pic),
-            "content": (self.content),
-            "content_source_url": (self.content_source_url),
-        })
+        jsonway::object(|obj| {
+            obj.set("title", self.title.to_owned());
+            obj.set("thumb_media_id", self.thumb_media_id.to_owned());
+            obj.set("author", self.author.to_owned());
+            obj.set("digest", self.digest.to_owned());
+            obj.set("show_cover_pic", self.show_cover_pic);
+            obj.set("content", self.content.to_owned());
+            obj.set("content_source_url", self.content_source_url.to_owned());
+        }).unwrap()
     }
 }
 

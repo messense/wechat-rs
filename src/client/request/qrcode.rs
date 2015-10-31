@@ -1,4 +1,5 @@
 use rustc_serialize::json::{Json, ToJson};
+use jsonway;
 
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -23,13 +24,15 @@ impl TempQRCodeRequest {
 
 impl ToJson for TempQRCodeRequest {
     fn to_json(&self) -> Json {
-        json!({
-            "action_name": "QR_SCENE",
-            "expire_seconds": (self.expire_seconds),
-            "action_info": {
-                "scene": {"scene_id": (self.scene_id)}
-            }
-        })
+        jsonway::object(|obj| {
+            obj.set("action_name", "QR_SCENE".to_owned());
+            obj.set("expire_seconds", self.expire_seconds);
+            obj.object("action_info", |obj| {
+                obj.object("scene", |obj| {
+                    obj.set("scene_id", self.scene_id);
+                });
+            });
+        }).unwrap()
     }
 }
 
@@ -45,12 +48,14 @@ impl PermQRCodeRequest {
 
 impl ToJson for PermQRCodeRequest {
     fn  to_json(&self) -> Json {
-        json!({
-            "action_name": "QR_LIMIT_STR_SCENE",
-            "action_info": {
-                "scene": {"scene_str": (self.scene_str)}
-            }
-        })
+        jsonway::object(|obj| {
+            obj.set("action_name", "QR_LIMIT_STR_SCENE".to_owned());
+            obj.object("action_info", |obj| {
+                obj.object("scene", |obj| {
+                    obj.set("scene_str", self.scene_str.to_owned());
+                });
+            });
+        }).unwrap()
     }
 }
 

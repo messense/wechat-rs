@@ -12,6 +12,7 @@ extern crate hyper;
 extern crate openssl;
 extern crate redis;
 extern crate multipart;
+extern crate jsonway;
 #[macro_use]
 extern crate log;
 

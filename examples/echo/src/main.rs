@@ -1,7 +1,10 @@
+#[macro_use]
+extern crate log;
 extern crate iron;
 extern crate router;
 extern crate urlencoded;
 extern crate bodyparser;
+extern crate env_logger;
 extern crate wechat;
 
 use std::collections::HashMap;
@@ -49,7 +52,7 @@ fn wechat_callback_handler(req: &mut Request) -> IronResult<Response> {
 
     match req.method {
         Method::Get => {
-            println!("Check signature succeed!");
+            info!("Check signature succeed!");
             let echo_str = get_query_string(&qs, "echostr", "");
             return Ok(Response::with((status::Ok, echo_str)));
         },
@@ -60,7 +63,7 @@ fn wechat_callback_handler(req: &mut Request) -> IronResult<Response> {
                 Err(_) => "".to_owned(),
             };
             let msg = Message::parse(&body);
-            println!("New message: {:?}", msg);
+            info!("New message: {:?}", msg);
 
             match msg {
                 Message::TextMessage(msg) => {
@@ -80,9 +83,13 @@ fn wechat_callback_handler(req: &mut Request) -> IronResult<Response> {
 
 
 fn main() {
+    // Enable logging
+    env_logger::init().unwrap();
+
     let mut router = Router::new();
     router.get("/callback", wechat_callback_handler);
     router.post("/callback", wechat_callback_handler);
 
+    info!("Listening on localhost:5000");
     Iron::new(router).http("localhost:5000").unwrap();
 }

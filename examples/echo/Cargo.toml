@@ -8,6 +8,8 @@ iron = "0.2"
 router = "*"
 urlencoded = "*"
 bodyparser = "*"
+log ="0.3"
+env_logger = "0.3"
 
 [dependencies.wechat]
 path = "../../"

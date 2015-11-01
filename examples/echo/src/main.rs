@@ -12,8 +12,8 @@ use iron::method::Method;
 use router::Router;
 use urlencoded::UrlEncodedQuery;
 
-use wechat::{check_signature, Message, Reply};
-use wechat::replies::TextReply;
+use wechat::{check_signature, Message};
+use wechat::replies::{TextReply, ReplyRenderer};
 
 
 const TOKEN: &'static str = "123456";
@@ -64,13 +64,11 @@ fn wechat_callback_handler(req: &mut Request) -> IronResult<Response> {
 
             match msg {
                 Message::TextMessage(msg) => {
-                    let text_reply = TextReply::new(msg.target, msg.source, msg.content);
-                    let reply = Reply::TextReply(text_reply);
+                    let reply = TextReply::new(msg.target, msg.source, msg.content);
                     return Ok(Response::with((status::Ok, reply.render())));
                 },
                 _ => {
-                    let text_reply = TextReply::new(msg.get_target(), msg.get_source(), "Sorry, can not handle this for now.".to_owned());
-                    let reply = Reply::TextReply(text_reply);
+                    let reply = TextReply::new(msg.get_target(), msg.get_source(), "Sorry, can not handle this for now.".to_owned());
                     return Ok(Response::with((status::Ok, reply.render())));
                 },
             }

@@ -87,9 +87,9 @@ impl<T: SessionStore> APIClient<T> {
         };
         let res = match req.send() {
             Ok(_res) => _res,
-            Err(_) => {
+            Err(ref e) => {
                 error!("Send request error");
-                return Err(WeChatError::ClientError { errcode: -1, errmsg: "Send request error".to_owned() });
+                return Err(WeChatError::ClientError { errcode: -1, errmsg: format!("Send request error: {}", e) });
             }
         };
         if res.status != hyper::Ok {
@@ -122,9 +122,9 @@ impl<T: SessionStore> APIClient<T> {
         }
         let res = match req.send() {
             Ok(_res) => _res,
-            Err(_) => {
+            Err(ref e) => {
                 error!("Send request error");
-                return Err(WeChatError::ClientError { errcode: -1, errmsg: "Send request error".to_owned() });
+                return Err(WeChatError::ClientError { errcode: -1, errmsg: format!("Send request error: {}", e) });
             }
         };
         if res.status != hyper::Ok {
@@ -163,9 +163,9 @@ impl<T: SessionStore> APIClient<T> {
     fn json_decode(&self, res: &mut Response) -> WeChatResult<Json> {
         let obj = match Json::from_reader(res) {
             Ok(decoded) => { decoded },
-            Err(_) => {
+            Err(ref e) => {
                 error!("Json decode error");
-                return Err(WeChatError::ClientError { errcode: -3, errmsg: "Json decode error".to_owned() });
+                return Err(WeChatError::ClientError { errcode: -3, errmsg: format!("Json decode error: {}", e) });
             }
         };
         match obj.find("errcode") {

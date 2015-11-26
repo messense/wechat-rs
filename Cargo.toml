@@ -11,16 +11,16 @@ license = "MIT"
 
 [dependencies]
 log = "0.3"
-url = "0.2"
+url = "0.5"
 sxd-document = "0.1"
 sxd-xpath = "0.1"
 rand = "0.3"
 time = "0.1"
 byteorder = "0.3"
 rustc-serialize = "0.3"
-hyper = "0.6"
+hyper = "0.7"
 jsonway = "0.3"
-openssl = "0.6"
+openssl = "0.7"
 multipart = "0.3"
 
 [dependencies.redis]

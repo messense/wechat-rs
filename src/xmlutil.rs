@@ -2,12 +2,12 @@ use std::collections::HashMap;
 
 use sxd_document::Package;
 use sxd_document::dom::Document;
-use sxd_document::parser::Parser;
+use sxd_document::parser;
 use sxd_xpath::{Value, Functions, Variables, Namespaces, Factory, EvaluationContext, Expression};
 
 
 pub fn parse<T: AsRef<str>>(xml: T) -> Package {
-    Parser::new().parse(xml.as_ref()).unwrap()
+    parser::parse(xml.as_ref()).unwrap()
 }
 
 pub fn evaluate<'d, T: AsRef<str>>(package: &'d Document<'d>, xpath: T) -> Value<'d> {

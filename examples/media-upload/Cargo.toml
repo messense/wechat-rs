@@ -1,0 +1,11 @@
+[package]
+name = "media-upload"
+version = "0.1.0"
+authors = ["messense <messense@icloud.com>"]
+
+[dependencies]
+log ="0.3"
+env_logger = "0.3"
+
+[dependencies.wechat]
+path = "../../"

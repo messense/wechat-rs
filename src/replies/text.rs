@@ -1,5 +1,5 @@
-use time;
 use replies::ReplyRenderer;
+use utils::current_timestamp;
 
 #[derive(Debug, Eq, PartialEq, Clone)]
 pub struct TextReply {
@@ -15,7 +15,7 @@ impl TextReply {
         TextReply {
             source: source.into(),
             target: target.into(),
-            time: time::get_time().sec,
+            time: current_timestamp(),
             content: content.into(),
         }
     }

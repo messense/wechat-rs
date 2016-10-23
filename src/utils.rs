@@ -1,3 +1,4 @@
+use std::time::{SystemTime, UNIX_EPOCH};
 use rustc_serialize::hex::ToHex;
 use openssl::crypto::hash;
 
@@ -13,6 +14,10 @@ pub fn check_signature<S: Into<String>, T: AsRef<str>>(token: S, signature: T, t
     // TODO: do not unwrap
     let real_sign = hash::hash(hash::Type::SHA1, data_str.as_bytes()).unwrap();
     signature.as_ref() == &real_sign.to_hex()
+}
+
+pub fn current_timestamp() -> i64 {
+    SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_secs() as i64
 }
 
 #[cfg(test)]

@@ -1,5 +1,5 @@
-use time;
 use replies::ReplyRenderer;
+use utils::current_timestamp;
 
 #[derive(Debug, Eq, PartialEq, Clone)]
 pub struct MusicReply {
@@ -19,7 +19,7 @@ impl MusicReply {
         MusicReply {
             source: source.into(),
             target: target.into(),
-            time: time::get_time().sec,
+            time: current_timestamp(),
             thumb_media_id: thumb_media_id.into(),
             title: "".to_owned(),
             description: "".to_owned(),

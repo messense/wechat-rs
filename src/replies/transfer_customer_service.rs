@@ -1,5 +1,5 @@
-use time;
 use replies::ReplyRenderer;
+use utils::current_timestamp;
 
 #[derive(Debug, Eq, PartialEq, Clone)]
 pub struct TransferCustomerServiceReply {
@@ -14,7 +14,7 @@ impl TransferCustomerServiceReply {
         TransferCustomerServiceReply {
             source: source.into(),
             target: target.into(),
-            time: time::get_time().sec,
+            time: current_timestamp(),
         }
     }
 }

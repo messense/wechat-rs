@@ -1,5 +1,5 @@
-use time;
 use replies::ReplyRenderer;
+use utils::current_timestamp;
 
 #[derive(Debug, Eq, PartialEq, Clone)]
 pub struct VideoReply {
@@ -17,7 +17,7 @@ impl VideoReply {
         VideoReply {
             source: source.into(),
             target: target.into(),
-            time: time::get_time().sec,
+            time: current_timestamp(),
             media_id: media_id.into(),
             title: "".to_owned(),
             description: "".to_owned(),

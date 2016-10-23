@@ -1,7 +1,6 @@
 use std::io::Read;
 use std::collections::HashMap;
 
-use time;
 use url::Url;
 use hyper::{self, Client};
 use hyper::client::{Request, Response};
@@ -13,6 +12,7 @@ use multipart::client::Multipart;
 use errors::WeChatError;
 use types::WeChatResult;
 use session::SessionStore;
+use utils::current_timestamp;
 
 
 const REFETCH_ACCESS_TOKEN_ERRCODES: [i32; 3] = [40001, 40014, 42001];
@@ -51,7 +51,7 @@ impl<T: SessionStore> APIClient<T> {
         let token_key = format!("{}_access_token", self.appid);
         let expires_key = format!("{}_expires_at", self.appid);
         let token: String = self.session.get(&token_key, Some("".to_owned())).unwrap();
-        let timestamp = time::get_time().sec;
+        let timestamp = current_timestamp();
         let expires_at: i64 = self.session.get(&expires_key, Some(timestamp)).unwrap();
         if expires_at <= timestamp {
             "".to_owned()
@@ -266,7 +266,7 @@ impl<T: SessionStore> APIClient<T> {
             Some(expires) => expires.as_u64().unwrap() as usize,
             None => 7200usize,
         };
-        let expires_at = time::get_time().sec + expires_in as i64;
+        let expires_at = current_timestamp() + expires_in as i64;
         let token_str = match *token {
             Json::String(ref v) => {
                 let token_key = format!("{}_access_token", self.appid);

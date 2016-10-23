@@ -1,5 +1,5 @@
-use time;
 use replies::ReplyRenderer;
+use utils::current_timestamp;
 
 #[derive(Debug, Eq, PartialEq, Clone)]
 pub struct Article {
@@ -19,7 +19,7 @@ pub struct ArticlesReply {
 
 #[allow(dead_code)]
 impl Article {
-    
+
     #[inline]
     pub fn new<S: Into<String>>(title: S, url: S) -> Article {
         Article {
@@ -91,7 +91,7 @@ impl ArticlesReply {
         ArticlesReply {
             source: source.into(),
             target: target.into(),
-            time: time::get_time().sec,
+            time: current_timestamp(),
             articles: vec![],
         }
     }
@@ -101,7 +101,7 @@ impl ArticlesReply {
         ArticlesReply {
             source: source.into(),
             target: target.into(),
-            time: time::get_time().sec,
+            time: current_timestamp(),
             articles: articles.to_vec(),
         }
     }

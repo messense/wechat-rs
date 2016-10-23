@@ -15,12 +15,12 @@ before_script:
 
 script:
   - travis-cargo build
-  # - travis-cargo test
+  - travis-cargo test -- --lib
   # - travis-cargo --only stable doc
   #
-after_success:
+  # after_success:
   # - travis-cargo --only stable doc-upload
-  - travis-cargo coveralls
+  # - travis-cargo coveralls
 
 env:
   global:

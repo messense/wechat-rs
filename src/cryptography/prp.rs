@@ -2,8 +2,7 @@ use std::io::Cursor;
 
 use rand::thread_rng;
 use rand::Rng;
-use rustc_serialize::base64;
-use rustc_serialize::base64::{FromBase64, ToBase64};
+use base64;
 use byteorder::{NativeEndian, WriteBytesExt, ReadBytesExt};
 use openssl::crypto::symm;
 
@@ -38,12 +37,12 @@ impl PrpCrypto {
         wtr.extend(_id.bytes());
         // TODO: do not unwrap
         let encrypted = symm::encrypt(symm::Type::AES_256_CBC, &self.key, Some(&self.key[..16]), &wtr).unwrap();
-        let b64encoded = encrypted.to_base64(base64::STANDARD);
+        let b64encoded = base64::encode(&encrypted);
         Ok(b64encoded)
     }
 
     pub fn decrypt(&self, ciphertext: &str, _id: &str) -> WeChatResult<String> {
-        let b64decoded = try!(ciphertext.from_base64());
+        let b64decoded = try!(base64::decode(ciphertext));
         // TODO: do not unwrap
         let text = symm::decrypt(symm::Type::AES_256_CBC, &self.key, Some(&self.key[..16]), &b64decoded).unwrap();
         let mut rdr = Cursor::new(text[16..20].to_vec());
@@ -60,13 +59,13 @@ impl PrpCrypto {
 
 #[cfg(test)]
 mod tests {
-    use rustc_serialize::base64::FromBase64;
+    use base64;
     use super::PrpCrypto;
 
     #[test]
     fn test_prpcrypto_encrypt() {
         let encoding_aes_key = "kWxPEV2UEDyxWpmPdKC3F4dgPDmOvfKX1HGnEUDS1aR=";
-        let key = encoding_aes_key.from_base64().unwrap();
+        let key = base64::decode(encoding_aes_key).unwrap();
         let prp = PrpCrypto::new(&key);
         let encrypted = prp.encrypt("test", "rust").unwrap();
         assert_eq!("9s4gMv99m88kKTh/H8IdkNiFGeG9pd7vNWl50fGRWXY=", &encrypted);
@@ -75,7 +74,7 @@ mod tests {
     #[test]
     fn test_prpcrypto_decrypt() {
         let encoding_aes_key = "kWxPEV2UEDyxWpmPdKC3F4dgPDmOvfKX1HGnEUDS1aR=";
-        let key = encoding_aes_key.from_base64().unwrap();
+        let key = base64::decode(encoding_aes_key).unwrap();
         let prp = PrpCrypto::new(&key);
         let decrypted = prp.decrypt("9s4gMv99m88kKTh/H8IdkNiFGeG9pd7vNWl50fGRWXY=", "rust").unwrap();
         assert_eq!("test", &decrypted);

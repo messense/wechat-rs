@@ -2,13 +2,13 @@ use std::fmt;
 use std::error;
 use std::io;
 
-use rustc_serialize::base64::FromBase64Error;
+use base64::Base64Error;
 
 #[derive(Debug)]
 pub enum WeChatError {
     InvalidSignature,
     InvalidAppId,
-    InvalidBase64(FromBase64Error),
+    InvalidBase64(Base64Error),
     ClientError { errcode: i32, errmsg: String },
     IOError(io::Error),
 }
@@ -38,8 +38,8 @@ impl error::Error for WeChatError {
     }
 }
 
-impl From<FromBase64Error> for WeChatError {
-    fn from(err: FromBase64Error) -> WeChatError {
+impl From<Base64Error> for WeChatError {
+    fn from(err: Base64Error) -> WeChatError {
         WeChatError::InvalidBase64(err)
     }
 }

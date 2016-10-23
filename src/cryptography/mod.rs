@@ -1,5 +1,5 @@
-use rustc_serialize::base64::FromBase64;
 use hex::ToHex;
+use base64;
 use openssl::crypto::hash;
 
 mod prp;
@@ -20,7 +20,7 @@ impl WeChatCrypto {
     pub fn new(token: &str, encoding_aes_key: &str, _id: &str) -> WeChatCrypto {
         let mut aes_key = encoding_aes_key.to_owned();
         aes_key.push('=');
-        let key = aes_key.from_base64().unwrap();
+        let key = base64::decode(&aes_key).unwrap();
         WeChatCrypto {
             token: token.to_owned(),
             key: key,

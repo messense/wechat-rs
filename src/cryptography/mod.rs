@@ -37,7 +37,8 @@ impl WeChatCrypto {
         ];
         data.sort();
         let data_str = data.join("");
-        let signature = hash::hash(hash::Type::SHA1, data_str.as_bytes());
+        // TODO: do not unwrap
+        let signature = hash::hash(hash::Type::SHA1, data_str.as_bytes()).unwrap();
         signature.to_hex()
     }
 

@@ -26,7 +26,8 @@ impl<T: SessionStore> WeChatCustomService<T> {
     }
 
     pub fn add_account(&self, account: &str, nickname: &str, password: &str) -> WeChatResult<()> {
-        let encrypted_password = hash::hash(hash::Type::MD5, password.as_bytes());
+        // TODO: do not unwrap
+        let encrypted_password = hash::hash(hash::Type::MD5, password.as_bytes()).unwrap();
         let encrypted_password = encrypted_password.to_hex();
         let data = jsonway::object(|obj| {
             obj.set("kf_account", account.to_owned());
@@ -42,7 +43,8 @@ impl<T: SessionStore> WeChatCustomService<T> {
     }
 
     pub fn update_account(&self, account: &str, nickname: &str, password: &str) -> WeChatResult<()> {
-        let encrypted_password = hash::hash(hash::Type::MD5, password.as_bytes());
+        // TODO: do not unwrap
+        let encrypted_password = hash::hash(hash::Type::MD5, password.as_bytes()).unwrap();
         let encrypted_password = encrypted_password.to_hex();
         let data = jsonway::object(|obj| {
             obj.set("kf_account", account.to_owned());

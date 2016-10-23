@@ -36,14 +36,16 @@ impl PrpCrypto {
         wtr.write_u32::<NativeEndian>((plaintext.len() as u32).to_be()).unwrap();
         wtr.extend(plaintext.bytes());
         wtr.extend(_id.bytes());
-        let encrypted = symm::encrypt(symm::Type::AES_256_CBC, &self.key, &self.key[..16], &wtr);
+        // TODO: do not unwrap
+        let encrypted = symm::encrypt(symm::Type::AES_256_CBC, &self.key, Some(&self.key[..16]), &wtr).unwrap();
         let b64encoded = encrypted.to_base64(base64::STANDARD);
         Ok(b64encoded)
     }
 
     pub fn decrypt(&self, ciphertext: &str, _id: &str) -> WeChatResult<String> {
         let b64decoded = try!(ciphertext.from_base64());
-        let text = symm::decrypt(symm::Type::AES_256_CBC, &self.key, &self.key[..16], &b64decoded);
+        // TODO: do not unwrap
+        let text = symm::decrypt(symm::Type::AES_256_CBC, &self.key, Some(&self.key[..16]), &b64decoded).unwrap();
         let mut rdr = Cursor::new(text[16..20].to_vec());
         let content_length = u32::from_be(rdr.read_u32::<NativeEndian>().unwrap()) as usize;
         let content = &text[20 .. content_length + 20];

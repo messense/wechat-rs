@@ -3,7 +3,7 @@ use std::collections::HashMap;
 use sxd_document::Package;
 use sxd_document::dom::Document;
 use sxd_document::parser;
-use sxd_xpath::{Value, Functions, Variables, Namespaces, Factory, EvaluationContext, Expression};
+use sxd_xpath::{Value, Functions, Variables, Namespaces, Factory, EvaluationContext};
 
 
 pub fn parse<T: AsRef<str>>(xml: T) -> Package {

@@ -16,7 +16,7 @@ fn main() {
     let client = WeChatClient::new(APPID, SECRET, session);
 
     // let mut media_file = File::open("/Users/messense/Desktop/test.amr").unwrap();
-    let mut media_file = File::open("/Users/messense/Pictures/com.tencent.ScreenCapture/1.png").unwrap();
+    let mut media_file = File::open("/Users/messense/Pictures/1.png").unwrap();
     let res = client.media.upload("image", &mut media_file).unwrap();
     println!("{:?}", res);
 }

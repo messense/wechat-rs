@@ -74,7 +74,7 @@ impl<T: SessionStore> APIClient<T> {
             debug!("Using access_token: {}", access_token);
             querys.push(("access_token", &access_token));
         }
-        http_url.set_query_from_pairs(querys.into_iter());
+        http_url.query_pairs_mut().extend_pairs(querys.into_iter());
         let body = match json::encode(data) {
             Ok(text) => text,
             Err(_) => "".to_owned(),
@@ -97,7 +97,7 @@ impl<T: SessionStore> APIClient<T> {
             return Err(WeChatError::ClientError { errcode: -2, errmsg: "Response status error".to_owned() })
         }
         Ok(res)
-        
+
     }
 
     fn _upload_file<R: Read>(&self, url: &str, params: Vec<(&str, &str)>, files: &mut HashMap<String, &mut R>) -> WeChatResult<Response> {
@@ -114,11 +114,12 @@ impl<T: SessionStore> APIClient<T> {
             debug!("Using access_token: {}", access_token);
             querys.push(("access_token", &access_token));
         }
-        http_url.set_query_from_pairs(querys.into_iter());
+        http_url.query_pairs_mut().extend_pairs(querys.into_iter());
         let request = Request::new(Method::Post, http_url).unwrap();
         let mut req = Multipart::from_request(request).unwrap();
         for (name, stream) in files.iter_mut() {
-            req.write_stream(name, stream, None, None);
+            // TODO: error handing
+            req.write_stream(name, stream, None, None).unwrap();
         }
         let res = match req.send() {
             Ok(_res) => _res,

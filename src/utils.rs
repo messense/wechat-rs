@@ -10,7 +10,8 @@ pub fn check_signature<S: Into<String>, T: AsRef<str>>(token: S, signature: T, t
     ];
     data.sort();
     let data_str = data.join("");
-    let real_sign = hash::hash(hash::Type::SHA1, data_str.as_bytes());
+    // TODO: do not unwrap
+    let real_sign = hash::hash(hash::Type::SHA1, data_str.as_bytes()).unwrap();
     signature.as_ref() == &real_sign.to_hex()
 }
 

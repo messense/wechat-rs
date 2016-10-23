@@ -11,18 +11,18 @@ license = "MIT"
 
 [dependencies]
 log = "0.3"
-url = "0.5"
+url = "1.2"
 sxd-document = "0.2"
 sxd-xpath = "0.2"
 rand = "0.3"
 time = "0.1"
-byteorder = "0.4"
+byteorder = "0.5"
 rustc-serialize = "0.3"
-hyper = "0.7"
+hyper = "0.9"
 jsonway = "0.3"
-openssl = "0.7"
-multipart = "0.4"
-redis = "0.5"
+openssl = "0.8"
+multipart = "0.8"
+redis = "0.7"
 
 [features]
 unstable = []

@@ -1,28 +1,29 @@
 [package]
-name = "wechat"
-version = "0.2.0"
 authors = ["messense <messense@icloud.com>"]
 description = "WeChat SDK for Rust"
-repository = "https://github.com/messense/wechat-rs"
 homepage = "https://github.com/messense/wechat-rs"
-readme = "README.md"
 keywords = ["wechat", "sdk"]
 license = "MIT"
+name = "wechat"
+readme = "README.md"
+repository = "https://github.com/messense/wechat-rs"
+version = "0.2.0"
 
 [dependencies]
-log = "0.3"
-url = "1.2"
-sxd-document = "0.2"
-sxd-xpath = "0.2"
-rand = "0.3"
-time = "0.1"
 byteorder = "0.5"
-rustc-serialize = "0.3"
+hex = "0.2"
 hyper = "0.9"
 jsonway = "0.3"
-openssl = "0.8"
+log = "0.3"
 multipart = "0.8"
+openssl = "0.8"
+rand = "0.3"
 redis = "0.7"
+rustc-serialize = "0.3"
+sxd-document = "0.2"
+sxd-xpath = "0.2"
+time = "0.1"
+url = "1.2"
 
 [features]
 unstable = []

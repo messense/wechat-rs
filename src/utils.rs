@@ -1,5 +1,5 @@
 use std::time::{SystemTime, UNIX_EPOCH};
-use rustc_serialize::hex::ToHex;
+use hex::ToHex;
 use openssl::crypto::hash;
 
 

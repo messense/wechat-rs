@@ -1,5 +1,5 @@
 use rustc_serialize::base64::FromBase64;
-use rustc_serialize::hex::ToHex;
+use hex::ToHex;
 use openssl::crypto::hash;
 
 mod prp;

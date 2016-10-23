@@ -12,6 +12,7 @@ extern crate multipart;
 extern crate jsonway;
 #[macro_use]
 extern crate log;
+extern crate hex;
 
 #[macro_use]
 mod macros;

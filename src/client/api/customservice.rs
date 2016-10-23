@@ -1,7 +1,7 @@
 use std::io::Read;
 use std::collections::HashMap;
 
-use rustc_serialize::hex::ToHex;
+use hex::ToHex;
 use openssl::crypto::hash;
 use jsonway;
 
